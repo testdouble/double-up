@@ -1,10 +1,10 @@
 module Matchmaking
-  class CreateMatches
+  class MatchesParticipants
     def initialize
       @scores_participants = ScoresParticipants.new
     end
 
-    def call(participants)
+    def call(participants:)
       return [] if participants.size < 2
 
       scored_participants = @scores_participants.call(
