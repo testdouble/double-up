@@ -1,0 +1,2 @@
+class HistoricalMatch < ApplicationRecord
+end
