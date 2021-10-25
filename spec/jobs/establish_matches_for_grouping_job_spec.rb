@@ -14,7 +14,7 @@ RSpec.describe EstablishMatchesForGroupingJob do
 
     allow(Slack::LoadsSlackChannels).to receive(:new) { @loads_slack_channels }
     allow(Slack::LoadsSlackChannelMembers).to receive(:new) { @loads_slack_channel_members }
-    allow(Slack::OpensSlackConversation).to receive(:new) { @opens_slack_conversation}
+    allow(Slack::OpensSlackConversation).to receive(:new) { @opens_slack_conversation }
     allow(Slack::SendsSlackMessage).to receive(:new) { @sends_slack_message }
   end
 
