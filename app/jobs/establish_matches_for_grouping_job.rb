@@ -22,6 +22,8 @@ class EstablishMatchesForGroupingJob < ApplicationJob
       match_conversation = @opens_slack_conversation.call(users: match.members)
       @sends_slack_message.call(channel: match_conversation, blocks: [])
     end
+  rescue => e
+    ReportsError.report(e)
   end
 
   private
