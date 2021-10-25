@@ -8,6 +8,7 @@ gem "puma", "~> 5.0"
 gem "slack-ruby-client"
 gem "bootsnap", ">= 1.4.4", require: false
 gem "pg", "~> 1.2"
+gem "bugsnag", "~> 6.24"
 
 group :development, :test do
   gem "dotenv-rails"
