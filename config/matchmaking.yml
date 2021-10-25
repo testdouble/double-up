@@ -1,6 +1,6 @@
 default: &default
   coffee_time:
-    name: Coffee Time
+    channel: <%= ENV["DOUBLE_UP_GROUP_COFFEE_TIME_CHANNEL_NAME"] %>
 
 development:
   <<: *default

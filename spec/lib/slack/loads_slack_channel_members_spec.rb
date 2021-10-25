@@ -9,19 +9,18 @@ RSpec.describe Slack::LoadsSlackChannelMembers do
   end
 
   it "loads members found in a channel" do
-    channel = "CHANNEL_ID"
-    members = [
+    slack_members = [
       "USER_ID_1",
       "USER_ID_2",
       "USER_ID_3"
     ]
 
-    expect(@slack_client).to receive(:conversations_members).with(channel: channel) {
-      Slack::Messages::Message.new(ok: true, members: members)
+    expect(@slack_client).to receive(:conversations_members).with(channel: "CHANNEL_ID") {
+      Slack::Messages::Message.new(ok: true, members: slack_members)
     }
 
-    members = subject.call(channel: channel)
+    members = subject.call(channel: "CHANNEL_ID")
 
-    expect(members).to eq(members)
+    expect(members).to eq(slack_members)
   end
 end
