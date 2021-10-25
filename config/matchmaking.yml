@@ -1,6 +1,7 @@
 default: &default
-  coffee_time:
-    channel: <%= ENV["DOUBLE_UP_GROUP_COFFEE_TIME_CHANNEL_NAME"] %>
+  rotating_brunch:
+    channel: group-rotating-brunch
+    size: 4
 
 development:
   <<: *default
