@@ -1,7 +1,7 @@
 class AddHistoricalMatches < ActiveRecord::Migration[6.1]
   def change
     create_table :historical_matches do |t|
-      t.string :matches, array: true, default: []
+      t.string :members, array: true, default: []
       t.string :grouping
       t.date :matched_on
 

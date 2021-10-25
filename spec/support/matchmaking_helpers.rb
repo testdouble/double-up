@@ -1,0 +1,25 @@
+module MatchmakingHelpers
+  def new_participants(ids:, historical_matches: [])
+    all_match_candidates = ids.map { |id| new_match_candidate(id: id) }
+
+    ids.map { |id|
+      new_participant(
+        id: id,
+        match_candidates: all_match_candidates.reject { |candidate| candidate.id == id },
+        historical_matches: historical_matches.select { |match| match.members.include?(id) }
+      )
+    }
+  end
+
+  def new_participant(id:, match_candidates: [], historical_matches: [])
+    Matchmaking::Participant.new(id, match_candidates, historical_matches.group_by(&:grouping))
+  end
+
+  def new_match_candidate(id:, score: 0)
+    Matchmaking::ScoredMatchCandidate.new(id, score)
+  end
+
+  def new_match(grouping:, members:)
+    Matchmaking::Match.new(grouping, members)
+  end
+end

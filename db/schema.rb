@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2021_10_21_003356) do
   enable_extension "plpgsql"
 
   create_table "historical_matches", force: :cascade do |t|
-    t.string "matches", default: [], array: true
+    t.string "members", default: [], array: true
     t.string "grouping"
     t.date "matched_on"
     t.datetime "created_at", precision: 6, null: false

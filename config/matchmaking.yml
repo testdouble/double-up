@@ -1,0 +1,13 @@
+default: &default
+  coffee_time:
+    name: Coffee Time
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+
