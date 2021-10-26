@@ -21,6 +21,8 @@ class EstablishMatchesForGroupingJob < ApplicationJob
     matches.each do |match|
       match_conversation = @opens_slack_conversation.call(users: match.members)
       @sends_slack_message.call(channel: match_conversation, blocks: [])
+
+      HistoricalMatch.create(members: match.members, grouping: grouping, matched_on: Date.today)
     end
   rescue => e
     ReportsError.report(e)

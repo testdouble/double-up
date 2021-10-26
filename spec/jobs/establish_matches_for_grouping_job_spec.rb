@@ -21,7 +21,7 @@ RSpec.describe EstablishMatchesForGroupingJob do
   it "raises error when grouping has no associated config" do
     expect {
       EstablishMatchesForGroupingJob.new(config: config).perform(grouping: "unknown")
-    }.to raise_error("No config found for grouping 'unknown'")
+    }.to raise_error("No config found for grouping 'unknown'").and(change(HistoricalMatch, :count).by(0))
   end
 
   it "raises error when grouping has no associated config" do
@@ -29,7 +29,7 @@ RSpec.describe EstablishMatchesForGroupingJob do
 
     expect {
       EstablishMatchesForGroupingJob.new(config: config_without_channel).perform(grouping: "test")
-    }.to raise_error("No configured channel for grouping 'test'")
+    }.to raise_error("No configured channel for grouping 'test'").and(change(HistoricalMatch, :count).by(0))
   end
 
   it "matches members of a specific channel and notifies each match" do
@@ -50,6 +50,8 @@ RSpec.describe EstablishMatchesForGroupingJob do
     expect(@sends_slack_message).to receive(:call).with(channel: "MPIM_ID_1", blocks: anything)
     expect(@sends_slack_message).to receive(:call).with(channel: "MPIM_ID_2", blocks: anything)
 
-    EstablishMatchesForGroupingJob.new(config: config).perform(grouping: "test")
+    expect {
+      EstablishMatchesForGroupingJob.new(config: config).perform(grouping: "test")
+    }.to change(HistoricalMatch, :count).by(2)
   end
 end

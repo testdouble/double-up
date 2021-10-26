@@ -20,9 +20,9 @@ RSpec.describe Matchmaking::ScoresParticipantCandidates, type: :matchmaking do
   end
 
   it "adjusts score for candidates found in previous matches" do
-    one_and_three_oldest = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_3"], grouping: "test")
-    one_and_three_newest = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_3"], grouping: "test")
-    one_and_four = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_4"], grouping: "test")
+    one_and_three_oldest = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_3"])
+    one_and_three_newest = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_3"])
+    one_and_four = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_4"])
 
     participant = new_participant(
       id: "USER_ID_1",

@@ -25,7 +25,7 @@ RSpec.describe Matchmaking::BuildsParticipants, type: :matchmaking do
   end
 
   it "returns a list of participants with historical matches when historical matches are found" do
-    one_and_three = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_3"], grouping: "test")
+    one_and_three = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_3"])
     participant_ids = ["USER_ID_1", "USER_ID_2", "USER_ID_3"]
 
     result = subject.call(participant_ids)

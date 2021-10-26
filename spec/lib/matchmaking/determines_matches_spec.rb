@@ -56,9 +56,9 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
     end
 
     it "matches lower scored candidates over higher scored candidates" do
-      one_and_two = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test")
-      one_and_three = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_3"], grouping: "test")
-      two_and_four = HistoricalMatch.create(members: ["USER_ID_2", "USER_ID_4"], grouping: "test")
+      one_and_two = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_2"])
+      one_and_three = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_3"])
+      two_and_four = create_historical_match(grouping: "test", members: ["USER_ID_2", "USER_ID_4"])
 
       participants = [
         new_participant(
