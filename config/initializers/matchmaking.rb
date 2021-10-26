@@ -1,5 +1,5 @@
 Rails.application.configure do
-  group_defaults = {size: 2}
+  group_defaults = {active: false, size: 2}
 
   matchmaking_config = config_for(:matchmaking).then do |cfg|
     cfg_json = cfg.map { |group, group_config|
