@@ -13,11 +13,14 @@ RSpec.describe Rakes::RunsMatchmaking do
     @stdout = StringIO.new
     @stderr = StringIO.new
 
+    @establish_matches_for_grouping_job = double(EstablishMatchesForGroupingJob)
+    allow(EstablishMatchesForGroupingJob).to receive(:new) { @establish_matches_for_grouping_job }
+
     @subject = Rakes::RunsMatchmaking.new(stdout: @stdout, stderr: @stderr, config: config)
   end
 
   it "shows successful message" do
-    allow(EstablishMatchesForGroupingJob).to receive(:perform_now).exactly(3).times
+    expect(@establish_matches_for_grouping_job).to receive(:perform).exactly(3).times
 
     @subject.call
 
@@ -30,7 +33,7 @@ RSpec.describe Rakes::RunsMatchmaking do
   end
 
   it "shows successful message" do
-    allow(EstablishMatchesForGroupingJob).to receive(:perform_now) { raise "test" }
+    allow(@establish_matches_for_grouping_job).to receive(:perform) { raise "test" }
 
     expect { @subject.call }.to raise_error("test")
 

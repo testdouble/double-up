@@ -7,9 +7,9 @@ module Rakes
     end
 
     def call
-      @config.to_h.keys.each do |grouping|
+      @config.each_pair do |grouping, grouping_config|
         @stdout.puts "Starting matchmaking for '#{grouping}'"
-        EstablishMatchesForGroupingJob.perform_now(grouping: grouping)
+        EstablishMatchesForGroupingJob.new.perform(grouping: grouping)
       rescue => e
         @stderr.puts "Failed to run matchmaking for '#{grouping}'. Reporting to Bugsnag."
         ReportsError.report(e)

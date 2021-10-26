@@ -1,7 +1,5 @@
-class EstablishMatchesForGroupingJob < ApplicationJob
+class EstablishMatchesForGroupingJob
   def initialize(config: nil)
-    super
-
     @loads_slack_channels = Slack::LoadsSlackChannels.new
     @loads_slack_channel_members = Slack::LoadsSlackChannelMembers.new
     @notifies_grouping_members = NotifiesGroupingMembers.new
