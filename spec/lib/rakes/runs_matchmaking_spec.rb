@@ -46,7 +46,7 @@ RSpec.describe Rakes::RunsMatchmaking do
   it "shows inactive message" do
     subject = Rakes::RunsMatchmaking.new(
       stdout: @stdout, stderr: @stderr, config: OpenStruct.new(
-        test: OpenStruct.new(active: false, size: 2, channel: "group-test"),
+        test: OpenStruct.new(active: false, size: 2, channel: "group-test")
       )
     )
     subject.call
