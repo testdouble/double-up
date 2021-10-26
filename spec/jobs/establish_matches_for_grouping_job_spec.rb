@@ -9,13 +9,11 @@ RSpec.describe EstablishMatchesForGroupingJob do
 
     @loads_slack_channels = double(Slack::LoadsSlackChannels)
     @loads_slack_channel_members = double(Slack::LoadsSlackChannelMembers)
-    @opens_slack_conversation = double(Slack::OpensSlackConversation)
-    @sends_slack_message = double(Slack::SendsSlackMessage)
+    @notifies_grouping_members = double(NotifiesGroupingMembers)
 
     allow(Slack::LoadsSlackChannels).to receive(:new) { @loads_slack_channels }
     allow(Slack::LoadsSlackChannelMembers).to receive(:new) { @loads_slack_channel_members }
-    allow(Slack::OpensSlackConversation).to receive(:new) { @opens_slack_conversation }
-    allow(Slack::SendsSlackMessage).to receive(:new) { @sends_slack_message }
+    allow(NotifiesGroupingMembers).to receive(:new) { @notifies_grouping_members }
   end
 
   it "raises error when grouping has no associated config" do
@@ -43,12 +41,10 @@ RSpec.describe EstablishMatchesForGroupingJob do
     expect(@loads_slack_channel_members).to receive(:call).with(channel: "CHANNEL_ID_2") {
       ["USER_ID_1", "USER_ID_2", "USER_ID_3", "USER_ID_4", "USER_ID_5"]
     }
-    expect(@opens_slack_conversation).to receive(:call)
-      .with(users: ["USER_ID_2", "USER_ID_3", "USER_ID_4"]) { "MPIM_ID_1" }
-    expect(@opens_slack_conversation).to receive(:call)
-      .with(users: ["USER_ID_1", "USER_ID_5"]) { "MPIM_ID_2" }
-    expect(@sends_slack_message).to receive(:call).with(channel: "MPIM_ID_1", blocks: anything)
-    expect(@sends_slack_message).to receive(:call).with(channel: "MPIM_ID_2", blocks: anything)
+    expect(@notifies_grouping_members).to receive(:call)
+      .with(grouping: "test", members: ["USER_ID_2", "USER_ID_3", "USER_ID_4"], channel_name: "group-test")
+    expect(@notifies_grouping_members).to receive(:call)
+      .with(grouping: "test", members: ["USER_ID_1", "USER_ID_5"], channel_name: "group-test")
 
     expect {
       EstablishMatchesForGroupingJob.new(config: config).perform(grouping: "test")

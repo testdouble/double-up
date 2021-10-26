@@ -4,8 +4,7 @@ class EstablishMatchesForGroupingJob < ApplicationJob
 
     @loads_slack_channels = Slack::LoadsSlackChannels.new
     @loads_slack_channel_members = Slack::LoadsSlackChannelMembers.new
-    @opens_slack_conversation = Slack::OpensSlackConversation.new
-    @sends_slack_message = Slack::SendsSlackMessage.new
+    @notifies_grouping_members = NotifiesGroupingMembers.new
     @matches_participants = Matchmaking::MatchesParticipants.new(config: config)
 
     @config = config || Rails.application.config.x.matchmaking
@@ -19,8 +18,11 @@ class EstablishMatchesForGroupingJob < ApplicationJob
       participant_ids: @loads_slack_channel_members.call(channel: channel.id)
     )
     matches.each do |match|
-      match_conversation = @opens_slack_conversation.call(users: match.members)
-      @sends_slack_message.call(channel: match_conversation, blocks: [])
+      @notifies_grouping_members.call(
+        grouping: grouping,
+        members: match.members,
+        channel_name: channel.name_normalized
+      )
 
       HistoricalMatch.create(members: match.members, grouping: grouping, matched_on: Date.today)
     end
