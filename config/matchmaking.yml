@@ -1,6 +1,6 @@
 default: &default
   rotating_brunch:
-    channel: rotating-brunch
+    channel: rotating-brunch-dev
     size: 4
 
 development:

@@ -1,5 +1,5 @@
 Slack.configure do |config|
-  config.token = ENV["DOUBLE_UP_SLACK_OAUTH_TOKEN"]
+  config.token = ENV["SLACK_OAUTH_TOKEN"]
 end
 
 Slack::Events.configure do |config|
