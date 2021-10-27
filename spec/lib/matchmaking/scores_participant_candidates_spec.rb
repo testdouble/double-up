@@ -13,9 +13,13 @@ RSpec.describe Matchmaking::ScoresParticipantCandidates, type: :matchmaking do
     result = subject.call(participant: participant)
 
     expect(result).to eq(
-      Matchmaking::Participant.new("USER_ID_1", [
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_2", 0)
-      ], {})
+      Matchmaking::Participant.new(
+        id: "USER_ID_1",
+        match_candidates: [
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_2")
+        ],
+        grouped_historical_matches: {}
+      )
     )
   end
 
@@ -41,13 +45,17 @@ RSpec.describe Matchmaking::ScoresParticipantCandidates, type: :matchmaking do
     result = subject.call(participant: participant)
 
     expect(result).to eq(
-      Matchmaking::Participant.new("USER_ID_1", [
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_2", 0),
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_3", 2),
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_4", 1)
-      ], {
-        "test" => [one_and_three_oldest, one_and_three_newest, one_and_four]
-      })
+      Matchmaking::Participant.new(
+        id: "USER_ID_1",
+        match_candidates: [
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_2"),
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_3", score: 2),
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_4", score: 1)
+        ],
+        grouped_historical_matches: {
+          "test" => [one_and_three_oldest, one_and_three_newest, one_and_four]
+        }
+      )
     )
   end
 end

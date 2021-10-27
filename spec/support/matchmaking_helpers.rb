@@ -12,14 +12,18 @@ module MatchmakingHelpers
   end
 
   def new_participant(id:, match_candidates: [], historical_matches: [])
-    Matchmaking::Participant.new(id, match_candidates, historical_matches.group_by(&:grouping))
+    Matchmaking::Participant.new(
+      id: id,
+      match_candidates: match_candidates,
+      grouped_historical_matches: historical_matches.group_by(&:grouping)
+    )
   end
 
   def new_match_candidate(id:, score: 0)
-    Matchmaking::ScoredMatchCandidate.new(id, score)
+    Matchmaking::ScoredMatchCandidate.new(id: id, score: score)
   end
 
   def new_match(grouping:, members:)
-    Matchmaking::Match.new(grouping, members)
+    Matchmaking::Match.new(grouping: grouping, members: members)
   end
 end

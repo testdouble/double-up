@@ -15,12 +15,20 @@ RSpec.describe Matchmaking::BuildsParticipants, type: :matchmaking do
     result = subject.call(participant_ids)
 
     expect(result).to eq([
-      Matchmaking::Participant.new("USER_ID_1", [
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_2", 0)
-      ], {}),
-      Matchmaking::Participant.new("USER_ID_2", [
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_1", 0)
-      ], {})
+      Matchmaking::Participant.new(
+        id: "USER_ID_1",
+        match_candidates: [
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_2")
+        ],
+        grouped_historical_matches: {}
+      ),
+      Matchmaking::Participant.new(
+        id: "USER_ID_2",
+        match_candidates: [
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_1")
+        ],
+        grouped_historical_matches: {}
+      )
     ])
   end
 
@@ -31,22 +39,34 @@ RSpec.describe Matchmaking::BuildsParticipants, type: :matchmaking do
     result = subject.call(participant_ids)
 
     expect(result).to eq([
-      Matchmaking::Participant.new("USER_ID_1", [
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_2", 0),
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_3", 1)
-      ], {
-        "test" => [one_and_three]
-      }),
-      Matchmaking::Participant.new("USER_ID_2", [
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_1", 0),
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_3", 0)
-      ], {}),
-      Matchmaking::Participant.new("USER_ID_3", [
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_1", 1),
-        Matchmaking::ScoredMatchCandidate.new("USER_ID_2", 0)
-      ], {
-        "test" => [one_and_three]
-      })
+      Matchmaking::Participant.new(
+        id: "USER_ID_1",
+        match_candidates: [
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_2"),
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_3", score: 1)
+        ],
+        grouped_historical_matches: {
+          "test" => [one_and_three]
+        }
+      ),
+      Matchmaking::Participant.new(
+        id: "USER_ID_2",
+        match_candidates: [
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_1"),
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_3")
+        ],
+        grouped_historical_matches: {}
+      ),
+      Matchmaking::Participant.new(
+        id: "USER_ID_3",
+        match_candidates: [
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_1", score: 1),
+          Matchmaking::ScoredMatchCandidate.new(id: "USER_ID_2")
+        ],
+        grouped_historical_matches: {
+          "test" => [one_and_three]
+        }
+      )
     ])
   end
 end

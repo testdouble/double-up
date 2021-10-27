@@ -30,7 +30,7 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
       matches = subject.call(grouping: "test", participants: participants)
 
       expect(matches).to eq([
-        Matchmaking::Match.new("test", ["USER_ID_1", "USER_ID_2"])
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_2"])
       ])
     end
 
@@ -40,7 +40,7 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
       matches = subject.call(grouping: "test", participants: participants)
 
       expect(matches).to eq([
-        Matchmaking::Match.new("test", ["USER_ID_1", "USER_ID_2", "USER_ID_3"])
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_2", "USER_ID_3"])
       ])
     end
 
@@ -50,8 +50,8 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
       matches = subject.call(grouping: "test", participants: participants)
 
       expect(matches).to eq([
-        Matchmaking::Match.new("test", ["USER_ID_2", "USER_ID_4"]),
-        Matchmaking::Match.new("test", ["USER_ID_1", "USER_ID_3"])
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_2", "USER_ID_4"]),
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_3"])
       ])
     end
 
@@ -102,8 +102,8 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
       matches = subject.call(grouping: "test", participants: participants)
 
       expect(matches).to eq([
-        Matchmaking::Match.new("test", ["USER_ID_2", "USER_ID_3"]),
-        Matchmaking::Match.new("test", ["USER_ID_1", "USER_ID_4"])
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_2", "USER_ID_3"]),
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_4"])
       ])
     end
   end
@@ -119,7 +119,7 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
       matches = subject.call(grouping: "test", participants: participants)
 
       expect(matches).to eq([
-        Matchmaking::Match.new("test", ["USER_ID_1", "USER_ID_2", "USER_ID_3", "USER_ID_4", "USER_ID_5"])
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_2", "USER_ID_3", "USER_ID_4", "USER_ID_5"])
       ])
     end
 
@@ -131,8 +131,8 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
       matches = subject.call(grouping: "test", participants: participants)
 
       expect(matches).to eq([
-        Matchmaking::Match.new("test", ["USER_ID_1", "USER_ID_5", "USER_ID_6"]),
-        Matchmaking::Match.new("test", ["USER_ID_2", "USER_ID_3", "USER_ID_4"])
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_5", "USER_ID_6"]),
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_2", "USER_ID_3", "USER_ID_4"])
       ])
     end
 
@@ -144,8 +144,8 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
       matches = subject.call(grouping: "test", participants: participants)
 
       expect(matches).to eq([
-        Matchmaking::Match.new("test", ["USER_ID_3", "USER_ID_5", "USER_ID_6", "USER_ID_7"]),
-        Matchmaking::Match.new("test", ["USER_ID_1", "USER_ID_2", "USER_ID_4"])
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_3", "USER_ID_5", "USER_ID_6", "USER_ID_7"]),
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_2", "USER_ID_4"])
       ])
     end
   end

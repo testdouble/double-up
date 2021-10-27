@@ -26,7 +26,7 @@ RSpec.describe Matchmaking::MatchesParticipants do
     matches = subject.call(grouping: "test", participant_ids: ["USER_ID_1", "USER_ID_2"])
 
     expect(matches).to eq([
-      Matchmaking::Match.new("test", ["USER_ID_1", "USER_ID_2"])
+      Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_2"])
     ])
   end
 end

@@ -20,7 +20,7 @@ module Matchmaking
           if determined_matches[group_ix].nil?
             # add the first member to the match when it hasn't been started
             chosen = unmatched_participants.sample
-            determined_matches[group_ix] = Match.new(grouping, [chosen.id])
+            determined_matches[group_ix] = Match.new(grouping: grouping, members: [chosen.id])
             unmatched_participants = unmatched_participants.reject { |p| p.id == chosen.id }
           else
             # add remaining members to the match
@@ -62,8 +62,8 @@ module Matchmaking
             end
 
             determined_matches[group_ix] = Match.new(
-              grouping,
-              current_match.members.union([chosen]).sort
+              grouping: grouping,
+              members: current_match.members.union([chosen]).sort
             )
             unmatched_participants = unmatched_participants.reject { |p| p.id == chosen }
           end

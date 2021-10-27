@@ -10,7 +10,11 @@ module Matchmaking
         grouped_historical_matches = collect_historical_matches_by_grouping(id)
 
         @scores_participant_candidates.call(
-          participant: Participant.new(id, match_candidates, grouped_historical_matches)
+          participant: Participant.new(
+            id: id,
+            match_candidates: match_candidates,
+            grouped_historical_matches: grouped_historical_matches
+          )
         )
       end
     end
@@ -19,7 +23,7 @@ module Matchmaking
 
     def build_match_candidates(participant_ids, current_id)
       participant_ids.difference([current_id])
-        .map { |other_id| ScoredMatchCandidate.new(other_id, 0) }
+        .map { |other_id| ScoredMatchCandidate.new(id: other_id) }
     end
 
     def collect_historical_matches_by_grouping(participant_id)

@@ -9,16 +9,16 @@ module Matchmaking
         candidate_matches = historical_candidate_matches(all_historical_matches, candidate)
 
         if (match_count = candidate_matches.count).positive?
-          ScoredMatchCandidate.new(candidate.id, candidate.score + match_count)
+          ScoredMatchCandidate.new(id: candidate.id, score: candidate.score + match_count)
         else
           candidate
         end
       end
 
       Participant.new(
-        participant.id,
-        candidates_with_adjusted_scores,
-        participant.grouped_historical_matches
+        id: participant.id,
+        match_candidates: candidates_with_adjusted_scores,
+        grouped_historical_matches: participant.grouped_historical_matches
       )
     end
 
