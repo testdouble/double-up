@@ -8,7 +8,7 @@ module Slack
     ].freeze
 
     def call(types:)
-      response = ClientWrapper.client.conversations_list(types: approved_types(types))
+      response = ClientWrapper.client.conversations_list(types: approved_types(types), limit: 1000)
 
       (response&.channels || []).reject { |ch| ch.is_archived }
     end

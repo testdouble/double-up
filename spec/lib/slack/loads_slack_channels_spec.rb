@@ -24,7 +24,7 @@ RSpec.describe Slack::LoadsSlackChannels do
       is_archived: true
     )
 
-    expect(@slack_client).to receive(:conversations_list).with(types: "public_channel,mpim") {
+    expect(@slack_client).to receive(:conversations_list).with(types: "public_channel,mpim", limit: 1000) {
       Slack::Messages::Message.new(ok: true, channels: [
         slack_public_channel,
         slack_mpim_channel,
@@ -43,7 +43,7 @@ RSpec.describe Slack::LoadsSlackChannels do
       is_channel: true
     )
 
-    expect(@slack_client).to receive(:conversations_list).with(types: "public_channel") {
+    expect(@slack_client).to receive(:conversations_list).with(types: "public_channel", limit: 1000) {
       Slack::Messages::Message.new(ok: true, channels: [slack_public_channel])
     }
 

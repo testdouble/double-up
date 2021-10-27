@@ -15,7 +15,7 @@ RSpec.describe Slack::LoadsSlackChannelMembers do
       "USER_ID_3"
     ]
 
-    expect(@slack_client).to receive(:conversations_members).with(channel: "CHANNEL_ID") {
+    expect(@slack_client).to receive(:conversations_members).with(channel: "CHANNEL_ID", limit: 1000) {
       Slack::Messages::Message.new(ok: true, members: slack_members)
     }
 
