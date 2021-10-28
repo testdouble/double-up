@@ -11,8 +11,6 @@ module Matchmaking
 
       min_match_size = @config.send(grouping.intern).size
       max_group_count = participants.size / min_match_size
-      # the extra iteration handles overflow when the number of participants
-      # does not divide evenly
       iterations = min_match_size + (participants.size % min_match_size)
 
       while iterations > 0
@@ -21,40 +19,12 @@ module Matchmaking
 
           if match_missing?(group_ix)
             # add the first member to the match when it hasn't been started
-            chosen = choose_candidate(@unmatched_participants)
-            determine_match!(group_ix, Match.new(grouping: grouping, members: [chosen.id]))
-            mark_participant_as_matched!(chosen.id)
-          else
-            # add remaining members to the match
-            current_match = current_match(group_ix)
-
-            # maybe try extracting again?
-            all_previously_eligible_candidates = []
-            chosen = nil
-            all_candidates_by_score(participants, current_match).each do |_, candidates_for_score|
-              next if candidates_for_score.empty?
-
-              # candidate has to be unmatched AND be best option between current members
-              threshold_candidates = candidates_in_common(candidates_for_score, all_previously_eligible_candidates)
-
-              if (selected = choose_candidate(threshold_candidates))
-                chosen = selected
-                break
-              end
-
-              all_previously_eligible_candidates += candidates_for_score.flatten.compact
-            end
-
-            if chosen.nil? && (chosen = choose_candidate(all_previously_eligible_candidates)).nil?
-              raise "something went terribly terribly wrong"
-            end
-
-            determine_match!(group_ix, Match.new(
-              grouping: grouping,
-              members: current_match.members.union([chosen]).sort
-            ))
-            mark_participant_as_matched!(chosen)
+            add_member_to_match(group_ix, choose_candidate(@unmatched_participants).id)
+            next
           end
+
+          # add remaining members to the match
+          add_member_to_match(group_ix, find_optimal_candidate_for_current_members(group_ix, participants))
         end
 
         iterations -= 1
@@ -93,6 +63,39 @@ module Matchmaking
 
     def choose_candidate(eligible_candidates)
       eligible_candidates.sample
+    end
+
+    def add_member_to_match(group_index, chosen)
+      determine_match!(group_index, Match.new(
+        grouping: @grouping,
+        members: (current_match(group_index)&.members || []).union([chosen]).sort
+      ))
+      mark_participant_as_matched!(chosen)
+    end
+
+    def find_optimal_candidate_for_current_members(group_index, participants)
+      all_previously_eligible_candidates = []
+      chosen = nil
+
+      all_candidates_by_score(participants, current_match(group_index)).each do |_, candidates_for_score|
+        next if candidates_for_score.empty?
+
+        # candidate has to be unmatched AND be best option between current members
+        threshold_candidates = candidates_in_common(candidates_for_score, all_previously_eligible_candidates)
+
+        if (selected = choose_candidate(threshold_candidates))
+          chosen = selected
+          break
+        end
+
+        all_previously_eligible_candidates += candidates_for_score.flatten.compact
+      end
+
+      if chosen.nil? && (chosen = choose_candidate(all_previously_eligible_candidates)).nil?
+        raise "something went terribly terribly wrong"
+      end
+
+      chosen
     end
 
     def all_candidates_by_score(participants, current_match)
