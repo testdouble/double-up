@@ -17,9 +17,9 @@ module Matchmaking
 
       while iterations > 0
         (0...max_group_count).each do |group_ix|
-          return @determined_matches if any_unmatched_participants?
+          return @determined_matches if all_participants_are_matched?
 
-          if match_determined?(group_ix)
+          if match_missing?(group_ix)
             # add the first member to the match when it hasn't been started
             chosen = choose_candidate(@unmatched_participants)
             determine_match!(group_ix, Match.new(grouping: grouping, members: [chosen.id]))
@@ -71,7 +71,7 @@ module Matchmaking
       @determined_matches = []
     end
 
-    def any_unmatched_participants?
+    def all_participants_are_matched?
       @unmatched_participants.empty?
     end
 
@@ -79,7 +79,7 @@ module Matchmaking
       @unmatched_participants = @unmatched_participants.reject { |p| p.id == participant }
     end
 
-    def match_determined?(group_index)
+    def match_missing?(group_index)
       @determined_matches[group_index].nil?
     end
 
