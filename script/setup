@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [ -e .env ]
+then
+  echo "-----> Existing .env file found, 'rm .env' to overwrite it next time."
+else
+  echo "-----> Copying .env file for development"
+  cp .env.example .env
+fi
+
+echo "-----> Installing Ruby dependencies"
+bundle install
+
+echo "-----> Setting up database"
+bin/rake db:create db:migrate db:test:prepare
+
+echo "-----> Inserting seed data"
+bin/rake db:seed
+
+echo "-----> Setup complete. Run 'rails s' to start a server"

@@ -1,0 +1,14 @@
+default: &default
+  rotating_brunch:
+    channel: rotating-brunch-dev
+    size: 4
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
+
