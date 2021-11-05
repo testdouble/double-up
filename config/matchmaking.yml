@@ -1,6 +1,7 @@
 default: &default
   rotating_brunch:
-    channel: rotating-brunch-dev
+    active: true
+    channel: rotating-brunch
     schedule: fortnightly
     size: 4
 
