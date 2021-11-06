@@ -113,13 +113,14 @@ RSpec.describe Matchmaking::DeterminesMatches, type: :matchmaking do
 
     subject { Matchmaking::DeterminesMatches.new(config: config) }
 
-    it "returns single larger group when multiple cannot satisfy minimum group size" do
+    it "ensures groups are balanced intead of creating a single larger group" do
       participants = new_participants(ids: ["USER_ID_1", "USER_ID_2", "USER_ID_3", "USER_ID_4", "USER_ID_5"])
 
       matches = subject.call(grouping: "test", participants: participants)
 
       expect(matches).to eq([
-        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_2", "USER_ID_3", "USER_ID_4", "USER_ID_5"])
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_2", "USER_ID_3", "USER_ID_4"]),
+        Matchmaking::Match.new(grouping: "test", members: ["USER_ID_1", "USER_ID_5"])
       ])
     end
 
