@@ -1,4 +1,14 @@
 default: &default
+  coffee_time:
+    active: true
+    channel: rotating-coffee-time
+    schedule: daily
+    size: 2
+  q_branch:
+    active: true
+    channel: rotating-q-branch
+    schedule: daily
+    size: 2
   rotating_brunch:
     active: true
     channel: rotating-brunch
@@ -13,4 +23,3 @@ test:
 
 production:
   <<: *default
-
