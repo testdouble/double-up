@@ -1,13 +1,13 @@
 default: &default
   coffee_time:
-    active: true
+    active: false
     channel: rotating-coffee-time
-    schedule: daily
+    schedule: weekly
     size: 2
   q_branch:
-    active: true
+    active: false
     channel: rotating-q-branch
-    schedule: daily
+    schedule: weekly
     size: 2
   rotating_brunch:
     active: true
