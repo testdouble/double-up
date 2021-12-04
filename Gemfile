@@ -12,7 +12,7 @@ gem "bugsnag", "~> 6.24"
 
 group :development, :test do
   gem "dotenv-rails"
-  gem "pry"
+  gem "pry-byebug"
   gem "standard"
 end
 
