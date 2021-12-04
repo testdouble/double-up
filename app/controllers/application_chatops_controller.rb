@@ -6,6 +6,6 @@ class ApplicationChatopsController < ApplicationController
     slack_request = Slack::Events::Request.new(request)
     slack_request.verify!
   rescue Slack::Events::Request::MissingSigningSecret, Slack::Events::Request::InvalidSignature, Slack::Events::Request::TimestampExpired
-    render json: {}, status: :unauthorized
+    render plain: "Nope.", status: :unauthorized
   end
 end

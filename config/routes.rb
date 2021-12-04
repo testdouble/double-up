@@ -3,4 +3,6 @@ Rails.application.routes.draw do
     TestOnlyRoutes = ActionDispatch::Routing::RouteSet.new unless defined?(::TestOnlyRoutes)
     mount TestOnlyRoutes, at: "/"
   end
+
+  post "/command/doubleup", to: "chatops/slack_slash_command#create"
 end
