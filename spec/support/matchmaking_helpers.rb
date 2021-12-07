@@ -26,4 +26,10 @@ module MatchmakingHelpers
   def new_match(grouping:, members:)
     Matchmaking::Match.new(grouping: grouping, members: members)
   end
+
+  def new_candidates_by_score(scored_candidates)
+    scored_candidates.reduce([]) { |memo, (score, candidates)|
+      memo.concat(candidates.map { |id| new_match_candidate(id: id, score: score) })
+    }
+  end
 end

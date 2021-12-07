@@ -88,7 +88,7 @@ module Matchmaking
           break
         end
 
-        all_previously_eligible_candidates += candidates_for_score.flatten.compact
+        all_previously_eligible_candidates += candidates_for_score.flatten.compact.intersection(@unmatched_participants.map(&:id))
       end
 
       if chosen.nil? && (chosen = choose_candidate(all_previously_eligible_candidates)).nil?
