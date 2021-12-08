@@ -1,6 +1,6 @@
 module Chatops
   class SlackSlashCommandController < ::ApplicationChatopsController
-    def create
+    def handle
       render plain: "pong"
     end
   end
