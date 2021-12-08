@@ -1,8 +1,8 @@
 require "shellwords"
 
-module Slack
-  class ParsesSlashArgsString
-    SlashArgsParseResult = Struct.new(:subcommand, :args, keyword_init: true)
+module Utils
+  class ParsesCliStyleCommandArgs
+    ParseResult = Struct.new(:subcommand, :args, keyword_init: true)
 
     def call(text:)
       words = Shellwords.shellwords(text)
@@ -16,7 +16,7 @@ module Slack
           k.sub(/^-*/, "")
             .underscore
         }
-      SlashArgsParseResult.new(
+      ParseResult.new(
         subcommand: subcommand,
         args: args
       )

@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe Slack::ParsesSlashArgsString do
-  let(:subject) { Slack::ParsesSlashArgsString.new }
+RSpec.describe Utils::ParsesCliStyleCommandArgs do
+  let(:subject) { Utils::ParsesCliStyleCommandArgs.new }
 
   it "parses an empty string returning an empty result" do
     text = ""
