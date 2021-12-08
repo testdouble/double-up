@@ -1,5 +1,5 @@
-module Message
-  class BuildsGroupingSlackContent < SlackMessageContent
+module Slack
+  class BuildsGroupingSlackMessage < ApplicationMessage
     def render(grouping:, members:, channel_name:)
       [
         slack_greeting(grouping, members, channel_name)
