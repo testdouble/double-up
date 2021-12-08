@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "ApplicationChatopsController authentication", type: :request do
+RSpec.describe "SlackSlashCommandController", type: :request do
   scenario "responds to ping with pong" do
     slack_signing_secret = Slack::Events.config.signing_secret
     timestamp = Time.zone.now.to_i
