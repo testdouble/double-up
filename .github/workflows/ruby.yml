@@ -47,7 +47,6 @@ jobs:
         env:
           RAILS_ENV: test
           DATABASE_URL: "postgresql://doubleup:doubleuptestpassword@localhost"
-          SLACK_SIGNING_SECRET: "FICTIONAL63fZabecd7c3c89387b6a9X"
         run: bundle exec rspec
       - name: Run linter
         run: bundle exec standardrb

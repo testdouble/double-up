@@ -23,7 +23,7 @@ RSpec.describe "ApplicationChatopsController authentication", type: :request do
   end
 
   scenario "allows with HMAC verification" do
-    slack_signing_secret = ENV["SLACK_SIGNING_SECRET"]
+    slack_signing_secret = Slack::Events.config.signing_secret
     timestamp = Time.zone.now.to_i
     request_body = "token=#{slack_signing_secret}&team_id=T02PF6RHYSY&team_domain=testdouble-hq&channel_id=C02NYBB3VPH&channel_name=some-channel&user_id=U02PRHH0XEV&user_name=cliff.pruitt&command=%2Fdoubleup&text=&api_app_id=A02PD0DUE03&is_enterprise_install=false&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FT02PF6RHYSY%2F2823421496992%2F0WC0HfWeGJpHetxmF8yUmawo&trigger_id=2801968477828.2797229610916.883001cf5008d6d02fd58a3cf70f449e"
     data = ["v0", timestamp, request_body].join(":")
