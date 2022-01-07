@@ -4,13 +4,13 @@ default: &default
     channel: rotating-coffee-time
     schedule: weekly
     size: 2
-  q_branch:
+  pair_matchmaking:
     active: true
-    channel: rotating-q-branch
+    channel: pair-matchmaking
     schedule: monthly
     size: 2
   rotating_brunch:
-    active: true
+    active: false
     channel: rotating-brunch
     schedule: fortnightly
     size: 4
