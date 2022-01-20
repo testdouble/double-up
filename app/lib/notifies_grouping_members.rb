@@ -1,8 +1,10 @@
 class NotifiesGroupingMembers
   def initialize
     @opens_slack_conversation = Slack::OpensSlackConversation.new
+    @retrieves_slack_user_info = Slack::RetrievesSlackUserInfo.new
     @sends_slack_message = Slack::SendsSlackMessage.new
     @builds_grouping_slack_message = Slack::BuildsGroupingSlackMessage.new
+    @builds_grouping_mailer_message = Mailer::BuildsGroupingMailerMessage.new
   end
 
   def call(grouping:, members:, channel_name:)
@@ -12,5 +14,19 @@ class NotifiesGroupingMembers
       channel: match_conversation,
       blocks: @builds_grouping_slack_message.render(grouping: grouping, members: members, channel_name: channel_name)
     )
+
+    member_users = members.map { |id| convert_to_match_member(id) }
+    member_users.each do |user|
+      @builds_grouping_mailer_message.render(
+        recipient: user,
+        other_members: member_users.reject { |u| u.email == user.email }
+      )
+    end
+  end
+
+  private
+
+  def convert_to_match_member(member_id)
+    Mailer::MatchMember.from_slack_user(@retrieves_slack_user_info.call(user: member_id))
   end
 end
