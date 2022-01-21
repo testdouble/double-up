@@ -48,6 +48,7 @@ RSpec.describe "SlackSlashCommandController", type: :request do
 
     it "responds to `/doubleup unavailable`" do
       expect(@updates_participant_availability).to receive(:call)
+      subject
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq("Success")
@@ -61,6 +62,7 @@ RSpec.describe "SlackSlashCommandController", type: :request do
 
     it "responds to available when user is already available" do
       expect(@updates_participant_availability).to receive(:call)
+      subject
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq("Success")
@@ -68,6 +70,7 @@ RSpec.describe "SlackSlashCommandController", type: :request do
 
     it "responds to available when user is unavailable" do
       expect(@updates_participant_availability).to receive(:call)
+      subject
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq("Success")
@@ -81,6 +84,7 @@ RSpec.describe "SlackSlashCommandController", type: :request do
 
     it "responds to anything with pong" do
       expect(@updates_participant_availability).not_to receive(:call)
+      subject
 
       expect(response).to have_http_status(:ok)
       expect(response.body).to eq("pong")
