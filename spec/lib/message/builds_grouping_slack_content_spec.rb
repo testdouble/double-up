@@ -33,14 +33,14 @@ RSpec.describe Message::BuildsGroupingSlackContent do
 
   it "renders message with humanized grouping name" do
     content = subject.render(
-      grouping: "rotating brunch",
+      grouping: "rotating_brunch",
       members: ["USER_ID_1", "USER_ID_2"],
       channel_name: "group-test"
     )
 
     expect(content).to eq([
       {type: "section", text: {type: "mrkdwn", text: <<~MSG.chomp}}
-        :wave: Hi <@USER_ID_1> and <@USER_ID_2>! You've been matched up for Rotating brunch from #group-test! Find a time to meet, and have fun!
+        :wave: Hi <@USER_ID_1> and <@USER_ID_2>! You've been matched up for Rotating Brunch from #group-test! Find a time to meet, and have fun!
       MSG
     ])
   end
