@@ -14,7 +14,7 @@ module Message
         text: {
           type: "mrkdwn",
           text: <<~MSG.chomp
-            :wave: Hi #{humanizes_users_reference(members)}! You've been matched up for #{grouping.humanize} from ##{channel_name}! Find a time to meet, and have fun!
+            :wave: Hi #{humanizes_users_reference(members)}! You've been matched up for #{grouping} from ##{channel_name}! Find a time to meet, and have fun!
           MSG
         }
       }
