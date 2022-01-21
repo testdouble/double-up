@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "SlackSlashCommandController", type: :request do
+RSpec.describe Chatops::SlackSlashCommandController, type: :request do
   let(:text) { "anything" }
   let(:channel) { "rotating-test-channel" }
   let(:slack_signing_secret) { Slack::Events.config.signing_secret }
@@ -37,8 +37,8 @@ RSpec.describe "SlackSlashCommandController", type: :request do
   end
 
   before(:example) do
-    @updates_participant_availability = double(Matchmaking::UpdatesParticipantAvailability)
-    allow(Matchmaking::UpdatesParticipantAvailability).to receive(:new) { @updates_participant_availability }
+    @handles_slash_command = double(Chatops::HandlesSlashCommand)
+    allow(Chatops::HandlesSlashCommand).to receive(:new) { @handles_slash_command }
   end
 
   describe "user asks to be unavailable" do
@@ -47,7 +47,7 @@ RSpec.describe "SlackSlashCommandController", type: :request do
     subject { post "/command/doubleup", params: request_params, headers: request_headers }
 
     it "responds to `/doubleup unavailable`" do
-      expect(@updates_participant_availability).to receive(:call)
+      expect(@handles_slash_command).to receive(:call) { "Success" }
       subject
 
       expect(response).to have_http_status(:ok)
@@ -61,7 +61,7 @@ RSpec.describe "SlackSlashCommandController", type: :request do
     subject { post "/command/doubleup", params: request_params, headers: request_headers }
 
     it "responds to available when user is already available" do
-      expect(@updates_participant_availability).to receive(:call)
+      expect(@handles_slash_command).to receive(:call) { "Success" }
       subject
 
       expect(response).to have_http_status(:ok)
@@ -69,7 +69,7 @@ RSpec.describe "SlackSlashCommandController", type: :request do
     end
 
     it "responds to available when user is unavailable" do
-      expect(@updates_participant_availability).to receive(:call)
+      expect(@handles_slash_command).to receive(:call) { "Success" }
       subject
 
       expect(response).to have_http_status(:ok)
@@ -83,7 +83,7 @@ RSpec.describe "SlackSlashCommandController", type: :request do
     subject { post "/command/doubleup", params: request_params, headers: request_headers }
 
     it "responds to anything with pong" do
-      expect(@updates_participant_availability).not_to receive(:call)
+      expect(@handles_slash_command).to receive(:call) { "pong" }
       subject
 
       expect(response).to have_http_status(:ok)

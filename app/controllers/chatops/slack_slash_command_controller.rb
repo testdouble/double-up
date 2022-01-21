@@ -1,19 +1,17 @@
 module Chatops
   class SlackSlashCommandController < ::ApplicationChatopsController
     def handle
-      text_params = params["text"]
+      command = SlackSlashCommand.new(**slack_command_params)
 
-      case text_params
-      when "available", "unavailable"
-        Matchmaking::UpdatesParticipantAvailability.new.call(
-          slack_channel: params["channel_name"],
-          member_id: params["user_id"],
-          availability: params["text"]
-        )
-        render plain: "Success"
-      else
-        render plain: "pong"
-      end
+      response = HandlesSlashCommand.new.call(command)
+
+      render plain: response
+    end
+
+    private
+
+    def slack_command_params
+      params.permit(:channel_name, :user_id, :text)
     end
   end
 end
