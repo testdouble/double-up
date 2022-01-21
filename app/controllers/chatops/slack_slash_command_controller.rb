@@ -1,15 +1,21 @@
 module Chatops
   class SlackSlashCommandController < ::ApplicationChatopsController
+    AVAILABLE = "available"
+    UNAVAILABLE = "unavailable"
+
     def handle
+      message = params[:text]
+      slack_user_id = params[:user_id]
+      slack_channel = params[:channel_name]
 
-      # slack_request = Slack::Events::Request.new(request)
-      text_params = params["text"]
-
-      case text_params
-      when "available"
-        "returning available"
-      when "unavailable"
-        "returning unavailable"
+      case message
+      when AVAILABLE
+        create_availability(slack_channel: slack_channel, slack_user_id: slack_user_id,
+          availability: AVAILABLE,
+        )
+        render plain: "available"
+      when UNAVAILABLE
+        render plain: "unavailable"
       else
         render plain: "pong"
       end
@@ -17,11 +23,11 @@ module Chatops
 
     private
 
-    def create_availability(slack_channel:, slack_user_id:)
-      GroupingMemberAvailability.create(
-
-        member_id: slack_user_id,
-        availability: :unavailable
+    def create_availability(slack_channel:, slack_user_id:, availability:)
+      Matchmaking::StoresMemberAvailability.new.call(
+        slack_channel: slack_channel,
+        slack_user_id: slack_user_id,
+        availability: availability,
       )
     end
   end
