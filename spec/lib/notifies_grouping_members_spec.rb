@@ -40,6 +40,8 @@ RSpec.describe NotifiesGroupingMembers do
     expect(@builds_grouping_mailer_message).to receive(:render)
       .with(
         recipient: Mailer::MatchMember.new(name: "Luke", email: "luke@rebels.com"),
+        channel: "test",
+        grouping: "test",
         other_members: [
           Mailer::MatchMember.new(name: "Leia", email: "leia@rebels.com")
         ]
@@ -47,6 +49,8 @@ RSpec.describe NotifiesGroupingMembers do
     expect(@builds_grouping_mailer_message).to receive(:render)
       .with(
         recipient: Mailer::MatchMember.new(name: "Leia", email: "leia@rebels.com"),
+        channel: "test",
+        grouping: "test",
         other_members: [
           Mailer::MatchMember.new(name: "Luke", email: "luke@rebels.com")
         ]

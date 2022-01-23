@@ -8,9 +8,11 @@ RSpec.describe GroupingMailer do
   it "creates encourage_match mailer" do
     email = GroupingMailer.encourage_match(
       recipient: Mailer::MatchMember.new(name: "Sherlock", email: "holmes@deduction.com"),
-      other_members: [
-        Mailer::MatchMember.new(name: "Watson", email: "watson@deduction.com")
-      ]
+      mailer_params: Mailer::GroupingMailerParameters.new(
+        other_members: [Mailer::MatchMember.new(name: "Watson", email: "watson@deduction.com")],
+        grouping: "Test",
+        channel: "rotating-test"
+      )
     )
 
     expect { email.deliver_now }.to change { GroupingMailer.deliveries.count }.by(1)
@@ -23,7 +25,7 @@ RSpec.describe GroupingMailer do
       <<~BODY
         Howdy Sherlock,
         
-        You've been matched up for grouping from the channel Slack channel!
+        You've been matched up for Test from the #rotating-test Slack channel!
         
         Find a time to meet, and have fun!
         

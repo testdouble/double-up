@@ -19,7 +19,12 @@ RSpec.describe Mailer::BuildsGroupingMailerMessage do
       name: "John Watson"
     )
 
-    mailer = subject.render(recipient: recipient, other_members: [other_member])
+    mailer = subject.render(
+      recipient: recipient,
+      grouping: "Test Time",
+      channel: "rotating-test",
+      other_members: [other_member]
+    )
 
     expect(mailer.to).to eq(["holmes@deduction.com"])
     expect(mailer.from).to eq(["doubot@testdouble.com"])
@@ -29,7 +34,7 @@ RSpec.describe Mailer::BuildsGroupingMailerMessage do
       <<~BODY
         Howdy Sherlock,
         
-        You've been matched up for grouping from the channel Slack channel!
+        You've been matched up for Test Time from the #rotating-test Slack channel!
         
         Find a time to meet, and have fun!
         
