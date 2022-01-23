@@ -10,7 +10,7 @@ RSpec.describe GroupingMailer do
       recipient: Mailer::MatchMember.new(name: "Sherlock", email: "holmes@deduction.com"),
       mailer_params: Mailer::GroupingMailerParameters.new(
         other_members: [Mailer::MatchMember.new(name: "Watson", email: "watson@deduction.com")],
-        grouping: "Test",
+        grouping: "test",
         channel: "rotating-test"
       )
     )
@@ -20,7 +20,7 @@ RSpec.describe GroupingMailer do
     expect(email.to).to eq(["holmes@deduction.com"])
     expect(email.from).to eq(["doubot@testdouble.com"])
     expect(email.reply_to).to eq(["watson@deduction.com"])
-    expect(email.subject).to eq("doing some work")
+    expect(email.subject).to eq("Test with Watson")
     expect(email.body.to_s).to eq(
       <<~BODY
         Howdy Sherlock,

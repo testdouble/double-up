@@ -21,7 +21,7 @@ RSpec.describe Mailer::BuildsGroupingMailerMessage do
 
     mailer = subject.render(
       recipient: recipient,
-      grouping: "Test Time",
+      grouping: "test_time",
       channel: "rotating-test",
       other_members: [other_member]
     )
@@ -29,7 +29,7 @@ RSpec.describe Mailer::BuildsGroupingMailerMessage do
     expect(mailer.to).to eq(["holmes@deduction.com"])
     expect(mailer.from).to eq(["doubot@testdouble.com"])
     expect(mailer.reply_to).to eq(["watson@deduction.com"])
-    expect(mailer.subject).to eq("doing some work")
+    expect(mailer.subject).to eq("Test Time with John Watson")
     expect(mailer.body.to_s).to eq(
       <<~BODY
         Howdy Sherlock,
