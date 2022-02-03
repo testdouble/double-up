@@ -25,7 +25,7 @@ RSpec.describe GroupingMailer do
       <<~BODY
         Howdy Sherlock,
         
-        You've been matched up for Test from the #rotating-test Slack channel!
+        You've been matched up with Watson for Test from the #rotating-test Slack channel!
         
         Find a time to meet, and have fun!
         

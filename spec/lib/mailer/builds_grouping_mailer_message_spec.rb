@@ -34,7 +34,7 @@ RSpec.describe Mailer::BuildsGroupingMailerMessage do
       <<~BODY
         Howdy Sherlock,
         
-        You've been matched up for Test Time from the #rotating-test Slack channel!
+        You've been matched up with John Watson for Test Time from the #rotating-test Slack channel!
         
         Find a time to meet, and have fun!
         
