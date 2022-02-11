@@ -15,8 +15,8 @@ default: &default
     schedule: fortnightly
     size: 4
   test_channel:
-    active: false
-    channel: rotating-test-channel
+    active: true
+    channel: pair-matchmaking-test
     schedule: daily
     size: 2
 
