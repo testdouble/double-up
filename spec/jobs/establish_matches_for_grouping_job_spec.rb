@@ -33,9 +33,9 @@ RSpec.describe EstablishMatchesForGroupingJob do
   it "matches members of a specific channel and notifies each match" do
     expect(@loads_slack_channels).to receive(:call).with(types: "public_channel") {
       [
-        Slack::Messages::Message.new(id: "CHANNEL_ID_1", name_normalized: "general"),
-        Slack::Messages::Message.new(id: "CHANNEL_ID_2", name_normalized: "group-test"),
-        Slack::Messages::Message.new(id: "CHANNEL_ID_3", name_normalized: "random")
+        Slack::Messages::Message.new(id: "CHANNEL_ID_1", name: "general"),
+        Slack::Messages::Message.new(id: "CHANNEL_ID_2", name: "group-test"),
+        Slack::Messages::Message.new(id: "CHANNEL_ID_3", name: "random")
       ]
     }
     expect(@loads_slack_channel_members).to receive(:call).with(channel: "CHANNEL_ID_2") {

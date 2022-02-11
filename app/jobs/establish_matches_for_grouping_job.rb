@@ -19,7 +19,7 @@ class EstablishMatchesForGroupingJob
       @notifies_grouping_members.call(
         grouping: grouping,
         members: match.members,
-        channel_name: channel.name_normalized
+        channel_name: channel.name
       )
 
       HistoricalMatch.create(members: match.members, grouping: grouping, matched_on: Date.today)
@@ -39,7 +39,7 @@ class EstablishMatchesForGroupingJob
     raise "No configured channel for grouping '#{grouping}'" unless channel_name
 
     @loads_slack_channels.call(types: "public_channel").find { |channel|
-      channel.name_normalized == channel_name
+      channel.name == channel_name
     }
   end
 end
