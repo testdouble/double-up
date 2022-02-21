@@ -32,22 +32,22 @@ RSpec.describe IdentifiesNearestDate do
   end
 
   context ":monthly" do
-    it "returns the date when it is the first monday of the month" do
-      date = subject.call(:monthly, from: Date.civil(2021, 4, 5))
+    it "returns the date when it is the first weekday of the month" do
+      date = subject.call(:monthly, from: Date.civil(2022, 1, 3))
 
-      expect(date).to eq(Date.civil(2021, 4, 5))
+      expect(date).to eq(Date.civil(2022, 1, 3))
     end
 
-    it "returns the first monday of the current month when date is before" do
-      date = subject.call(:monthly, from: Date.civil(2021, 4, 1))
+    it "returns the first weekday of the current month when date is before" do
+      date = subject.call(:monthly, from: Date.civil(2022, 1, 1))
 
-      expect(date).to eq(Date.civil(2021, 4, 5))
+      expect(date).to eq(Date.civil(2022, 1, 3))
     end
 
     it "returns the first monday of the next month when date is after" do
-      date = subject.call(:monthly, from: Date.civil(2021, 4, 6))
+      date = subject.call(:monthly, from: Date.civil(2022, 1, 6))
 
-      expect(date).to eq(Date.civil(2021, 5, 3))
+      expect(date).to eq(Date.civil(2022, 2, 1))
     end
   end
 

@@ -8,7 +8,7 @@ class IdentifiesNearestDate
     when :fortnightly
       next_odd_monday(from)
     when :monthly
-      next_first_monday(from)
+      next_first_weekday_of_month(from)
     else
       raise ArgumentError.new("No matching schedule for '#{schedule}'")
     end
@@ -43,5 +43,14 @@ class IdentifiesNearestDate
     return first_monday_of_month if date < first_monday_of_month
 
     next_monday(date.beginning_of_month + 1.month)
+  end
+
+  def next_first_weekday_of_month(date)
+    first_weekday_of_month = next_weekday(date.beginning_of_month)
+
+    return date if date == first_weekday_of_month
+    return first_weekday_of_month if date < first_weekday_of_month
+
+    next_weekday(date.beginning_of_month + 1.month)
   end
 end
