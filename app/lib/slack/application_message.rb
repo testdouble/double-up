@@ -1,5 +1,5 @@
-module Message
-  class SlackMessageContent
+module Slack
+  class ApplicationMessage
     include Rails.application.routes.url_helpers
     include ActionView::Helpers::TextHelper
 
