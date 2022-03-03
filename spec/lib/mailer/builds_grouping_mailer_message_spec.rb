@@ -30,17 +30,7 @@ RSpec.describe Mailer::BuildsGroupingMailerMessage do
     expect(mailer.from).to eq(["doubot@testdouble.com"])
     expect(mailer.reply_to).to eq(["watson@deduction.com"])
     expect(mailer.subject).to eq("Test Time with John Watson")
-    expect(mailer.body.to_s).to eq(
-      <<~BODY
-        Howdy Sherlock,
-        
-        You've been matched up with John Watson for Test Time from the #rotating-test Slack channel!
-        
-        Find a time to meet, and have fun!
-        
-        - Double Up San
-
-      BODY
-    )
+    expect(mailer.body.to_s).to match(/Howdy Sherlock/)
+    expect(mailer.body.to_s).to match(/You've been matched up with John Watson for Test Time from the #rotating-test Slack channel/)
   end
 end
