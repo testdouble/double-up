@@ -5,7 +5,7 @@ default: &default
     schedule: weekly
     size: 2
   q_branch:
-    active: false
+    active: true
     channel: rotating-q-branch
     schedule: monthly
     size: 2
