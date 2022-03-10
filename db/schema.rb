@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_21_003356) do
+ActiveRecord::Schema.define(version: 2022_03_10_001818) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,15 @@ ActiveRecord::Schema.define(version: 2021_10_21_003356) do
     t.date "matched_on"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "pending_notifications", force: :cascade do |t|
+    t.string "strategy"
+    t.date "last_attempted_on"
+    t.bigint "historical_match_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["historical_match_id"], name: "index_pending_notifications_on_historical_match_id"
   end
 
 end
