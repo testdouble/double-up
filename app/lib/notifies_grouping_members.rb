@@ -22,7 +22,7 @@ class NotifiesGroupingMembers
         channel: channel_name,
         grouping: grouping,
         other_members: member_users.reject { |u| u.email == user.email }
-      )
+      ).deliver_now
     end
   end
 
