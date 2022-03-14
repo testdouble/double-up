@@ -18,6 +18,8 @@ RSpec.describe NotifiesGroupingMembers do
   end
 
   it "sends a single group slack message and an email to all members" do
+    mailer = double(GroupingMailer)
+
     expect(@opens_slack_conversation).to receive(:call)
       .with(users: ["USER_ID_1", "USER_ID_2"]) { "MPIM_ID" }
     expect(@builds_grouping_slack_message).to receive(:render)
@@ -45,7 +47,7 @@ RSpec.describe NotifiesGroupingMembers do
         other_members: [
           Mailer::MatchMember.new(name: "Leia", email: "leia@rebels.com")
         ]
-      ) { [] }
+      ) { mailer }
     expect(@builds_grouping_mailer_message).to receive(:render)
       .with(
         recipient: Mailer::MatchMember.new(name: "Leia", email: "leia@rebels.com"),
@@ -54,7 +56,8 @@ RSpec.describe NotifiesGroupingMembers do
         other_members: [
           Mailer::MatchMember.new(name: "Luke", email: "luke@rebels.com")
         ]
-      ) { [] }
+      ) { mailer }
+    expect(mailer).to receive(:deliver_now).twice
 
     subject.call(grouping: "test", members: ["USER_ID_1", "USER_ID_2"], channel_name: "test")
   end
