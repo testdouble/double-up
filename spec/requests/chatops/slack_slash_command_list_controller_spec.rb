@@ -12,7 +12,7 @@ RSpec.describe "SlackSlashCommandListController", type: :request do
       "user_id" => "U02PRHH0XEV",
       "user_name" => "cliff.pruitt",
       "command" => "/doubleup",
-      "text" => "list",
+      "text" => "channels:list",
       "api_app_id" => "A02PD0DUE03",
       "is_enterprise_install" => "false",
       "response_url" =>
@@ -63,7 +63,7 @@ RSpec.describe "SlackSlashCommandListController", type: :request do
       "user_id" => "U02PRHH0XEV",
       "user_name" => "cliff.pruitt",
       "command" => "/doubleup",
-      "text" => "list",
+      "text" => "channels:list",
       "api_app_id" => "A02PD0DUE03",
       "is_enterprise_install" => "false",
       "response_url" =>
@@ -118,7 +118,7 @@ RSpec.describe "SlackSlashCommandListController", type: :request do
       "user_id" => "U02PRHH0XEV",
       "user_name" => "cliff.pruitt",
       "command" => "/doubleup",
-      "text" => "list --all",
+      "text" => "channels:list --all",
       "api_app_id" => "A02PD0DUE03",
       "is_enterprise_install" => "false",
       "response_url" =>
