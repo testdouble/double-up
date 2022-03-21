@@ -9,7 +9,7 @@ gem "slack-ruby-client"
 gem "bootsnap", ">= 1.4.4", require: false
 gem "pg", "~> 1.2"
 gem "bugsnag", "~> 6.24"
-gem "sendgrid-actionmailer", "~> 3.2"
+gem "sendgrid-actionmailer"
 
 group :development, :test do
   gem "dotenv-rails"
