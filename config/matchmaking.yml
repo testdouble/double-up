@@ -18,7 +18,7 @@ default: &default
     active: true
     channel: rotating-test-channel
     schedule: daily
-    size: 4
+    size: 2
 
 development:
   <<: *default
