@@ -2,7 +2,7 @@ class GroupingMailer < ApplicationMailer
   def encourage_match(recipient:, mailer_params:)
     @recipient = recipient
     @channel = mailer_params.channel
-    @grouping = mailer_params.grouping.titleize
+    @grouping = mailer_params.grouping.to_s.titleize
     @other_members = humanizes_match_members(mailer_params.other_members)
 
     mail(
