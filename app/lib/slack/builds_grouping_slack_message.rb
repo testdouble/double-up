@@ -14,7 +14,7 @@ module Slack
         text: {
           type: "mrkdwn",
           text: <<~MSG.chomp
-            :wave: Hi #{humanizes_users_reference(members)}! You've been matched up for #{grouping.titleize} from ##{channel_name}! Find a time to meet, and have fun!
+            :wave: Hi #{humanizes_users_reference(members)}! You've been matched up for #{grouping.to_s.titleize} from ##{channel_name}! Find a time to meet, and have fun!
           MSG
         }
       }
