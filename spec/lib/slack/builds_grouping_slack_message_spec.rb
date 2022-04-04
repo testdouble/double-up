@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe Message::BuildsGroupingSlackContent do
-  let(:subject) { Message::BuildsGroupingSlackContent.new }
+RSpec.describe Slack::BuildsGroupingSlackMessage do
+  let(:subject) { Slack::BuildsGroupingSlackMessage.new }
 
   it "renders message as blocks with 2 members" do
     content = subject.render(
