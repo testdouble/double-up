@@ -2,6 +2,7 @@ module Matchmaking
   class DeterminesMatches
     def initialize(config: nil)
       @config = config || Rails.application.config.x.matchmaking
+      @calculates_total_matches = CalculatesTotalMatches.new
       @unmatched_participants = []
       @determined_matches = []
     end
@@ -9,12 +10,14 @@ module Matchmaking
     def call(grouping:, participants:)
       reset!(grouping, participants)
 
-      min_match_size = @config.send(grouping.intern).size
-      max_group_count = participants.size / min_match_size
-      iterations = min_match_size + (participants.size % min_match_size)
+      target_size = @config.send(grouping.intern).size
+      total_matches = @calculates_total_matches.call(
+        total_participants: participants.size, target_size: target_size
+      )
+      iterations = target_size + (participants.size % target_size)
 
       while iterations > 0
-        (0...max_group_count).each do |group_ix|
+        (0...total_matches).each do |group_ix|
           return @determined_matches if all_participants_are_matched?
 
           if match_missing?(group_ix)
