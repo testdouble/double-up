@@ -44,4 +44,28 @@ RSpec.describe PendingNotification, type: :model do
     expect(match.valid?).to be true
     expect(match.errors).to be_empty
   end
+
+  describe ".for_grouping scope" do
+    it "returns pending notifications for a particular grouping" do
+      test_match = create_historical_match(
+        grouping: "test",
+        members: ["USER_ID_1", "USER_ID_2"],
+        pending_notifications: [
+          PendingNotification.create(strategy: "slack")
+        ]
+      )
+      other_match = create_historical_match(
+        grouping: "other",
+        members: ["USER_ID_1", "USER_ID_2"],
+        pending_notifications: [
+          PendingNotification.create(strategy: "slack")
+        ]
+      )
+
+      pending_notifications = PendingNotification.for_grouping("test")
+
+      expect(pending_notifications).to match(test_match.pending_notifications)
+      expect(pending_notifications).to_not match(other_match.pending_notifications)
+    end
+  end
 end

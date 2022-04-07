@@ -3,4 +3,6 @@ class PendingNotification < ApplicationRecord
 
   validates :strategy, inclusion: {in: %w[slack email], message: "%{value} is not a valid notification strategy"}
   validates :historical_match, presence: true
+
+  scope :for_grouping, ->(grouping) { includes(:historical_match).where(historical_match: {grouping: grouping}) }
 end
