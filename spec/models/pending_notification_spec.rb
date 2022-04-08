@@ -68,4 +68,32 @@ RSpec.describe PendingNotification, type: :model do
       expect(pending_notifications).to_not match(other_match.pending_notifications)
     end
   end
+
+  describe "use_slack?" do
+    it "returns true when strategy is slack" do
+      notification = PendingNotification.new(strategy: "slack")
+
+      expect(notification.use_slack?).to be true
+    end
+
+    it "returns false when strategy is not slack" do
+      notification = PendingNotification.new(strategy: "email")
+
+      expect(notification.use_slack?).to be false
+    end
+  end
+
+  describe "use_email?" do
+    it "returns true when strategy is email" do
+      notification = PendingNotification.new(strategy: "email")
+
+      expect(notification.use_email?).to be true
+    end
+
+    it "returns false when strategy is not email" do
+      notification = PendingNotification.new(strategy: "slack")
+
+      expect(notification.use_email?).to be false
+    end
+  end
 end

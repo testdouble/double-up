@@ -5,4 +5,12 @@ class PendingNotification < ApplicationRecord
   validates :historical_match, presence: true
 
   scope :for_grouping, ->(grouping) { includes(:historical_match).where(historical_match: {grouping: grouping}) }
+
+  def use_slack?
+    strategy == "slack"
+  end
+
+  def use_email?
+    strategy == "email"
+  end
 end
