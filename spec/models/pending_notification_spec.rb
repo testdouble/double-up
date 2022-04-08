@@ -2,21 +2,21 @@ require "rails_helper"
 
 RSpec.describe PendingNotification, type: :model do
   it "requires historical_match reference" do
-    match = PendingNotification.create
+    notification = PendingNotification.create
 
-    expect(match.valid?).to be false
-    expect(match.errors[:historical_match].first).to eq("must exist")
+    expect(notification.valid?).to be false
+    expect(notification.errors[:historical_match].first).to eq("must exist")
   end
 
   it "requires strategy to be a valid value" do
-    match = PendingNotification.create(strategy: "other")
+    notification = PendingNotification.create(strategy: "other")
 
-    expect(match.valid?).to be false
-    expect(match.errors[:strategy].first).to eq("other is not a valid notification strategy")
+    expect(notification.valid?).to be false
+    expect(notification.errors[:strategy].first).to eq("other is not a valid notification strategy")
   end
 
   it "creates successfully for slack" do
-    match = PendingNotification.create(
+    notification = PendingNotification.create(
       strategy: "slack",
       last_attempted_on: Date.today,
       historical_match: HistoricalMatch.create(
@@ -26,12 +26,12 @@ RSpec.describe PendingNotification, type: :model do
       )
     )
 
-    expect(match.valid?).to be true
-    expect(match.errors).to be_empty
+    expect(notification.valid?).to be true
+    expect(notification.errors).to be_empty
   end
 
   it "creates successfully for email" do
-    match = PendingNotification.create(
+    notification = PendingNotification.create(
       strategy: "email",
       last_attempted_on: Date.today,
       historical_match: HistoricalMatch.create(
@@ -41,8 +41,8 @@ RSpec.describe PendingNotification, type: :model do
       )
     )
 
-    expect(match.valid?).to be true
-    expect(match.errors).to be_empty
+    expect(notification.valid?).to be true
+    expect(notification.errors).to be_empty
   end
 
   describe ".for_grouping scope" do
