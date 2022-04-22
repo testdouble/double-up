@@ -13,7 +13,7 @@ class EstablishMatchesForGroupingJob
 
     matches = @matches_participants.call(
       grouping: grouping,
-      participant_ids: @loads_slack_channel_members.call(channel: channel.id)
+      participant_ids: members_for_channel(channel, selected_by: Matchmaking::SelectsAvailableParticipants.new(grouping: grouping))
     )
     matches.each do |match|
       @notifies_grouping_members.call(
@@ -29,6 +29,12 @@ class EstablishMatchesForGroupingJob
   end
 
   private
+
+  def members_for_channel(channel, selected_by:)
+    participant_ids = @loads_slack_channel_members.call(channel: channel.id)
+
+    selected_by.call(participant_ids)
+  end
 
   def channel_for_grouping(grouping)
     grouping_sym = grouping.intern
