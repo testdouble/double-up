@@ -44,7 +44,7 @@ RSpec.describe IdentifiesNearestDate do
       expect(date).to eq(Date.civil(2022, 1, 3))
     end
 
-    it "returns the first monday of the next month when date is after" do
+    it "returns the first weekday of the next month when date is after" do
       date = subject.call(:monthly, from: Date.civil(2022, 1, 6))
 
       expect(date).to eq(Date.civil(2022, 2, 1))
