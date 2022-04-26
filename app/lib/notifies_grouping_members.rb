@@ -15,15 +15,16 @@ class NotifiesGroupingMembers
       blocks: @builds_grouping_slack_message.render(grouping: grouping, members: members, channel_name: channel_name)
     )
 
-    member_users = members.map { |id| convert_to_match_member(id) }
-    member_users.each do |user|
-      @builds_grouping_mailer_message.render(
-        recipient: user,
-        channel: channel_name,
-        grouping: grouping,
-        other_members: member_users.reject { |u| u.email == user.email }
-      ).deliver_now
-    end
+    # Turn off email for now
+    # member_users = members.map { |id| convert_to_match_member(id) }
+    # member_users.each do |user|
+    #   @builds_grouping_mailer_message.render(
+    #     recipient: user,
+    #     channel: channel_name,
+    #     grouping: grouping,
+    #     other_members: member_users.reject { |u| u.email == user.email }
+    #   ).deliver_now
+    # end
   end
 
   private
