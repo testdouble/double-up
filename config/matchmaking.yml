@@ -7,7 +7,7 @@ default: &default
   pair_matchmaking:
     active: true
     channel: pair-matchmaking
-    schedule: daily
+    schedule: monthly
     size: 2
   rotating_brunch:
     active: false
