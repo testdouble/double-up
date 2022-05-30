@@ -8,6 +8,9 @@ RSpec.describe Rakes::SendsPendingNotifications do
     @retrieves_pending_notifications = double(Notify::RetrievesPendingNotifications)
     allow(Notify::RetrievesPendingNotifications).to receive(:new) { @retrieves_pending_notifications }
 
+    @determines_retriability = double(Notify::DeterminesRetriability)
+    allow(Notify::DeterminesRetriability).to receive(:new) { @determines_retriability }
+
     @uses_email_to_deliver_notification = double(Notify::UsesEmailToDeliverNotification)
     allow(Notify::UsesEmailToDeliverNotification).to receive(:new) { @uses_email_to_deliver_notification }
 
@@ -17,6 +20,7 @@ RSpec.describe Rakes::SendsPendingNotifications do
 
   it "does not send any when no pending notifications are found" do
     expect(@retrieves_pending_notifications).to receive(:call).with(grouping: :test) { [] }
+    expect(@determines_retriability).to_not receive(:call)
     expect(@uses_slack_to_deliver_notification).to_not receive(:call)
     expect(@uses_email_to_deliver_notification).to_not receive(:call)
 
@@ -42,6 +46,7 @@ RSpec.describe Rakes::SendsPendingNotifications do
     )
 
     expect(@retrieves_pending_notifications).to receive(:call).with(grouping: :test) { match.pending_notifications }
+    expect(@determines_retriability).to receive(:call).with(:daily, original_date: Date.today) { :retry }.twice
     expect(@uses_slack_to_deliver_notification).to receive(:call).with(notification: slack_notification)
     expect(@uses_email_to_deliver_notification).to receive(:call).with(notification: email_notification)
 
@@ -65,7 +70,32 @@ RSpec.describe Rakes::SendsPendingNotifications do
     )
 
     expect(@retrieves_pending_notifications).to receive(:call).with(grouping: :test) { match.pending_notifications }
+    expect(@determines_retriability).to receive(:call).with(:daily, original_date: Date.today) { :retry }
     expect(@uses_slack_to_deliver_notification).to receive(:call).with(notification: slack_notification)
+
+    subject = Rakes::SendsPendingNotifications.new(
+      stdout: @stdout, stderr: @stderr, config: OpenStruct.new(
+        test: OpenStruct.new(active: true, size: 2, channel: "group-test", schedule: :daily)
+      )
+    )
+
+    expect { subject.call }.to change(PendingNotification, :count).by(-1)
+
+    output = output!
+    expect(output).to match(/Slack notification sent/)
+  end
+
+  it "does not send notifications if after retribility limit" do
+    slack_notification = PendingNotification.new(strategy: "slack", created_at: Date.civil(2022, 1, 3))
+    match = create_historical_match(
+      grouping: "test",
+      members: ["USER_ID_1", "USER_ID_2"],
+      pending_notifications: [slack_notification]
+    )
+
+    expect(@retrieves_pending_notifications).to receive(:call).with(grouping: :test) { match.pending_notifications }
+    expect(@determines_retriability).to receive(:call).with(:daily, original_date: Date.civil(2022, 1, 3)) { :noretry }
+    expect(@uses_slack_to_deliver_notification).to_not receive(:call)
 
     subject = Rakes::SendsPendingNotifications.new(
       stdout: @stdout, stderr: @stderr, config: OpenStruct.new(
