@@ -1,26 +1,12 @@
 module Slack
   class BuildsGroupingSlackMessage < ApplicationMessage
-    def initialize(config: nil)
-      @config = config || Rails.application.config.x.matchmaking
-    end
-
-    def render(match:)
-      channel_name = channel_name_for_grouping(match.grouping)
-
+    def render(grouping:, members:, channel_name:)
       [
-        slack_greeting(match.grouping, match.members, channel_name)
+        slack_greeting(grouping, members, channel_name)
       ].compact.flatten(1)
     end
 
     private
-
-    def channel_name_for_grouping(grouping)
-      grouping_sym = grouping.intern
-
-      raise "No config found for grouping '#{grouping}'" unless @config.respond_to?(grouping_sym)
-
-      @config.send(grouping_sym)&.channel
-    end
 
     def slack_greeting(grouping, members, channel_name)
       {
