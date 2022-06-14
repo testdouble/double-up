@@ -10,6 +10,7 @@ gem "bootsnap", ">= 1.4.4", require: false
 gem "pg", "~> 1.2"
 gem "bugsnag", "~> 6.24"
 gem "sendgrid-actionmailer"
+gem "todo_or_die"
 
 group :development, :test do
   gem "dotenv-rails"
