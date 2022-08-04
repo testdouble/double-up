@@ -230,6 +230,7 @@ GEM
       rubocop (= 1.17.0)
       rubocop-performance (= 1.11.2)
     thor (1.1.0)
+    todo_or_die (0.0.4)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.0.0)
@@ -259,6 +260,7 @@ DEPENDENCIES
   sendgrid-actionmailer
   slack-ruby-client
   standard
+  todo_or_die
 
 RUBY VERSION
    ruby 3.0.0p0

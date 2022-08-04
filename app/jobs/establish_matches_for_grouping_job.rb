@@ -2,7 +2,6 @@ class EstablishMatchesForGroupingJob
   def initialize(config: nil)
     @loads_slack_channels = Slack::LoadsSlackChannels.new
     @loads_slack_channel_members = Slack::LoadsSlackChannelMembers.new
-    @notifies_grouping_members = NotifiesGroupingMembers.new
     @matches_participants = Matchmaking::MatchesParticipants.new(config: config)
 
     @config = config || Rails.application.config.x.matchmaking
@@ -16,13 +15,15 @@ class EstablishMatchesForGroupingJob
       participant_ids: @loads_slack_channel_members.call(channel: channel.id)
     )
     matches.each do |match|
-      @notifies_grouping_members.call(
-        grouping: grouping,
+      HistoricalMatch.create(
         members: match.members,
-        channel_name: channel.name_normalized
+        grouping: grouping,
+        matched_on: Date.today,
+        pending_notifications: [
+          PendingNotification.create(strategy: "email"),
+          PendingNotification.create(strategy: "slack")
+        ]
       )
-
-      HistoricalMatch.create(members: match.members, grouping: grouping, matched_on: Date.today)
     end
   rescue => e
     ReportsError.report(e)

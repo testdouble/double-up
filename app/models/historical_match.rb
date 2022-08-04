@@ -1,4 +1,6 @@
 class HistoricalMatch < ApplicationRecord
+  has_many :pending_notifications
+
   validates :matched_on, :grouping, presence: true
   validate :at_least_two_members
 
