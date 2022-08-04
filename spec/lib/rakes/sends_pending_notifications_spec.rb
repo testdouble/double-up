@@ -20,7 +20,7 @@ RSpec.describe Rakes::SendsPendingNotifications do
 
   it "does not send any when no pending notifications are found" do
     expect(@retrieves_pending_notifications).to receive(:call).with(grouping: :test) { [] }
-    expect(@determines_retriability).to_not receive(:call)
+    expect(@determines_retriability).to_not receive(:can_retry?)
     expect(@uses_slack_to_deliver_notification).to_not receive(:call)
     expect(@uses_email_to_deliver_notification).to_not receive(:call)
 
@@ -46,7 +46,7 @@ RSpec.describe Rakes::SendsPendingNotifications do
     )
 
     expect(@retrieves_pending_notifications).to receive(:call).with(grouping: :test) { match.pending_notifications }
-    expect(@determines_retriability).to receive(:call).with(:daily, original_date: Date.today) { :retry }.twice
+    expect(@determines_retriability).to receive(:can_retry?).with(:daily, original_date: Date.today) { true }.twice
     expect(@uses_slack_to_deliver_notification).to receive(:call).with(notification: slack_notification)
     expect(@uses_email_to_deliver_notification).to receive(:call).with(notification: email_notification)
 
@@ -70,7 +70,7 @@ RSpec.describe Rakes::SendsPendingNotifications do
     )
 
     expect(@retrieves_pending_notifications).to receive(:call).with(grouping: :test) { match.pending_notifications }
-    expect(@determines_retriability).to receive(:call).with(:daily, original_date: Date.today) { :retry }
+    expect(@determines_retriability).to receive(:can_retry?).with(:daily, original_date: Date.today) { true }
     expect(@uses_slack_to_deliver_notification).to receive(:call).with(notification: slack_notification)
 
     subject = Rakes::SendsPendingNotifications.new(
@@ -94,7 +94,7 @@ RSpec.describe Rakes::SendsPendingNotifications do
     )
 
     expect(@retrieves_pending_notifications).to receive(:call).with(grouping: :test) { match.pending_notifications }
-    expect(@determines_retriability).to receive(:call).with(:daily, original_date: Date.civil(2022, 1, 3)) { :noretry }
+    expect(@determines_retriability).to receive(:can_retry?).with(:daily, original_date: Date.civil(2022, 1, 3)) { false }
     expect(@uses_slack_to_deliver_notification).to_not receive(:call)
 
     subject = Rakes::SendsPendingNotifications.new(

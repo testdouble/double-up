@@ -37,7 +37,7 @@ module Rakes
     private
 
     def sendable_today?(grouping_config, notification)
-      @determines_retriability.call(grouping_config.schedule, original_date: notification.created_at.to_date) == :retry
+      @determines_retriability.can_retry?(grouping_config.schedule, original_date: notification.created_at.to_date)
     end
 
     def pick_strategy(notification)
