@@ -32,4 +32,25 @@ RSpec.describe HistoricalMatch, type: :model do
     expect(match.valid?).to be true
     expect(match.errors).to be_empty
   end
+
+  describe "older_than scope" do
+    it "returns all records older than the specified date" do
+      HistoricalMatch.create(
+        grouping: "test",
+        matched_on: Date.today,
+        members: ["USER_ID1", "USER_ID2"]
+      )
+
+      older_match = HistoricalMatch.create(
+        grouping: "test",
+        matched_on: Date.today,
+        members: ["USER_ID1", "USER_ID2"],
+        created_at: Date.today - 3.months
+      )
+
+      matches = HistoricalMatch.older_than(Date.today)
+
+      expect(matches).to eq([older_match])
+    end
+  end
 end
