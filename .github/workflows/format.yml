@@ -1,0 +1,25 @@
+name: Format
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  GIT_COMMITTER_NAME: GitHub Actions
+  GIT_COMMITTER_EMAIL: actions@users.noreply.github.com
+  RAILS_ENV: test
+
+jobs:
+  standard_ruby:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: "3.1.2"
+
+      - run: bin/rake standard:fix && git diff --quiet
+
+      - if: failure()
+        run: git commit -a --fixup=HEAD --author=. && git push
