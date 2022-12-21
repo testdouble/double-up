@@ -4,5 +4,5 @@ Rails.application.routes.draw do
     mount TestOnlyRoutes, at: "/"
   end
 
-  post "/command/doubleup", to: "chatops/slack_slash_command#handle"
+  post "/command/handle", to: "chatops/slack_slash_command#handle"
 end
