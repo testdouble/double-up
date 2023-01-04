@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_10_001818) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_01_04_193109) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,17 +18,26 @@ ActiveRecord::Schema.define(version: 2022_03_10_001818) do
     t.string "members", default: [], array: true
     t.string "grouping"
     t.date "matched_on"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "pending_notifications", force: :cascade do |t|
     t.string "strategy"
     t.date "last_attempted_on"
     t.bigint "historical_match_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["historical_match_id"], name: "index_pending_notifications_on_historical_match_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "slack_user_id", null: false
+    t.string "auth_token"
+    t.datetime "auth_token_expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slack_user_id"], name: "index_users_on_slack_user_id", unique: true
   end
 
 end
