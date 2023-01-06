@@ -3,9 +3,6 @@ require "rails_helper"
 RSpec.describe Notify::RetrievesPendingNotifications do
   let(:subject) { Notify::RetrievesPendingNotifications.new }
 
-  before(:example) do
-  end
-
   it "returns an empty array when no pending notifications are found" do
     pending_notifications = subject.call(grouping: "test")
 
