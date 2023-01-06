@@ -1,5 +1,5 @@
 module Slack
-  class LoginWithSlackController < SlashCommandController
+  class LoginWithSlackCommandController < SlashCommandController
     def handle
       # {
       #   "token"=>"[FILTERED]",
@@ -16,8 +16,12 @@ module Slack
       #   "response_url"=>"https://hooks.slack.com/commands/T02HPRG01AN/4555190839444/d0PqVGpXyiQ41yhbgQfar125",
       #   "trigger_id"=>"4576431983232.2601866001362.7e817ff88a1bf3f9f68b688761504d7b"
       # }
-      puts params
-      render plain: "pong"
+      Auth::SendsLoginLink.new.call(slack_user_id: params["user_id"])
+
+      render json: {
+        response_type: "ephemeral",
+        text: "Check your DMs for a link to login with"
+      }
     end
   end
 end

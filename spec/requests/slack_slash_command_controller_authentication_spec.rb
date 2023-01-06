@@ -1,12 +1,12 @@
 require "rails_helper"
 
-class HmacChatopsController < ApplicationChatopsController
+class HmacChatopsController < Slack::SlashCommandController
   def index
     render json: {is_ok: "Sure. Why not?"}
   end
 end
 
-RSpec.describe "ApplicationChatopsController authentication", type: :request do
+RSpec.describe "Slack::SlashCommandController authentication", type: :request do
   before :all do
     TestOnlyRoutes.draw do
       post "/chatops/only-if-hmac-verified", to: "hmac_chatops#index"
@@ -25,7 +25,21 @@ RSpec.describe "ApplicationChatopsController authentication", type: :request do
   scenario "allows with HMAC verification" do
     slack_signing_secret = Slack::Events.config.signing_secret
     timestamp = Time.zone.now.to_i
-    request_body = "token=#{slack_signing_secret}&team_id=T02PF6RHYSY&team_domain=testdouble-hq&channel_id=C02NYBB3VPH&channel_name=some-channel&user_id=U02PRHH0XEV&user_name=cliff.pruitt&command=%2Fdoubleup&text=&api_app_id=A02PD0DUE03&is_enterprise_install=false&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FT02PF6RHYSY%2F2823421496992%2F0WC0HfWeGJpHetxmF8yUmawo&trigger_id=2801968477828.2797229610916.883001cf5008d6d02fd58a3cf70f449e"
+    request_body = [
+      "token=#{slack_signing_secret}",
+      "team_id=TESTTEAM",
+      "team_domain=test-team",
+      "channel_id=CHANNEL",
+      "channel_name=test-channel",
+      "user_id=USER",
+      "user_name=test.mctestface",
+      "command=%2Fdoubleup",
+      "text=",
+      "api_app_id=APP",
+      "is_enterprise_install=false",
+      "response_url=",
+      "trigger_id="
+    ].join("&")
     data = ["v0", timestamp, request_body].join(":")
     mac = OpenSSL::HMAC.hexdigest("SHA256", slack_signing_secret, data)
     signature = "v0=#{mac}"
@@ -37,19 +51,18 @@ RSpec.describe "ApplicationChatopsController authentication", type: :request do
 
     request_params = {
       "token" => slack_signing_secret,
-      "team_id" => "T02PF6RHYSY",
-      "team_domain" => "testdouble-hq",
-      "channel_id" => "C02NYBB3VPH",
-      "channel_name" => "some-channel",
-      "user_id" => "U02PRHH0XEV",
-      "user_name" => "cliff.pruitt",
+      "team_id" => "TESTTEAM",
+      "team_domain" => "test-team",
+      "channel_id" => "CHANNEL",
+      "channel_name" => "test-channel",
+      "user_id" => "USER",
+      "user_name" => "test.mctestface",
       "command" => "/doubleup",
       "text" => "",
-      "api_app_id" => "A02PD0DUE03",
+      "api_app_id" => "APP",
       "is_enterprise_install" => "false",
-      "response_url" =>
-       "https://hooks.slack.com/commands/T02PF6RHYSY/2823421496992/0WC0HfWeGJpHetxmF8yUmawo",
-      "trigger_id" => "2801968477828.2797229610916.883001cf5008d6d02fd58a3cf70f449e"
+      "response_url" => "",
+      "trigger_id" => ""
     }
 
     post "/chatops/only-if-hmac-verified",

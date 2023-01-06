@@ -14,7 +14,10 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
-  config.hosts << ENV["NGROK_DOMAIN"] unless ENV["NGROK_DOMAIN"].blank?
+  unless ENV["NGROK_DOMAIN"].blank?
+    config.hosts << ENV["NGROK_DOMAIN"]
+    routes.default_url_options[:host] = ENV["NGROK_DOMAIN"]
+  end
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.

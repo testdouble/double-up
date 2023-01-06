@@ -4,5 +4,7 @@ Rails.application.routes.draw do
     mount TestOnlyRoutes, at: "/"
   end
 
-  post "/command/handle", to: "slack/login_with_slack#handle", constraints: Constraints::MatchesCommand.new(command: "login")
+  constraints Constraints::MatchesCommand.new(command: "login") do
+    post "/command/handle", to: "slack/login_with_slack_command#handle"
+  end
 end
