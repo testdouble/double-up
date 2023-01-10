@@ -4,5 +4,14 @@ Rails.application.routes.draw do
     mount TestOnlyRoutes, at: "/"
   end
 
-  post "/command/doubleup", to: "chatops/slack_slash_command#handle"
+  constraints Constraints::MatchesCommand.new(command: "login") do
+    post "/command/handle", to: "slack/login_with_slack_command#handle"
+  end
+
+  post "/command/handle", to: "slack/slash_command#handle"
+
+  match "/auth/verify", to: "auth/verify_login#verify", via: [:get, :post], as: "verify_login"
+
+  # Authenticated routes
+  get "/history", to: "history#show", as: "history"
 end
