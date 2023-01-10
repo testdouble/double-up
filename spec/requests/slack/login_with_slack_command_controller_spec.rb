@@ -1,6 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "LoginWithSlackCommandController", type: :request do
+  before(:example) do
+    allow_any_instance_of(Auth::SendsLoginLink).to receive(:call)
+  end
+
   scenario "sends a link and responds with an ephemeral message" do
     slack_signing_secret = Slack::Events.config.signing_secret
     timestamp = Time.zone.now.to_i
