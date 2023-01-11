@@ -6,13 +6,22 @@ This application is intended to be a self-hosted version of Donut.
 
 This application uses Ruby 3.0
 
+## Dev Setup
+
+Install dependencies with `bin/bundle install` and then run the app with `bin/dev`. If you want to receive a command from Slack, `ngrok http 3000` is helpful to run first to get a domain you can provide your instance of rails via `NGROK_DOMAIN`. For example,
+
+```bash
+$ NGROK_DOMAIN=1fa7-63-99-55-76.ngrok.io bin/dev
+```
+
 ## App Setup Instructions
 
 1. Follow instructions and [create a new slack app](https://api.slack.com/authentication/basics)
 2. Add the following scopes to your slack app: `users:read`, `mpim:write`, `im:write`, `chat:write`, `channels:join`, `channels:manage`, `groups:write`, `groups:read`, `mpim:read`, `im:read`, and `channels:read`.
-4. Create a new app in Heroku or your hosting service of choice. Go to wherever you can add environment variables.
-5. Set `MIN_GROUP_SIZE` to 3.
-6. Get your secret key base and the oauth token for your newly created slack app. Store those as `SLACK_SIGNING_SECRET` and `SLACK_OAUTH_TOKEN`.
+3. Create a new app in Heroku or your hosting service of choice. Go to wherever you can add environment variables.
+4. Set `MIN_GROUP_SIZE` to 3.
+5. Get your secret key base and the oauth token for your newly created slack app. Store those as `SLACK_SIGNING_SECRET` and `SLACK_OAUTH_TOKEN`.
+6. Create Slash Command called `doubleup` with a URL path of `/command/handle`.
 7. Deploy app to Heroku (or your hosting service of choice).
 8. If using Heroku, install Heroku Scheduler.
 9. Schedule `rake create_groups` to run every day at a time of your choice. If you have a hosting service that will allow you to run cron jobs, you can remove the code mentioned above that checks that day and week and just use cron format. If using Heroku, just run daily and it will quit if it's not the right day 🙂

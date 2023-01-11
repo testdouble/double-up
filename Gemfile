@@ -7,6 +7,8 @@ gem "rails"
 gem "puma"
 gem "slack-ruby-client"
 gem "pg"
+gem "sprockets-rails"
+gem "tailwindcss-rails"
 
 gem "bugsnag"
 gem "sendgrid-actionmailer"

@@ -230,9 +230,22 @@ GEM
       gli
       hashie
       websocket-driver
+    sprockets (4.2.0)
+      concurrent-ruby (~> 1.0)
+      rack (>= 2.2.4, < 4)
+    sprockets-rails (3.4.2)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
+      sprockets (>= 3.0.0)
     standard (1.17.0)
       rubocop (= 1.38.0)
       rubocop-performance (= 1.15.0)
+    tailwindcss-rails (2.0.21-arm64-darwin)
+      railties (>= 6.0.0)
+    tailwindcss-rails (2.0.21-x86_64-darwin)
+      railties (>= 6.0.0)
+    tailwindcss-rails (2.0.21-x86_64-linux)
+      railties (>= 6.0.0)
     thor (1.2.1)
     timeout (0.3.0)
     todo_or_die (0.1.1)
@@ -266,7 +279,9 @@ DEPENDENCIES
   rspec-rails
   sendgrid-actionmailer
   slack-ruby-client
+  sprockets-rails
   standard
+  tailwindcss-rails
   todo_or_die
 
 RUBY VERSION
