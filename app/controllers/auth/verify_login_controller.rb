@@ -7,7 +7,7 @@ module Auth
       if result.success?
         reset_session
         session[:user_id] = result.user.id
-        redirect_to history_path
+        redirect_to recent_matches_path
       else
         render plain: "Unable to verify", status: :unauthorized
       end
