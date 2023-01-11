@@ -108,4 +108,7 @@ Rails.application.configure do
     api_key: ENV["SENDGRID_API_KEY"],
     raise_delivery_errors: true
   }
+
+  config.hosts << ENV["DOUBLEUP_DOMAIN"]
+  routes.default_url_options[:host] = ENV["DOUBLEUP_DOMAIN"]
 end
