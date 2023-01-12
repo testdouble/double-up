@@ -20,7 +20,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_10_144730) do
     t.date "matched_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["members"], name: "index_historical_matches_on_members"
+    t.index ["members"], name: "index_historical_matches_on_members", using: :gin
   end
 
   create_table "pending_notifications", force: :cascade do |t|
@@ -33,10 +33,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_10_144730) do
   end
 
   create_table "slack_user_profiles", force: :cascade do |t|
-    t.string "user_id"
+    t.string "slack_user_id", null: false
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slack_user_id"], name: "index_slack_user_profiles_on_slack_user_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
