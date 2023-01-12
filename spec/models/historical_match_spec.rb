@@ -53,4 +53,32 @@ RSpec.describe HistoricalMatch, type: :model do
       expect(matches).to eq([older_match])
     end
   end
+
+  describe "for_user scope" do
+    it "returns all records with the given user as a member" do
+      match1, _, match3 = [
+        HistoricalMatch.create(
+          grouping: "test",
+          matched_on: Date.today,
+          members: ["USER_ID1", "USER_ID2"]
+        ),
+        HistoricalMatch.create(
+          grouping: "test",
+          matched_on: Date.today,
+          members: ["USER_ID2", "USER_ID3"]
+        ),
+        HistoricalMatch.create(
+          grouping: "test",
+          matched_on: Date.today,
+          members: ["USER_ID1", "USER_ID3"]
+        )
+      ]
+
+      user = User.create(slack_user_id: "USER_ID1")
+
+      matches = HistoricalMatch.for_user(user)
+
+      expect(matches).to eq([match1, match3])
+    end
+  end
 end

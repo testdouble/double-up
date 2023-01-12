@@ -1,4 +1,10 @@
-<h1 class="text-3xl font-bold">
+<div class="flex flex-col space-y-16">
+  <h1 class="text-3xl font-bold">
     Your Recent Matches
-</h1>
-
+  </h1>
+  <ul class="flex flex-col ml-8 space-y-8">
+    <% @historical_matches.each do |match| %>
+      <li id="match-<%= match.id %>"><%= match.id %></li>
+    <% end %>
+  </ul>
+</div>
