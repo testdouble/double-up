@@ -1,0 +1,2 @@
+class SlackUserProfile < ApplicationRecord
+end
