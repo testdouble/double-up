@@ -1,5 +1,7 @@
 module Slack
   class LoadsSlackChannels
+    include RateLimitRetryable
+
     SLACK_CHANNEL_TYPES = [
       "public_channel",
       "private_channel",
@@ -8,7 +10,9 @@ module Slack
     ].freeze
 
     def call(types:)
-      response = ClientWrapper.client.conversations_list(types: approved_types(types), limit: 1000)
+      response = retry_when_rate_limited do
+        ClientWrapper.client.conversations_list(types: approved_types(types), limit: 1000)
+      end
 
       (response&.channels || []).reject { |ch| ch.is_archived }
     end
