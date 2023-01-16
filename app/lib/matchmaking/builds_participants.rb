@@ -27,7 +27,7 @@ module Matchmaking
     end
 
     def collect_historical_matches_by_grouping(participant_id)
-      HistoricalMatch.where("'#{participant_id}' = any(members)").to_a
+      HistoricalMatch.scoreable.where("'#{participant_id}' = any(members)").to_a
         .group_by { |m| m.grouping }
     end
   end
