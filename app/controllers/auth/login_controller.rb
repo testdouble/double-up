@@ -1,5 +1,5 @@
 module Auth
-  class VerifyLoginController < ApplicationController
+  class LoginController < ApplicationController
     skip_before_action :require_login
 
     def verify
@@ -7,10 +7,15 @@ module Auth
       if result.success?
         reset_session
         session[:user_id] = result.user.id
-        redirect_to history_path
+        redirect_to recent_matches_path
       else
-        render plain: "Unable to verify", status: :unauthorized
+        render inline: "Unable to verify", status: :unauthorized
       end
+    end
+
+    def log_out
+      reset_session
+      redirect_to root_path(format: :html)
     end
   end
 end

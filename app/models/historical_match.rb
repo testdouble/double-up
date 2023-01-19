@@ -7,6 +7,7 @@ class HistoricalMatch < ApplicationRecord
   validate :at_least_two_members
 
   scope :older_than, ->(date) { where("created_at::date < '#{date.to_date}'") }
+  scope :for_user, ->(user) { where("members @> ?", "{#{user.slack_user_id}}") }
 
   private
 
