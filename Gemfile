@@ -9,6 +9,8 @@ gem "slack-ruby-client"
 gem "pg"
 gem "sprockets-rails"
 gem "tailwindcss-rails"
+gem "importmap-rails"
+gem "hotwire-rails"
 
 gem "bugsnag"
 gem "sendgrid-actionmailer"
