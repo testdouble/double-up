@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.describe "RecentMatchesController", type: :request do
   scenario "user must be logged in to access" do
+    SlackUserProfile.create(slack_user_id: "USER")
+
     get "/matches"
 
     expect(response).to have_http_status(:unauthorized)
