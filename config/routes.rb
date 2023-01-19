@@ -11,8 +11,9 @@ Rails.application.routes.draw do
   post "/command/handle", to: "slack/slash_command#handle"
 
   match "/auth/verify", to: "auth/login#verify", via: [:get, :post], as: "verify_login"
-  delete "/auth/logout", to: "auth/login#log_out", as: "log_out"
+  match "/auth/logout", to: "auth/login#log_out", via: [:get, :post, :delete], as: "log_out"
 
   # Authenticated routes
+  root to: "root#index"
   get "/matches", to: "recent_matches#show", as: "recent_matches"
 end

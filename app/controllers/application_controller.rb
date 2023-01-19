@@ -5,6 +5,6 @@ class ApplicationController < ActionController::Base
     @current_user = User.find_by(id: session[:user_id])
     return if @current_user.present?
 
-    render plain: "Run /doubleup login in Slack to authenticate", status: :unauthorized
+    render inline: "Run /doubleup login in Slack to authenticate", status: :unauthorized
   end
 end

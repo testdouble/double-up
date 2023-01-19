@@ -9,13 +9,13 @@ module Auth
         session[:user_id] = result.user.id
         redirect_to recent_matches_path
       else
-        render plain: "Unable to verify", status: :unauthorized
+        render inline: "Unable to verify", status: :unauthorized
       end
     end
 
     def log_out
       reset_session
-      redirect_to recent_matches_path
+      redirect_to root_path(format: :html)
     end
   end
 end
