@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "VerifyLoginController", type: :request do
+RSpec.describe "LoginController", type: :request do
   scenario "verifies token and redirects" do
     User.create!(auth_token: "12345", auth_token_expires_at: 1.minute.from_now, slack_user_id: "USER")
 

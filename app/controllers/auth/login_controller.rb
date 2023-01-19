@@ -1,5 +1,5 @@
 module Auth
-  class VerifyLoginController < ApplicationController
+  class LoginController < ApplicationController
     skip_before_action :require_login
 
     def verify
@@ -11,6 +11,11 @@ module Auth
       else
         render plain: "Unable to verify", status: :unauthorized
       end
+    end
+
+    def log_out
+      reset_session
+      redirect_to recent_matches_path
     end
   end
 end
