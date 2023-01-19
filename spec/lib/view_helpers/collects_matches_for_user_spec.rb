@@ -66,7 +66,7 @@ RSpec.describe ViewHelpers::CollectsMatchesForUser do
 
     expect(@retrieves_slack_user_info).to receive(:call).with(user: "USER_ID_2")
 
-    user_matches = subject.call(user: user)
+    subject.call(user: user)
   end
 
   it "returns an empty array for a user with no matches" do
