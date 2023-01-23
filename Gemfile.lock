@@ -96,6 +96,8 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashie (5.0.0)
+    heroicon (1.0.0)
+      rails (>= 5.2)
     hotwire-rails (0.1.3)
       rails (>= 6.0.0)
       stimulus-rails
@@ -282,6 +284,7 @@ DEPENDENCIES
   bootsnap
   bugsnag
   dotenv-rails
+  heroicon
   hotwire-rails
   importmap-rails
   listen (~> 3.3)
