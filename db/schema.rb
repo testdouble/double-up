@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_20_171331) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_20_213602) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "calendar_links", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "link_name"
+    t.string "link_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_calendar_links_on_user_id"
+  end
 
   create_table "historical_matches", force: :cascade do |t|
     t.string "members", default: [], array: true
