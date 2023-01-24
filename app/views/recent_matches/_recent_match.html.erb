@@ -1,0 +1,16 @@
+<div id="<%= match_dom_id recent_match %>" class="my-4 px-4">
+  <div class="flex flex-col space-y-4 border border-black">
+    <div class="flex flex-wrap">
+      <% recent_match.other_members.each do |member| %>
+        <div class="flex flex-row p-2">
+          <img class="w-8 h-8" src="<%= member.avatar_url %>" />
+          <span class="leading-8 px-2"><%= member.name %></span>
+        </div>
+      <% end %>
+    </div>
+    <div class="flex flex-row justify-between">
+      <span class="text-sm text-slate-500 m-1"><%= recent_match.grouping.titleize %></span>
+      <span class="text-sm text-slate-500 m-1"><%= recent_match.matched_on.strftime("%b %d, %Y") %></span>
+    </div>
+  </div>
+</div>

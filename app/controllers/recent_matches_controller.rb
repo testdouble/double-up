@@ -1,8 +1,8 @@
 class RecentMatchesController < ApplicationController
-  def show
+  def index
     load_current_user_profile
 
-    @user_matches = ViewHelpers::CollectsMatchesForUser.new.call(user: @current_user)
+    @recent_matches = CollectsRecentMatchesForUser.new.call(user: @current_user)
   end
 
   private

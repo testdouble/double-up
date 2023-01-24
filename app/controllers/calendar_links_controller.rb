@@ -1,13 +1,9 @@
 class CalendarLinksController < ApplicationController
-  before_action :set_calendar_link, only: %i[show edit update destroy]
+  before_action :set_calendar_link, only: %i[edit update destroy]
 
   # GET /calendar_links
   def index
     @calendar_links = @current_user.calendar_links
-  end
-
-  # GET /calendar_links/1
-  def show
   end
 
   # GET /calendar_links/new
@@ -24,7 +20,7 @@ class CalendarLinksController < ApplicationController
     @calendar_link = CalendarLink.new(calendar_link_params.merge(user: @current_user))
 
     if @calendar_link.save
-      redirect_to @calendar_link, notice: "Calendar link was successfully created."
+      redirect_to calendar_links_path, notice: "Calendar link was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -33,7 +29,7 @@ class CalendarLinksController < ApplicationController
   # PATCH/PUT /calendar_links/1
   def update
     if @calendar_link.update(calendar_link_params)
-      redirect_to @calendar_link, notice: "Calendar link was successfully updated."
+      redirect_to calendar_links_path, notice: "Calendar link was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -42,14 +38,14 @@ class CalendarLinksController < ApplicationController
   # DELETE /calendar_links/1
   def destroy
     @calendar_link.destroy
-    redirect_to calendar_links_url, notice: "Calendar link was successfully destroyed."
+    redirect_to calendar_links_path, notice: "Calendar link was successfully destroyed."
   end
 
   private
 
   # Use callbacks to share common setup or constraints between actions.
   def set_calendar_link
-    @calendar_link = CalendarLink.find(params[:id])
+    @calendar_link = CalendarLink.find_by(id: params[:id], user_id: @current_user.id)
   end
 
   # Only allow a list of trusted parameters through.

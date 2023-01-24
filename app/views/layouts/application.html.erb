@@ -12,9 +12,17 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= link_to "Log out", log_out_path, data: { "turbo-method": :delete }, class: "absolute top-2 right-2" %>
-      <%= yield %>
-    </main>
+    <div class="flex flex-col h-screen justify-between">
+      <header class="h-8 m-2 flex flex-row-reverse">
+        <%= link_to "Log out", log_out_path, data: { "turbo-method": :delete }, class: "" %>
+      </header>
+      <main class="container mx-auto my-8 px-5 flex flex-grow">
+        <%= yield %>
+      </main>
+      <footer class="flex flex-row space-x-5 justify-center my-8">
+        <%= link_to "Recent Matches", recent_matches_path, class: "text-sm text-blue-600 hover:underline hover:underline-offset-2" %>
+        <%= link_to "Calendar Links", calendar_links_path, class: "text-sm text-blue-600 hover:underline hover:underline-offset-2" %>
+      </footer>
+    </div>
   </body>
 </html>

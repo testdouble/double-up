@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe ViewHelpers::CollectsMatchesForUser do
-  let(:subject) { ViewHelpers::CollectsMatchesForUser.new }
+RSpec.describe CollectsRecentMatchesForUser do
+  let(:subject) { CollectsRecentMatchesForUser.new }
 
   before(:example) do
     @retrieves_slack_user_info = double(Slack::RetrievesSlackUserInfo)
@@ -13,14 +13,15 @@ RSpec.describe ViewHelpers::CollectsMatchesForUser do
     user = User.create(slack_user_id: "USER_ID_1")
     match_date = Date.today
     SlackUserProfile.create(name: "Leia", slack_user_id: "USER_ID_2", avatar_url: "https://example.com/x/512/512")
-    HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date)
+    match = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date)
 
     expect(@retrieves_slack_user_info).to_not receive(:call)
 
     user_matches = subject.call(user: user)
 
     expect(user_matches).to eq([
-      ViewHelpers::UserMatch.new(
+      RecentMatch.new(
+        match_id: match.id,
         slack_user_id: "USER_ID_1",
         grouping: "test",
         matched_on: match_date,
@@ -34,22 +35,24 @@ RSpec.describe ViewHelpers::CollectsMatchesForUser do
     user = User.create(slack_user_id: "USER_ID_1")
     match_date = Date.today
     SlackUserProfile.create(name: "Leia", slack_user_id: "USER_ID_2", avatar_url: "https://example.com/x/512/512")
-    HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date - 1.day)
-    HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date)
+    match1 = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date - 1.day)
+    match2 = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date)
 
     expect(@retrieves_slack_user_info).to_not receive(:call)
 
     user_matches = subject.call(user: user)
 
     expect(user_matches).to eq([
-      ViewHelpers::UserMatch.new(
+      RecentMatch.new(
+        match_id: match2.id,
         slack_user_id: "USER_ID_1",
         grouping: "test",
         matched_on: match_date,
         other_members: [SlackUserProfile.find_by(slack_user_id: "USER_ID_2")],
         match_status: "scoreable"
       ),
-      ViewHelpers::UserMatch.new(
+      RecentMatch.new(
+        match_id: match1.id,
         slack_user_id: "USER_ID_1",
         grouping: "test",
         matched_on: match_date - 1.day,
