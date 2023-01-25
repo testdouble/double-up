@@ -35,7 +35,7 @@ RSpec.describe "rendering a recent match partial" do
       match_status: "archived"
     )
 
-    render :partial => "recent_matches/recent_match", locals: {recent_match: match}
+    render partial: "recent_matches/recent_match", locals: {recent_match: match}
 
     expect(rendered).to match(/John Watson/)
     expect(rendered).to match(/src="https:\/\/example.com\/x\/512\/512"/)

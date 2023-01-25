@@ -24,7 +24,7 @@ RSpec.describe "CalendarLinksController", type: :request do
     get "/calendar_links/new"
     expect(response).to have_http_status(:ok)
 
-    post "/calendar_links", params: { calendar_link: { link_name: "Test", link_url: "http://example.com/schedule" } }
+    post "/calendar_links", params: {calendar_link: {link_name: "Test", link_url: "http://example.com/schedule"}}
     expect(response).to redirect_to(calendar_links_path)
     follow_redirect!
 
@@ -39,7 +39,7 @@ RSpec.describe "CalendarLinksController", type: :request do
     get "/calendar_links/#{link.id}/edit"
     expect(response).to have_http_status(:ok)
 
-    put "/calendar_links/#{link.id}", params: { calendar_link: { link_name: "Test", link_url: "http://example.com/schedule" } }
+    put "/calendar_links/#{link.id}", params: {calendar_link: {link_name: "Test", link_url: "http://example.com/schedule"}}
     expect(response).to redirect_to(calendar_links_path)
     follow_redirect!
 
