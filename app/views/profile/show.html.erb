@@ -1,0 +1,28 @@
+<% if @user_profile %>
+  <div class="w-full">
+    <div class="flex mb-8">
+      <img class="w-16 h-16" src="<%= @user_profile.avatar_url %>" />
+      <h1 class="font-bold text-4xl ml-8 leading-loose"><%= @user_profile.name %></h1>
+    </div>
+
+    <div id="calendar_links" class="min-w-full">
+      <% if @user %>
+        <h2 class="font-bold text-2xl">Calendar Links</h2>
+        <% @user.calendar_links.each do |calendar_link| %>
+          <p class="ml-2 mt-2 mb-1">
+            <strong class="block font-medium mb-1 text-blue-600 leading-8">
+              <%= link_to calendar_link.link_url do %>
+                <%= calendar_link.link_name %>
+                <%= heroicon "arrow-top-right-on-square", options: { class: "inline h-4 align-text-top" } %>
+              <% end %>
+            </strong>
+          </p>
+        <% end %>
+      <% else %>
+        <p class="font-medium mt-8"><%= @user_profile.name %> hasn't set up a profile yet!</p>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <p class="font-medium mt-8">Unable to find any info about this user.</p>
+<% end %>
