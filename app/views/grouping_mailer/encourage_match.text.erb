@@ -1,6 +1,10 @@
 Howdy <%= @recipient.name %>,
 
 You've been matched up with <%= @other_members %> for <%= @grouping %> from the #<%= @channel %> Slack channel!
+<% if @other_members.exclude?("and") %>
+
+In Slack, you can run "/doubleup login" and click on a member's name for this match to see if they have a calendar link for scheduling.
+<% end %>
 
 Find a time to meet, and have fun!
 
