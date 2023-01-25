@@ -12,7 +12,6 @@ module Slack
 
     def login_link(user, text)
       link = verify_login_url(token: user.auth_token)
-      # link = "https://1fa9-68-99-55-76.ngrok.io/auth/verify/#{user.auth_token}"
 
       "<#{link}|#{text}>"
     end

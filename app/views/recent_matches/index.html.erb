@@ -1,0 +1,13 @@
+<div class="w-full">
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Your recent matches</h1>
+  </div>
+
+  <div id="recent_matches" class="min-w-full">
+    <% if @recent_matches.empty? %>
+      <p class="px-4">No matches found yet</p>
+    <% else %>
+      <%= render partial: "recent_match", collection: @recent_matches %>
+    <% end %>
+  </div>
+</div>

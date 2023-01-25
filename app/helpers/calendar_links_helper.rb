@@ -1,0 +1,2 @@
+module CalendarLinksHelper
+end

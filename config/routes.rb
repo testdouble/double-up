@@ -15,5 +15,8 @@ Rails.application.routes.draw do
 
   # Authenticated routes
   root to: "root#index"
-  get "/matches", to: "recent_matches#show", as: "recent_matches"
+
+  get "/matches", to: "recent_matches#index", as: "recent_matches"
+  get "/profile/:slack_user_id", to: "profile#show", as: "profile"
+  resources :calendar_links, except: [:show]
 end

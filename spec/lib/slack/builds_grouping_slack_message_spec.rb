@@ -13,6 +13,8 @@ RSpec.describe Slack::BuildsGroupingSlackMessage do
     expect(content).to eq([
       {type: "section", text: {type: "mrkdwn", text: <<~MSG.chomp}}
         :wave: Hi <@USER_ID_1> and <@USER_ID_2>! You've been matched up for Test from #group-test! Find a time to meet, and have fun!
+
+        Run `/doubleup login` and click on a member's name for this match to see if they have set a calendar link for scheduling.
       MSG
     ])
   end
@@ -41,6 +43,8 @@ RSpec.describe Slack::BuildsGroupingSlackMessage do
     expect(content).to eq([
       {type: "section", text: {type: "mrkdwn", text: <<~MSG.chomp}}
         :wave: Hi <@USER_ID_1> and <@USER_ID_2>! You've been matched up for Rotating Brunch from #group-test! Find a time to meet, and have fun!
+
+        Run `/doubleup login` and click on a member's name for this match to see if they have set a calendar link for scheduling.
       MSG
     ])
   end

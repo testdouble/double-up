@@ -1,0 +1,26 @@
+<div id="<%= dom_id calendar_link %>" class="my-4 px-4">
+  <p class="mt-5 mb-1">
+    <strong class="block font-medium mb-1 text-blue-600 leading-8">
+      <%= link_to calendar_link.link_url do %>
+        <%= calendar_link.link_name %>
+        <%= heroicon "arrow-top-right-on-square", options: { class: "inline h-4 align-text-top" } %>
+      <% end %>
+    </strong>
+  </p>
+
+  <p class="mt-1 mb-1">
+    <em class="block font-medium text-xs mb-1 text-slate-600">
+      <%= calendar_link.link_url %>
+    </em>
+  </p>
+
+  <div class="flex flex-row space-x-4 mb-5 leading-4">
+    <%= link_to edit_calendar_link_path(calendar_link), class: "text-sm text-blue-600 hover:underline hover:underline-offset-2" do %>
+      change
+    <% end %>
+
+    <%= button_to calendar_link_path(calendar_link), method: :delete, class: "text-sm text-blue-600 hover:underline hover:underline-offset-2 hover:text-red-600" do %>
+      delete
+    <% end %>
+  </div>
+</div>

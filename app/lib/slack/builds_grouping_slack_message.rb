@@ -13,9 +13,18 @@ module Slack
         type: "section",
         text: {
           type: "mrkdwn",
-          text: <<~MSG.chomp
-            :wave: Hi #{humanizes_users_reference(members)}! You've been matched up for #{grouping.to_s.titleize} from ##{channel_name}! Find a time to meet, and have fun!
-          MSG
+          text:
+            if members.size == 2
+              <<~MSG.chomp
+                :wave: Hi #{humanizes_users_reference(members)}! You've been matched up for #{grouping.to_s.titleize} from ##{channel_name}! Find a time to meet, and have fun!
+
+                Run `/doubleup login` and click on a member's name for this match to see if they have set a calendar link for scheduling.
+              MSG
+            else
+              <<~MSG.chomp
+                :wave: Hi #{humanizes_users_reference(members)}! You've been matched up for #{grouping.to_s.titleize} from ##{channel_name}! Find a time to meet, and have fun!
+              MSG
+            end
         }
       }
     end
