@@ -1,0 +1,22 @@
+name: AWS Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    permissions:
+      id-token: write
+      contents: read
+      checks: write
+    name: build-and-push
+    concurrency: ${{ github.ref }}
+    uses: ./.github/workflows/build-image.yaml
+    with:
+      build_role: arn:aws:iam::458591407913:role/github-actions-ecr-pair-matchmaker
+      ecr_repo: thoughtbot/pair-matchmaker
