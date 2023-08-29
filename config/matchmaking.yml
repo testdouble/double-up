@@ -1,4 +1,9 @@
 default: &default
+  client_chime:
+    active: true
+    channel: client-chime-rotating-q-branch
+    schedule: monthly
+    size: 2
   coffee_time:
     active: true
     channel: rotating-coffee-time
