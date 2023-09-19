@@ -1,0 +1,94 @@
+app:
+  # This image will be replaced with the latest application image during deploy.
+  image: ruby:3.1.2-slim
+
+config:
+  env:
+    data:
+      RAILS_MAX_THREADS: '5'
+      WEB_CONCURRENCY: '2'
+      MIN_GROUP_SIZE: '3'
+
+defaults:
+  container:
+    envFrom:
+    - configMapRef:
+        name: env
+    - secretRef:
+        name: secretsmanager
+  csiSecrets:
+  - secretsmanager
+  pod:
+    securityContext:
+      fsGroup: 1000
+
+services:
+  web:
+    containers:
+      main:
+        http: {}
+        resources:
+          limits:
+            memory: 1536Mi
+          requests:
+            cpu: 1m
+            memory: 512Mi
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 5
+      enabled: true
+    virtualservice:
+      headers: true
+      matchprefix: /
+      timeout: 30s
+    poddisruptionbudget:
+      enabled: true
+  console:
+    containers:
+      main:
+        args:
+          - 'sleep'
+          - 'infinity'
+        resources:
+          limits:
+            memory: 1536Mi
+          requests:
+            cpu: 1m
+            memory: 256Mi
+
+jobs:
+  db-migrate:
+    backoffLimit: 1
+    containers:
+      main:
+        command:
+          - /bin/sh
+          - -c
+          - |
+            bundle exec rake db:migrate
+            result="$?";
+            ruby -rnet/http -e 'Net::HTTP.post(URI.parse("http://localhost:15020/quitquitquit"), nil)';
+            exit "$result"
+        env:
+          - name: ENABLE_PROMETHEUS
+            value: 'false'
+    restartPolicy: Never
+
+# cronjobs:
+  # purge-updated:
+  #   schedule: '*/10 * * * *'
+  #   containers:
+  #     main:
+  #       command:
+  #         - /bin/sh
+  #         - -c
+  #         - |
+  #           bundle exec rake purge:updated_content
+  #           result="$?";
+  #           ruby -rnet/http -e 'Net::HTTP.post(URI.parse("http://localhost:15020/quitquitquit"), nil)';
+  #           exit "$result"
+  #       env:
+  #         - name: ENABLE_PROMETHEUS
+  #           value: 'false'
+  #   restartPolicy: Never

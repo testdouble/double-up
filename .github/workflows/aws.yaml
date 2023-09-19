@@ -1,0 +1,38 @@
+name: AWS Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    permissions:
+      id-token: write
+      contents: read
+      checks: write
+    name: build-and-push
+    concurrency: ${{ github.ref }}
+    uses: ./.github/workflows/build-image.yaml
+    with:
+      build_role: arn:aws:iam::458591407913:role/github-actions-ecr-pair-matchmaker
+      ecr_repo: thoughtbot/pair-matchmaker
+
+  deploy-staging-sandbox-v1:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: read
+      id-token: write
+      actions: read
+    name: deploy-staging-sandbox-v1
+    needs: build-and-push
+    concurrency: ${{ github.ref }}
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      cluster_name: thoughtbot-sandbox-v1
+      deploy_role: arn:aws:iam::181682000713:role/pair-matchmaker-deploy
+      image_url: ${{ needs.build-and-push.outputs.image_url }}
+      manifest_path: ./deploy/staging
+      namespace: pair-matchmaker
+      registry_account: '458591407913'
+      version: ${{ needs.build-and-push.outputs.version }}

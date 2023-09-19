@@ -1,0 +1,13 @@
+app:
+  instance: pair-matchmaker-staging
+
+namespaces:
+- name: pair-matchmaker
+  create: false
+  hosts:
+  - pair-matchmaker-staging.thoughtbot.com
+  serviceaccount:
+    pair-matchmaker:
+      create: false
+  virtualservice:
+    enabled: true
