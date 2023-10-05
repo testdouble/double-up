@@ -75,20 +75,20 @@ jobs:
             value: 'false'
     restartPolicy: Never
 
-# cronjobs:
-  # purge-updated:
-  #   schedule: '*/10 * * * *'
-  #   containers:
-  #     main:
-  #       command:
-  #         - /bin/sh
-  #         - -c
-  #         - |
-  #           bundle exec rake purge:updated_content
-  #           result="$?";
-  #           ruby -rnet/http -e 'Net::HTTP.post(URI.parse("http://localhost:15020/quitquitquit"), nil)';
-  #           exit "$result"
-  #       env:
-  #         - name: ENABLE_PROMETHEUS
-  #           value: 'false'
-  #   restartPolicy: Never
+cronjobs:
+  run-matchmaking:
+    schedule: '0 0 * * *'
+    containers:
+      main:
+        command:
+          - /bin/sh
+          - -c
+          - |
+            bundle exec rake create_groups
+            result="$?";
+            ruby -rnet/http -e 'Net::HTTP.post(URI.parse("http://localhost:15020/quitquitquit"), nil)';
+            exit "$result"
+        env:
+          - name: ENABLE_PROMETHEUS
+            value: 'false'
+    restartPolicy: Never
