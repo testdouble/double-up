@@ -1,0 +1,2 @@
+class MatchmakingGroup < ApplicationRecord
+end

@@ -3,12 +3,13 @@ module Rakes
     def initialize(stdout:, stderr:, config: nil)
       @stdout = stdout
       @stderr = stderr
-      @config = config || Rails.application.config.x.matchmaking
+      @config = config
 
       @identifies_nearest_date = IdentifiesNearestDate.new
     end
 
     def call
+      @config ||= CollectGroups.call
       @config.each_pair do |grouping, grouping_config|
         next unless should_run_today?(grouping_config.schedule)
 
