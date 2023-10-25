@@ -2,7 +2,8 @@ Rails.application.configure do
   group_defaults = {
     active: false,
     schedule: :weekly,
-    size: 2
+    size: 2,
+    readonly: true
   }
 
   matchmaking_config = config_for(:matchmaking).then do |cfg|
