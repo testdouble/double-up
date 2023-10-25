@@ -11,22 +11,26 @@ RSpec.describe Rakes::RunsMatchmaking do
     @identifies_nearest_date = double(IdentifiesNearestDate)
     allow(IdentifiesNearestDate).to receive(:new) { @identifies_nearest_date }
 
+    @collects_groups = double(CollectsGroups)
+    allow(CollectsGroups).to receive(:new) { @collects_groups }
+
     @jan_5 = Date.civil(2021, 1, 5)
     allow(Date).to receive(:today) { @jan_5 }
   end
 
   it "shows successful message" do
-    expect(@identifies_nearest_date).to receive(:call).with(:daily) { @jan_5 }.exactly(3).times
-    expect(@jan_5).to receive(:today?) { true }.exactly(3).times
-    expect(@establish_matches_for_grouping_job).to receive(:perform).exactly(3).times
-
-    subject = Rakes::RunsMatchmaking.new(
-      stdout: @stdout, stderr: @stderr, config: OpenStruct.new(
+    expect(@collects_groups).to receive(:call).and_return(
+      OpenStruct.new(
         test1: OpenStruct.new(active: true, size: 2, channel: "group-test1", schedule: :daily),
         test2: OpenStruct.new(active: true, size: 3, channel: "group-test2", schedule: :daily),
         test3: OpenStruct.new(active: true, size: 4, channel: "group-test3", schedule: :daily)
       )
     )
+    expect(@identifies_nearest_date).to receive(:call).with(:daily) { @jan_5 }.exactly(3).times
+    expect(@jan_5).to receive(:today?) { true }.exactly(3).times
+    expect(@establish_matches_for_grouping_job).to receive(:perform).exactly(3).times
+
+    subject = Rakes::RunsMatchmaking.new(stdout: @stdout, stderr: @stderr)
     subject.call
 
     output = output!
@@ -38,15 +42,16 @@ RSpec.describe Rakes::RunsMatchmaking do
   end
 
   it "shows an error message" do
+    expect(@collects_groups).to receive(:call).and_return(
+      OpenStruct.new(
+        test: OpenStruct.new(active: true, size: 2, channel: "group-test", schedule: :daily)
+      )
+    )
     expect(@identifies_nearest_date).to receive(:call).with(:daily) { @jan_5 }
     expect(@jan_5).to receive(:today?) { true }
     allow(@establish_matches_for_grouping_job).to receive(:perform) { raise "test" }
 
-    subject = Rakes::RunsMatchmaking.new(
-      stdout: @stdout, stderr: @stderr, config: OpenStruct.new(
-        test: OpenStruct.new(active: true, size: 2, channel: "group-test", schedule: :daily)
-      )
-    )
+    subject = Rakes::RunsMatchmaking.new(stdout: @stdout, stderr: @stderr)
     expect { subject.call }.to raise_error("test")
 
     output = output!
@@ -56,14 +61,15 @@ RSpec.describe Rakes::RunsMatchmaking do
   end
 
   it "shows inactive message" do
-    expect(@identifies_nearest_date).to receive(:call).with(:daily) { @jan_5 }
-    expect(@jan_5).to receive(:today?) { true }
-
-    subject = Rakes::RunsMatchmaking.new(
-      stdout: @stdout, stderr: @stderr, config: OpenStruct.new(
+    expect(@collects_groups).to receive(:call).and_return(
+      OpenStruct.new(
         test: OpenStruct.new(active: false, size: 2, channel: "group-test", schedule: :daily)
       )
     )
+    expect(@identifies_nearest_date).to receive(:call).with(:daily) { @jan_5 }
+    expect(@jan_5).to receive(:today?) { true }
+
+    subject = Rakes::RunsMatchmaking.new(stdout: @stdout, stderr: @stderr)
     subject.call
 
     output = output!
@@ -73,14 +79,15 @@ RSpec.describe Rakes::RunsMatchmaking do
   end
 
   it "shows completed message on an unscheduled day" do
-    expect(@identifies_nearest_date).to receive(:call).with(:weekly) { @jan_5 }
-    expect(@jan_5).to receive(:today?) { false }
-
-    subject = Rakes::RunsMatchmaking.new(
-      stdout: @stdout, stderr: @stderr, config: OpenStruct.new(
+    expect(@collects_groups).to receive(:call).and_return(
+      OpenStruct.new(
         test: OpenStruct.new(active: false, size: 2, channel: "group-test", schedule: :weekly)
       )
     )
+    expect(@identifies_nearest_date).to receive(:call).with(:weekly) { @jan_5 }
+    expect(@jan_5).to receive(:today?) { false }
+
+    subject = Rakes::RunsMatchmaking.new(stdout: @stdout, stderr: @stderr)
     subject.call
 
     output = output!

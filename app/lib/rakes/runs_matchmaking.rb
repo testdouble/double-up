@@ -1,16 +1,15 @@
 module Rakes
   class RunsMatchmaking
-    def initialize(stdout:, stderr:, config: nil)
+    def initialize(stdout:, stderr:)
       @stdout = stdout
       @stderr = stderr
-      @config = config
 
       @identifies_nearest_date = IdentifiesNearestDate.new
+      @collects_groups = CollectsGroups.new
     end
 
     def call
-      @config ||= CollectGroups.call
-      @config.each_pair do |grouping, grouping_config|
+      @collects_groups.call.each_pair do |grouping, grouping_config|
         next unless should_run_today?(grouping_config.schedule)
 
         unless grouping_config.active
