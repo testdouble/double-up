@@ -1,0 +1,24 @@
+<table class="table-auto">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Active</th>
+      <th>Schedule</th>
+      <th>Size</th>
+      <th>Channel</th>
+      <th>Readonly</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @groups.each do |group| %>
+      <tr>
+        <td><%= group[:name] %></td>
+        <td><%= group[:active] %></td>
+        <td><%= group[:schedule] %></td>
+        <td><%= group[:size] %></td>
+        <td><%= group[:channel] %></td>
+        <td><%= group[:readonly] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
