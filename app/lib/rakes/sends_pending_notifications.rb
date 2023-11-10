@@ -42,7 +42,7 @@ module Rakes
 
     def pick_strategy(notification)
       return @uses_email_to_deliver_notification if notification.use_email?
-      return @uses_slack_to_deliver_notification if notification.use_slack?
+      @uses_slack_to_deliver_notification if notification.use_slack?
     end
   end
 end
