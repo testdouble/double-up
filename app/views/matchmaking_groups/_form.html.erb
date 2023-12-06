@@ -1,0 +1,8 @@
+<%= form_for @group do |f| %>
+  <%= f.text_field :name, placeholder: "Name" %>
+  <%= f.text_field :slack_channel_name, placeholder: "Slack Channel Name" %>
+  <%= f.select :schedule, ['daily', 'weekly', 'fortnightly', 'monthly'], selected: 'weekly' %>
+  <%= f.text_field :target_size, placeholder: "Target Size" %>
+  <%= f.check_box :is_active, checked: true %>
+  <%= f.submit @group.id.present? ? "Update Group" : "Create Group" %>
+<% end %>

@@ -5,9 +5,9 @@ RSpec.describe CollectsGroups do
 
   let(:yaml_config) do
     OpenStruct.new(
-      test1: OpenStruct.new(active: true, size: 2, channel: "group-test1", schedule: :daily, readonly: true),
-      test2: OpenStruct.new(active: true, size: 3, channel: "group-test2", schedule: :daily, readonly: true),
-      test3: OpenStruct.new(active: true, size: 4, channel: "group-test3", schedule: :daily, readonly: true)
+      test1: OpenStruct.new(active: true, size: 2, channel: "group-test1", schedule: :daily),
+      test2: OpenStruct.new(active: true, size: 3, channel: "group-test2", schedule: :daily),
+      test3: OpenStruct.new(active: true, size: 4, channel: "group-test3", schedule: :daily)
     )
   end
 
@@ -18,7 +18,7 @@ RSpec.describe CollectsGroups do
   end
 
   it "returns a hash that merges config and MatchmakingGroup records" do
-    MatchmakingGroup.create(
+    custom_group = MatchmakingGroup.create(
       name: "database_record",
       slack_channel_name: "bar",
       schedule: "weekly",
@@ -31,6 +31,7 @@ RSpec.describe CollectsGroups do
 
     expect(result.to_h.size).to eq(4)
     expect(result.database_record.to_h).to eq(
+      id: custom_group.id,
       active: true,
       size: 2,
       channel: "bar",
