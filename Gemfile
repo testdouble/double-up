@@ -32,6 +32,7 @@ group :development do
 end
 
 group :test do
+  gem "minitest"
   gem "rspec"
   gem "rspec-rails"
 end

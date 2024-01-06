@@ -301,6 +301,7 @@ DEPENDENCIES
   hotwire-rails
   importmap-rails
   listen (~> 3.3)
+  minitest
   pg
   pry-byebug
   puma
