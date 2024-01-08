@@ -1,8 +1,8 @@
 ENV["RAILS_ENV"] ||= "test"
-require File.expand_path("../config/environment", __dir__)
+require_relative "../config/environment"
+require "rails/test_help"
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-Dir[File.expand_path("support/**/*.rb", __dir__)].each { |file| require file }
 
 # Disable slack messages from going out in tests
 Slack::ClientWrapper.disable!
@@ -10,11 +10,14 @@ Slack::ClientWrapper.disable!
 require "minitest/autorun"
 require "mocktail"
 
-class Minitest::Test
+class ActiveSupport::TestCase
   include Mocktail::DSL
 
-  def teardown
-    super
+  parallelize(workers: :number_of_processors)
+
+  fixtures :all
+
+  teardown do
     Mocktail.reset
   end
 end
