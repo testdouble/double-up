@@ -33,6 +33,7 @@ end
 
 group :test do
   gem "minitest"
+  gem "mocktail"
   gem "rspec"
   gem "rspec-rails"
 end

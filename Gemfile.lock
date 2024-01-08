@@ -126,6 +126,9 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitest (5.16.3)
+    mocktail (2.0.0)
+      sorbet-eraser (~> 0.3.1)
+      sorbet-runtime (~> 0.5.9204)
     msgpack (1.6.0)
     multipart-post (2.2.3)
     net-imap (0.3.1)
@@ -243,6 +246,8 @@ GEM
       gli
       hashie
       websocket-driver
+    sorbet-eraser (0.3.1)
+    sorbet-runtime (0.5.11178)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -303,6 +308,7 @@ DEPENDENCIES
   importmap-rails
   listen (~> 3.3)
   minitest
+  mocktail
   pg
   puma
   rack-mini-profiler (~> 2.0)
