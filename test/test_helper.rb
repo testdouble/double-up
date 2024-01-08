@@ -9,8 +9,10 @@ Slack::ClientWrapper.disable!
 
 require "minitest/autorun"
 require "mocktail"
+require_relative "support/config_test_helper"
 
 class ActiveSupport::TestCase
+  include ConfigTestHelper
   include Mocktail::DSL
 
   parallelize(workers: :number_of_processors)
