@@ -21,8 +21,8 @@ gem "bootsnap", require: false
 gem "todo_or_die"
 
 group :development, :test do
+  gem "debug"
   gem "dotenv-rails"
-  gem "pry-byebug"
   gem "standard"
 end
 
