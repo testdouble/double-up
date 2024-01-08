@@ -1,13 +1,15 @@
+require "test_helper"
+
 module Matchmaking
-  class BalanceGroupsTest < Minitest::Test
-    def setup
+  class BalanceGroupsTest < ActiveSupport::TestCase
+    setup do
       @subject = BalanceGroups.new
       @participant_matrix = (0..11).map.with_index do |row, index|
         [index, (0..index - 1).map { |column| (65 + column).chr }]
       end
     end
 
-    def test_balance_for_groups_with_target_size_of_3
+    test "balance for groups with target size of 3" do
       distributions = {
         0 => [],
         1 => [],
@@ -28,7 +30,7 @@ module Matchmaking
       end
     end
 
-    def test_balance_for_groups_with_target_size_of_4
+    test "balance for groups with target size of 4" do
       distributions = {
         0 => [],
         1 => [],
@@ -49,7 +51,7 @@ module Matchmaking
       end
     end
 
-    def test_balance_for_groups_with_target_size_of_5
+    test "balance for groups with target size of 5" do
       distributions = {
         0 => [],
         1 => [],

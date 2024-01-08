@@ -2,8 +2,8 @@ require "test_helper"
 
 module Matchmaking
   module Strategies
-    class PairByFewestEncountersTest < Minitest::Test
-      def setup
+    class PairByFewestEncountersTest < ActiveSupport::TestCase
+      setup do
         srand(98765)
 
         @subject = PairByFewestEncounters
@@ -16,7 +16,7 @@ module Matchmaking
         }
       end
 
-      def test_matchmaking_pairs_when_third_participant_is_not_allowed
+      test "matchmaking pairs when third participant is not allowed" do
         strategy = @subject.new(allow_third_participant: false)
 
         matches = strategy.call(@scored_participants)
@@ -25,7 +25,7 @@ module Matchmaking
         assert_equal matches, [["Merry", "Sam"], ["Frodo", "Pippin"]]
       end
 
-      def test_matchmaking_pairs_when_third_participant_is_allowed
+      test "matchmaking pairs when third participant is allowed" do
         strategy = @subject.new(allow_third_participant: true)
 
         matches = strategy.call(@scored_participants)
@@ -34,7 +34,7 @@ module Matchmaking
         assert_equal matches, [["Merry", "Sam", "Gandalf"], ["Frodo", "Pippin"]]
       end
 
-      def test_matchmaking_pairs_for_no_participants
+      test "matchmaking pairs for no participants" do
         strategy = @subject.new
 
         matches = strategy.call({})
@@ -43,7 +43,7 @@ module Matchmaking
         assert_equal matches, []
       end
 
-      def test_matchmaking_pairs_for_one_participant
+      test "matchmaking pairs for one participant" do
         strategy = @subject.new
 
         matches = strategy.call({"Frodo" => {}})

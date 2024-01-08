@@ -1,10 +1,13 @@
+require "test_helper"
+
 module Matchmaking
   module Strategies
-    class ArrangeGroupsGeneticallyTest < Minitest::Test
-      def setup
+    class ArrangeGroupsGeneticallyTest < ActiveSupport::TestCase
+      setup do
         srand(98765)
 
         @subject = ArrangeGroupsGenetically
+        @balance_groups = Mocktail.of_next(BalanceGroups)
         @scored_participants = {
           "Frodo" => {"Pippin" => 0, "Merry" => 1, "Sam" => 2, "Gandalf" => 1},
           "Sam" => {"Frodo" => 2, "Pippin" => 1, "Merry" => 0, "Gandalf" => 0},
@@ -14,7 +17,12 @@ module Matchmaking
         }
       end
 
-      def test_matchmaking_groups
+      test "matchmaking genetic algorithm" do
+        stubs { |m| @balance_groups.call(m.any, 3) }.with do |call|
+          (a, b, c, d, e) = call.args.first
+          [[a, c, e], [b, d]]
+        end
+
         strategy = @subject.new(target_group_size: 3, population_size: 50)
 
         matches = strategy.call(@scored_participants)
@@ -23,7 +31,7 @@ module Matchmaking
         assert_equal matches, [["Pippin", "Frodo"], ["Gandalf", "Merry", "Sam"]]
       end
 
-      def test_matchmaking_pairs_for_no_participants
+      test "matchmaking for no participants" do
         strategy = @subject.new(target_group_size: 3)
 
         matches = strategy.call({})
@@ -32,7 +40,7 @@ module Matchmaking
         assert_equal matches, []
       end
 
-      def test_matchmaking_pairs_for_one_participant
+      test "matchmaking for one participant" do
         strategy = @subject.new(target_group_size: 3)
 
         matches = strategy.call({"Frodo" => {}})
