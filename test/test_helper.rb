@@ -8,3 +8,13 @@ Dir[File.expand_path("support/**/*.rb", __dir__)].each { |file| require file }
 Slack::ClientWrapper.disable!
 
 require "minitest/autorun"
+require "mocktail"
+
+class Minitest::Test
+  include Mocktail::DSL
+
+  def teardown
+    super
+    Mocktail.reset
+  end
+end
