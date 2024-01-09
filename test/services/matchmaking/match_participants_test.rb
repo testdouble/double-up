@@ -18,6 +18,21 @@ module Matchmaking
       assert_equal [], @subject.new.call(["1"], "test")
     end
 
+    test "returns an empty array if there is no strategy" do
+      expected_scored_participants = {
+        "Frodo" => {"Sam" => 3, "Merry" => 1, "Pippin" => 0, "Gandalf" => 2},
+        "Sam" => {"Frodo" => 3, "Merry" => 2, "Pippin" => 1, "Gandalf" => 0},
+        "Merry" => {"Frodo" => 1, "Sam" => 2, "Pippin" => 3, "Gandalf" => 0},
+        "Pippin" => {"Frodo" => 0, "Sam" => 1, "Merry" => 3, "Gandalf" => 2},
+        "Gandalf" => {"Frodo" => 2, "Sam" => 0, "Merry" => 0, "Pippin" => 2}
+      }
+
+      stubs { @collect_scored_participants.call(@participants, "test") }.with { expected_scored_participants }
+      stubs { @choose_strategy.call("test") }.with { nil }
+
+      assert_equal [], @subject.new.call(@participants, "test")
+    end
+
     test "returns matches" do
       expected_scored_participants = {
         "Frodo" => {"Sam" => 3, "Merry" => 1, "Pippin" => 0, "Gandalf" => 2},

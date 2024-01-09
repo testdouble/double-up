@@ -13,6 +13,7 @@ module Matchmaking
       scored_participants = @collect_scored_participants.call(participants, grouping)
 
       strategy = @choose_strategy.call(grouping)
+      return [] unless strategy
 
       strategy.call(scored_participants)
     end
