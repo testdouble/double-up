@@ -36,8 +36,11 @@ class EstablishMatchesForGroupingJob
     channel_name = @config.send(grouping)&.channel
     raise "No configured channel for grouping '#{grouping}'" unless channel_name
 
-    @loads_slack_channels.call(types: "public_channel").find { |channel|
+    selected_channel = @loads_slack_channels.call(types: "public_channel").find { |channel|
       channel.name_normalized == channel_name
     }
+    raise "No channel found with name '#{channel_name}' for grouping '#{grouping}'" unless selected_channel
+
+    selected_channel
   end
 end

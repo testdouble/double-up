@@ -26,6 +26,21 @@ class EstablishMatchesForGroupingJobTest < ActiveSupport::TestCase
     }
   end
 
+  test "raises error when no channel found with name" do
+    config = matchmaking_config(test: {size: 2, channel: "test"})
+
+    stubs { @loads_slack_channels.call(types: "public_channel") }.with {
+      [
+        Slack::Messages::Message.new(id: "CHANNEL_ID_1", name_normalized: "general"),
+        Slack::Messages::Message.new(id: "CHANNEL_ID_2", name_normalized: "random")
+      ]
+    }
+
+    assert_raises("No channel found with name 'test' for grouping 'test'") {
+      @subject.new(config: config).perform(grouping: "test")
+    }
+  end
+
   test "matches members of a specific channel and records the match" do
     config = matchmaking_config(test: {size: 2, channel: "group-test"})
 
