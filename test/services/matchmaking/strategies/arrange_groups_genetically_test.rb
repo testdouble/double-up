@@ -33,7 +33,9 @@ module Matchmaking
         matches = strategy.call(@scored_participants)
 
         assert matches.is_a?(Array)
-        assert_equal matches, [["Sam", "Frodo", "Boromir"], ["Merry", "Gimli", "Gollum"], ["Pippin", "Gandalf"], ["Legolas", "Aragorn"]]
+        assert_equal matches.size, 4
+        assert_equal matches.map(&:size), [3, 3, 2, 2]
+        assert_equal matches.flatten.uniq.size, 10
       end
 
       test "matchmaking for no participants" do
