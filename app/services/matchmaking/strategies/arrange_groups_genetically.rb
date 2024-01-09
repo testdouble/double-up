@@ -51,10 +51,10 @@ module Matchmaking
         population = Array.new(@population_size) { random_solution }
 
         @generations.times do
-          selected = select_parents(population)
+          p1, p2 = select_parents(population)
 
-          offspring = selected.map { |p1, p2| crossover(p1, p2) }
-          mutated_offspring = offspring.each { |child| mutate(child) }
+          offspring = crossover(p1, p2)
+          mutated_offspring = offspring.map { |child| mutate(child) }
 
           population = select_next_generation(population, mutated_offspring)
         end
@@ -69,7 +69,7 @@ module Matchmaking
       end
 
       def mutate(solution)
-        return solution if solution.empty? || solution.all? { |group| group.size <= 1 }
+        return solution if solution.empty?
 
         # Randomly select two groups to mutate
         group_indices = (0...solution.size).to_a.sample(2)
@@ -94,15 +94,45 @@ module Matchmaking
       end
 
       def crossover(parent1, parent2)
-        return [parent1.dup, parent2.dup] if parent1.size <= 1 || parent2.size <= 1
+        return [parent1.dup, parent2.dup] if parent1.empty? || parent2.empty? || parent1.size != parent2.size
 
-        crossover_point = rand(1...[parent1.size, parent2.size].min)
+        crossover_point = rand([parent1.size, parent2.size].min)
 
-        # Create offspring by combining parts of the parents
-        offspring1 = parent1[0...crossover_point] + parent2[crossover_point..]
-        offspring2 = parent2[0...crossover_point] + parent1[crossover_point..]
+        new_parent1 = parent1.dup
+        new_parent2 = parent2.dup
+        # Swap the whole group. This will likely violate the determinants of matchmaking, namely that each
+        # participant exist in exactly one group. The rest of the method will fix this.
+        new_parent1[crossover_point], new_parent2[crossover_point] = new_parent2[crossover_point], new_parent1[crossover_point]
+
+        # The fix here is to identify any participants that are duplicated and replace them with participants that are
+        # missing from groups. This ensures that each participant exists in exactly one group. The only group that remains
+        # unchanged is the one that was swapped. By leaving that group unchanged, the crossover point is maintained so
+        # the offspring has something from each parent.
+        offspring1 = fix_duplicates(new_parent1, crossover_point, parent1 + parent2)
+        offspring2 = fix_duplicates(new_parent2, crossover_point, parent1 + parent2)
 
         [offspring1, offspring2]
+      end
+
+      def fix_duplicates(offspring, crossover_point, all_groups)
+        all_participants = all_groups.flatten.uniq
+        existing_participants = offspring.flatten
+
+        missing = all_participants - existing_participants
+        duplicated = existing_participants.tally.select { |p, c| c > 1 }.keys
+
+        offspring.map.with_index do |group, idx|
+          next group if idx == crossover_point
+
+          group.map do |participant|
+            if duplicated.include?(participant)
+              duplicated.delete(participant)
+              missing.shift
+            else
+              participant
+            end
+          end
+        end
       end
 
       def fitness(solution)
