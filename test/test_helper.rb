@@ -9,15 +9,21 @@ Slack::ClientWrapper.disable!
 
 require "minitest/autorun"
 require "mocktail"
-require_relative "support/config_test_helper"
+Dir[Rails.root.join("test/support/**/*.rb")].each { |f| require f }
 
 class ActiveSupport::TestCase
   include ConfigTestHelper
+  include DatabaseTestHelper
+  include IoTestHelper
   include Mocktail::DSL
 
   parallelize(workers: :number_of_processors)
 
   fixtures :all
+
+  setup do
+    io_refresh!
+  end
 
   teardown do
     Mocktail.reset
