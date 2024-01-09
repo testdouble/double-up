@@ -27,6 +27,7 @@ group :development, :test do
 end
 
 group :development do
+  gem "foreman"
   gem "rack-mini-profiler", "~> 2.0"
   gem "listen", "~> 3.3"
 end
