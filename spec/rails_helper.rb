@@ -50,5 +50,4 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   config.include DatabaseHelpers
-  config.include MatchmakingHelpers, type: :matchmaking
 end
