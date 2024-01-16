@@ -2,7 +2,7 @@ class EstablishMatchesForGroupingJob
   def initialize(config: nil)
     @loads_slack_channels = Slack::LoadsSlackChannels.new
     @loads_slack_channel_members = Slack::LoadsSlackChannelMembers.new
-    @matches_participants = Matchmaking::MatchesParticipants.new(config: config)
+    @match_participants = Matchmaking::MatchParticipants.new(config: config)
 
     @config = config || Rails.application.config.x.matchmaking
   end
@@ -10,13 +10,12 @@ class EstablishMatchesForGroupingJob
   def perform(grouping:)
     channel = channel_for_grouping(grouping)
 
-    matches = @matches_participants.call(
-      grouping: grouping,
-      participant_ids: @loads_slack_channel_members.call(channel: channel.id)
-    )
+    participants = @loads_slack_channel_members.call(channel: channel.id)
+
+    matches = @match_participants.call(participants, grouping)
     matches.each do |match|
       HistoricalMatch.create(
-        members: match.members,
+        members: match,
         grouping: grouping,
         matched_on: Date.today,
         pending_notifications: [
@@ -32,15 +31,16 @@ class EstablishMatchesForGroupingJob
   private
 
   def channel_for_grouping(grouping)
-    grouping_sym = grouping.intern
+    raise "No config found for grouping '#{grouping}'" unless @config.respond_to?(grouping.intern)
 
-    raise "No config found for grouping '#{grouping}'" unless @config.respond_to?(grouping_sym)
-
-    channel_name = @config.send(grouping_sym)&.channel
+    channel_name = @config.send(grouping)&.channel
     raise "No configured channel for grouping '#{grouping}'" unless channel_name
 
-    @loads_slack_channels.call(types: "public_channel").find { |channel|
+    selected_channel = @loads_slack_channels.call(types: "public_channel").find { |channel|
       channel.name_normalized == channel_name
     }
+    raise "No channel found with name '#{channel_name}' for grouping '#{grouping}'" unless selected_channel
+
+    selected_channel
   end
 end

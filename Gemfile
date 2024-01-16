@@ -21,17 +21,20 @@ gem "bootsnap", require: false
 gem "todo_or_die"
 
 group :development, :test do
+  gem "debug"
   gem "dotenv-rails"
-  gem "pry-byebug"
   gem "standard"
 end
 
 group :development do
+  gem "foreman"
   gem "rack-mini-profiler", "~> 2.0"
   gem "listen", "~> 3.3"
 end
 
 group :test do
+  gem "minitest"
+  gem "mocktail"
   gem "rspec"
   gem "rspec-rails"
 end

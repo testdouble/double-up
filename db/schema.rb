@@ -33,13 +33,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_213602) do
     t.index ["members"], name: "index_historical_matches_on_members", using: :gin
   end
 
-  create_table "meeting_links", force: :cascade do |t|
-    t.bigint "user_id"
-    t.string "link_url"
-    t.string "link_text"
-    t.index ["user_id"], name: "index_meeting_links_on_user_id"
-  end
-
   create_table "pending_notifications", force: :cascade do |t|
     t.string "strategy"
     t.date "last_attempted_on"

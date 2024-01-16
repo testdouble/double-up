@@ -29,5 +29,7 @@ jobs:
           bundler-cache: true
       - name: Set up database schema
         run: bin/rake db:test:prepare
-      - name: Run tests
+      - name: Run tests (rspec)
         run: bin/rspec
+      - name: Run tests (minitest)
+        run: bin/rails test
