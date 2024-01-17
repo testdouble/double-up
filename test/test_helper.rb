@@ -27,5 +27,6 @@ class ActiveSupport::TestCase
 
   teardown do
     Mocktail.reset
+    Timecop.return
   end
 end
