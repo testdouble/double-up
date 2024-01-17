@@ -20,7 +20,8 @@ class MatchmakingGroupsController < ApplicationController
   end
 
   def update
-    MatchmakingGroup.update(group_params)
+    @group = MatchmakingGroup.find_by(id: params[:id])
+    @group.update(group_params)
     redirect_to matchmaking_groups_path
   end
 
