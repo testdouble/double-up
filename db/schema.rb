@@ -70,5 +70,4 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
     t.datetime "updated_at", null: false
     t.index ["slack_user_id"], name: "index_users_on_slack_user_id", unique: true
   end
-
 end

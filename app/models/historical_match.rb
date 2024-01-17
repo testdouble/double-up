@@ -6,8 +6,10 @@ class HistoricalMatch < ApplicationRecord
   validates :matched_on, :grouping, presence: true
   validate :at_least_two_members
 
+  scope :in_grouping, ->(grouping) { where(grouping: grouping) }
+  scope :with_member, ->(member) { where("members @> ?", "{#{member}}") }
   scope :older_than, ->(date) { where("created_at::date < '#{date.to_date}'") }
-  scope :for_user, ->(user) { where("members @> ?", "{#{user.slack_user_id}}") }
+  scope :for_user, ->(user) { with_member(user.slack_user_id) }
 
   private
 
