@@ -1,6 +1,6 @@
 class MatchmakingGroupsController < ApplicationController
   def index
-    @groups = CollectsGroup.new.call.to_h
+    @groups = CollectGroups.new.call.to_h
       .reduce([]) { |acc, (k, v)| acc << v.to_h.merge(name: k) }
       .sort_by { |g| [g[:readonly] ? 0 : 1, g[:name]] }
   end
