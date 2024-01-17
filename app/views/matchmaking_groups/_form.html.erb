@@ -1,8 +1,30 @@
 <%= form_for @group do |f| %>
-  <%= f.text_field :name, placeholder: "Name" %>
-  <%= f.text_field :slack_channel_name, placeholder: "Slack Channel Name" %>
-  <%= f.select :schedule, ['daily', 'weekly', 'fortnightly', 'monthly'], selected: 'weekly' %>
-  <%= f.text_field :target_size, placeholder: "Target Size" %>
-  <%= f.check_box :is_active, checked: true %>
-  <%= f.submit @group.id.present? ? "Update Group" : "Create Group" %>
+  <p>
+    <%= f.label :name %>
+    <%= f.text_field :name, placeholder: "Name" %>
+  </p>
+
+  <p>
+    <%= f.label :slack_channel_name %>
+    <%= f.text_field :slack_channel_name, placeholder: "Slack Channel Name" %>
+  </p>
+
+  <p>
+    <%= f.label :schedule %>
+    <%= f.select :schedule, ['daily', 'weekly', 'fortnightly', 'monthly'], selected: 'weekly' %>
+  </p>
+
+  <p>
+    <%= f.label :target_size %>
+    <%= f.text_field :target_size, placeholder: "Target Size" %>
+  </p>
+
+  <p>
+    <%= f.label :is_active %>
+    <%= f.check_box :is_active, checked: true %>
+  </p>
+
+  <p>
+    <%= f.submit @group.id.present? ? "Update Group" : "Create Group", class: "py-3 px-5 border border-blue-600 bg-blue-600 hover:bg-blue-800 text-white block font-medium" %>
+  </p>
 <% end %>

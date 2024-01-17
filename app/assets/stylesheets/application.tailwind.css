@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+td,th {
+  @apply p-2;
+}
+
+.actions {
+  a {
+    @apply px-1 mx-1 border border-black;
+  }
+}
+
 /*
 
 @layer components {
