@@ -10,7 +10,13 @@ class MatchmakingGroupsController < ApplicationController
   end
 
   def create
-    MatchmakingGroup.create(group_params.merge(slack_user_id: @current_user.slack_user_id))
+    if MatchmakingGroup.exists?(name: group_params[:name])
+      flash[:error] = "Group already exists"
+    else
+      MatchmakingGroup.create(group_params.merge(slack_user_id: @current_user.slack_user_id))
+      flash[:notice] = "Group created"
+    end
+
     redirect_to matchmaking_groups_path
   end
 
@@ -21,7 +27,15 @@ class MatchmakingGroupsController < ApplicationController
 
   def update
     @group = MatchmakingGroup.find_by(id: params[:id])
-    @group.update(group_params)
+
+    if @group.name != group_params[:name] && MatchmakingGroup.exists?(name: group_params[:name])
+      flash[:error] = "Other group already exists with that name"
+    else
+      @group = MatchmakingGroup.find_by(id: params[:id])
+      @group.update(group_params)
+
+      flash[:notice] = "Group updated"
+    end
     redirect_to matchmaking_groups_path
   end
 
