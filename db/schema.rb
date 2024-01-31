@@ -42,6 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
     t.string "slack_user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_matchmaking_groups_on_name", unique: true
   end
 
   create_table "pending_notifications", force: :cascade do |t|
@@ -70,4 +71,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
     t.datetime "updated_at", null: false
     t.index ["slack_user_id"], name: "index_users_on_slack_user_id", unique: true
   end
+
 end

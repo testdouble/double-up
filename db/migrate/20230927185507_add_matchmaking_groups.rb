@@ -1,7 +1,7 @@
 class AddMatchmakingGroups < ActiveRecord::Migration[7.0]
   def change
     create_table :matchmaking_groups do |t|
-      t.string :name, null: false
+      t.string :name, null: false, index: {unique: true}
       t.string :slack_channel_name, null: false
       t.string :schedule, null: false
       t.integer :target_size, null: false
