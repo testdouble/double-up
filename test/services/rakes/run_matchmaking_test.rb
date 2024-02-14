@@ -3,7 +3,7 @@ require "test_helper"
 module Rakes
   class RunMatchmakingTest < ActiveSupport::TestCase
     setup do
-      @subject = RunsMatchmaking
+      @subject = RunMatchmaking
       @establish_matches_for_group = Mocktail.of_next(Matchmaking::EstablishMatchesForGroup)
       @identifies_nearest_date = Mocktail.of_next(IdentifiesNearestDate)
       @collect_groups = Mocktail.of_next(CollectGroups)
