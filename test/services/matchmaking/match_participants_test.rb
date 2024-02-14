@@ -3,19 +3,21 @@ require "test_helper"
 module Matchmaking
   class MatchParticipantsTest < ActiveSupport::TestCase
     setup do
-      @subject = MatchParticipants
-      @participants = ["Frodo", "Sam", "Merry", "Pippin", "Gandalf"]
       @choose_strategy = Mocktail.of_next(ChooseStrategy)
       @collect_scored_participants = Mocktail.of_next(CollectScoredParticipants)
       @strategy = Mocktail.of(Strategies::ArrangeGroupsGenetically)
+
+      @subject = MatchParticipants.new
+      @participants = ["Frodo", "Sam", "Merry", "Pippin", "Gandalf"]
+      @group = group_with(name: "test")
     end
 
     test "returns an empty array if there are no participants" do
-      assert_equal [], @subject.new.call([], "test")
+      assert_equal [], @subject.call([], @group)
     end
 
     test "returns an empty array if there is only one participant" do
-      assert_equal [], @subject.new.call(["1"], "test")
+      assert_equal [], @subject.call(["1"], @group)
     end
 
     test "returns an empty array if there is no strategy" do
@@ -27,10 +29,10 @@ module Matchmaking
         "Gandalf" => {"Frodo" => 2, "Sam" => 0, "Merry" => 0, "Pippin" => 2}
       }
 
-      stubs { @collect_scored_participants.call(@participants, "test") }.with { expected_scored_participants }
+      stubs { @collect_scored_participants.call(@participants, @group) }.with { expected_scored_participants }
       stubs { @choose_strategy.call("test") }.with { nil }
 
-      assert_equal [], @subject.new.call(@participants, "test")
+      assert_equal [], @subject.call(@participants, @group)
     end
 
     test "returns matches" do
@@ -42,11 +44,11 @@ module Matchmaking
         "Gandalf" => {"Frodo" => 2, "Sam" => 0, "Merry" => 0, "Pippin" => 2}
       }
 
-      stubs { @collect_scored_participants.call(@participants, "test") }.with { expected_scored_participants }
-      stubs { @choose_strategy.call("test") }.with { @strategy }
+      stubs { @collect_scored_participants.call(@participants, @group) }.with { expected_scored_participants }
+      stubs { @choose_strategy.call(@group) }.with { @strategy }
       stubs { @strategy.call(expected_scored_participants) }.with { [["Frodo", "Sam", "Pippin"], ["Merry", "Gandalf"]] }
 
-      matches = @subject.new.call(@participants, "test")
+      matches = @subject.call(@participants, @group)
 
       assert_equal [["Frodo", "Sam", "Pippin"], ["Merry", "Gandalf"]], matches
     end
