@@ -1,13 +1,14 @@
 require "test_helper"
 
 module Rakes
-  class SendsPendingNotificationsTest < ActiveSupport::TestCase
+  class SendPendingNotificationsTest < ActiveSupport::TestCase
     setup do
-      @subject = SendsPendingNotifications
       @retrieves_pending_notifications = Mocktail.of_next(Notify::RetrievesPendingNotifications)
       @determines_retriability = Mocktail.of_next(Notify::DeterminesRetriability)
       @uses_email_to_deliver_notification = Mocktail.of_next(Notify::UsesEmailToDeliverNotification)
       @uses_slack_to_deliver_notification = Mocktail.of_next(Notify::UsesSlackToDeliverNotification)
+
+      @subject = SendPendingNotifications
     end
 
     test "does not send any when no pending notifications are found" do

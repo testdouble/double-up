@@ -1,5 +1,5 @@
 module Rakes
-  class SendsPendingNotifications
+  class SendPendingNotifications
     def initialize(stdout:, stderr:, config: nil)
       @stdout = stdout
       @stderr = stderr
