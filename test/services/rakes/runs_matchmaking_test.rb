@@ -4,7 +4,7 @@ module Rakes
   class RunsMatchmakingTest < ActiveSupport::TestCase
     setup do
       @subject = RunsMatchmaking
-      @establish_matches_for_grouping_job = Mocktail.of_next(EstablishMatchesForGroupingJob)
+      @establish_matches_for_group = Mocktail.of_next(Matchmaking::EstablishMatchesForGroup)
       @identifies_nearest_date = Mocktail.of_next(IdentifiesNearestDate)
       @collect_groups = Mocktail.of_next(CollectGroups)
       @jan_5 = Date.civil(2021, 1, 5)
@@ -14,17 +14,15 @@ module Rakes
     end
 
     test "shows successful message" do
-      config = matchmaking_config(
-        test1: {active: true, size: 2, channel: "group-test1", schedule: :daily},
-        test2: {active: true, size: 3, channel: "group-test2", schedule: :daily},
-        test3: {active: true, size: 4, channel: "group-test3", schedule: :daily}
-      )
+      groups = [
+        group_with(name: "test1", channel: "group-test1", size: 2, schedule: :daily),
+        group_with(name: "test2", channel: "group-test2", size: 3, schedule: :daily),
+        group_with(name: "test3", channel: "group-test3", size: 4, schedule: :daily)
+      ]
 
-      stubs { @collect_groups.call }.with { config }
-      stubs(times: 3) { @identifies_nearest_date.call(:daily) }.with { @jan_5 }
-      stubs { @establish_matches_for_grouping_job.perform(grouping: :test1) }
-      stubs { @establish_matches_for_grouping_job.perform(grouping: :test2) }
-      stubs { @establish_matches_for_grouping_job.perform(grouping: :test3) }
+      stubs { @collect_groups.call }.with { groups }
+      stubs(times: 3) { @identifies_nearest_date.call("daily") }.with { @jan_5 }
+      stubs(times: 3) { |m| @establish_matches_for_group.call(m.is_a?(MatchmakingGroup)) }
 
       @subject.new(stdout: stdout, stderr: stderr).call
 
@@ -37,11 +35,13 @@ module Rakes
     end
 
     test "shows an error message" do
-      config = matchmaking_config(test: {channel: "group-test", schedule: :daily})
+      groups = [
+        group_with(name: "test", channel: "group-test", size: 2, schedule: :daily)
+      ]
 
-      stubs { @collect_groups.call }.with { config }
-      stubs { @identifies_nearest_date.call(:daily) }.with { @jan_5 }
-      stubs { @establish_matches_for_grouping_job.perform(grouping: :test) }.with { raise "test" }
+      stubs { @collect_groups.call }.with { groups }
+      stubs { @identifies_nearest_date.call("daily") }.with { @jan_5 }
+      stubs { |m| @establish_matches_for_group.call(m.any) }.with { raise "test" }
 
       assert_raises("test") do
         @subject.new(stdout: stdout, stderr: stderr).call
@@ -54,10 +54,12 @@ module Rakes
     end
 
     test "shows inactive message" do
-      config = matchmaking_config(test: {active: false, channel: "group-test", schedule: :daily})
+      groups = [
+        group_with(name: "test", channel: "group-test", size: 2, schedule: :daily, active: false)
+      ]
 
-      stubs { @collect_groups.call }.with { config }
-      stubs { @identifies_nearest_date.call(:daily) }.with { @jan_5 }
+      stubs { @collect_groups.call }.with { groups }
+      stubs { @identifies_nearest_date.call("daily") }.with { @jan_5 }
 
       @subject.new(stdout: stdout, stderr: stderr).call
 
@@ -66,10 +68,12 @@ module Rakes
     end
 
     test "shows completed message on an unscheduled day" do
-      config = matchmaking_config(test: {channel: "group-test", schedule: :weekly})
+      groups = [
+        group_with(name: "test", channel: "group-test", size: 2, schedule: :weekly)
+      ]
 
-      stubs { @collect_groups.call }.with { config }
-      stubs { @identifies_nearest_date.call(:weekly) }.with { Date.civil(2021, 1, 6) }
+      stubs { @collect_groups.call }.with { groups }
+      stubs { @identifies_nearest_date.call("weekly") }.with { Date.civil(2021, 1, 6) }
 
       @subject.new(stdout: stdout, stderr: stderr).call
 

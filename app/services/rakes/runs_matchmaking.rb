@@ -6,22 +6,22 @@ module Rakes
 
       @identifies_nearest_date = IdentifiesNearestDate.new
       @collect_groups = CollectGroups.new
-      @establish_matches_for_grouping_job = EstablishMatchesForGroupingJob.new
+      @establish_matches_for_group = Matchmaking::EstablishMatchesForGroup.new
     end
 
     def call
-      @collect_groups.call.each_pair do |grouping, grouping_config|
-        next unless should_run_today?(grouping_config.schedule)
+      @collect_groups.call.each do |group|
+        next unless should_run_today?(group.schedule)
 
-        unless grouping_config.active
-          @stdout.puts "Skipping matchmaking for '#{grouping}'"
+        unless group.active?
+          @stdout.puts "Skipping matchmaking for '#{group.name}'"
           next
         end
 
-        @stdout.puts "Starting matchmaking for '#{grouping}'"
-        @establish_matches_for_grouping_job.perform(grouping: grouping)
+        @stdout.puts "Starting matchmaking for '#{group.name}'"
+        @establish_matches_for_group.call(group)
       rescue => e
-        @stderr.puts "Failed to run matchmaking for '#{grouping}'. Reporting to Bugsnag."
+        @stderr.puts "Failed to run matchmaking for '#{group.name}'. Reporting to Bugsnag."
         ReportsError.report(e)
       end
       @stdout.puts "Matchmaking successfully completed"
