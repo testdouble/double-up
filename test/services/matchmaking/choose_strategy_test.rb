@@ -3,31 +3,31 @@ require "test_helper"
 module Matchmaking
   class ChooseStrategyTest < ActiveSupport::TestCase
     setup do
-      @subject = ChooseStrategy
+      @subject = ChooseStrategy.new
     end
 
     test "returns nil if the group is not active" do
-      config = matchmaking_config(test: {active: false})
+      group = group_with(name: "test", active: false)
 
-      assert_nil @subject.new(config: config).call("test")
+      assert_nil @subject.call(group)
     end
 
     test "returns nil if the group is not configured" do
-      config = matchmaking_config
+      group = MatchmakingGroup.new
 
-      assert_nil @subject.new(config: config).call("unknown")
+      assert_nil @subject.call(group)
     end
 
     test "returns PairByFewestEncounters if the group size is 2" do
-      config = matchmaking_config(test: {size: 2})
+      group = group_with(name: "test", size: 2)
 
-      assert_instance_of Strategies::PairByFewestEncounters, @subject.new(config: config).call("test")
+      assert_instance_of Strategies::PairByFewestEncounters, @subject.call(group)
     end
 
     test "returns ArrangeGroupsGenetically if the group size is greater than 2" do
-      config = matchmaking_config(test: {size: 3})
+      group = group_with(name: "test", size: 3)
 
-      assert_instance_of Strategies::ArrangeGroupsGenetically, @subject.new(config: config).call("test")
+      assert_instance_of Strategies::ArrangeGroupsGenetically, @subject.call(group)
     end
   end
 end
