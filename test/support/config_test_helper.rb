@@ -1,5 +1,5 @@
 module ConfigTestHelper
-  def matchmaking_config(hash = {})
+  def build_config(hash = {})
     raise ArgumentError, "arg must be a Hash" unless hash.is_a?(Hash)
 
     group_defaults = {size: 2, active: true, schedule: :weekly, channel: "test-channel"}
