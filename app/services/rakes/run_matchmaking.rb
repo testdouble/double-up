@@ -1,5 +1,5 @@
 module Rakes
-  class RunsMatchmaking
+  class RunMatchmaking
     def initialize(stdout:, stderr:)
       @stdout = stdout
       @stderr = stderr

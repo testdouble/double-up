@@ -1,7 +1,7 @@
 require "test_helper"
 
 module Rakes
-  class RunsMatchmakingTest < ActiveSupport::TestCase
+  class RunMatchmakingTest < ActiveSupport::TestCase
     setup do
       @subject = RunsMatchmaking
       @establish_matches_for_group = Mocktail.of_next(Matchmaking::EstablishMatchesForGroup)
