@@ -7,8 +7,8 @@ module Rakes
       @collect_groups = CollectGroups.new
       @retrieves_pending_notifications = Notify::RetrievesPendingNotifications.new
       @determines_retriability = Notify::DeterminesRetriability.new
-      @uses_email_to_deliver_notification = Notify::UsesEmailToDeliverNotification.new
-      @uses_slack_to_deliver_notification = Notify::UsesSlackToDeliverNotification.new
+      @use_email_to_deliver_notification = Notify::UseEmailToDeliverNotification.new
+      @use_slack_to_deliver_notification = Notify::UseSlackToDeliverNotification.new
     end
 
     def call
@@ -25,7 +25,7 @@ module Rakes
 
           if sendable_today?(group, notification)
             notification_strategy = pick_strategy(notification)
-            notification_strategy&.call(notification: notification)
+            notification_strategy&.call(notification, group)
           end
 
           notification.delete
@@ -41,8 +41,8 @@ module Rakes
     end
 
     def pick_strategy(notification)
-      return @uses_email_to_deliver_notification if notification.use_email?
-      @uses_slack_to_deliver_notification if notification.use_slack?
+      return @use_email_to_deliver_notification if notification.use_email?
+      @use_slack_to_deliver_notification if notification.use_slack?
     end
   end
 end

@@ -6,8 +6,8 @@ module Rakes
       @collect_groups = Mocktail.of_next(CollectGroups)
       @retrieves_pending_notifications = Mocktail.of_next(Notify::RetrievesPendingNotifications)
       @determines_retriability = Mocktail.of_next(Notify::DeterminesRetriability)
-      @uses_email_to_deliver_notification = Mocktail.of_next(Notify::UsesEmailToDeliverNotification)
-      @uses_slack_to_deliver_notification = Mocktail.of_next(Notify::UsesSlackToDeliverNotification)
+      @use_email_to_deliver_notification = Mocktail.of_next(Notify::UseEmailToDeliverNotification)
+      @use_slack_to_deliver_notification = Mocktail.of_next(Notify::UseSlackToDeliverNotification)
 
       @subject = SendPendingNotifications
     end
@@ -42,8 +42,8 @@ module Rakes
       stubs { @collect_groups.call }.with { groups }
       stubs { @retrieves_pending_notifications.call(grouping: "test") }.with { match.pending_notifications }
       stubs(times: 2) { @determines_retriability.can_retry?(:daily, original_date: Date.today) }.with { true }
-      stubs { @uses_slack_to_deliver_notification.call(notification: slack_notification) }
-      stubs { @uses_email_to_deliver_notification.call(notification: email_notification) }
+      stubs { @use_slack_to_deliver_notification.call(slack_notification, groups.first) }
+      stubs { @use_email_to_deliver_notification.call(email_notification, groups.first) }
 
       @subject.new(stdout: stdout, stderr: stderr).call
 
@@ -66,7 +66,7 @@ module Rakes
       stubs { @collect_groups.call }.with { groups }
       stubs { @retrieves_pending_notifications.call(grouping: "test") }.with { match.pending_notifications }
       stubs { @determines_retriability.can_retry?(:daily, original_date: Date.today) }.with { true }
-      stubs { @uses_slack_to_deliver_notification.call(notification: slack_notification) }
+      stubs { @use_slack_to_deliver_notification.call(slack_notification, groups.first) }
 
       assert_difference("PendingNotification.count", -1) {
         @subject.new(stdout: stdout, stderr: stderr).call

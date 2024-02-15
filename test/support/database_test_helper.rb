@@ -30,4 +30,12 @@ module DatabaseTestHelper
       slack_user_id: slack_user_id
     )
   end
+
+  def create_pending_email_notification
+    PendingNotification.create(strategy: "email")
+  end
+
+  def create_pending_slack_notification
+    PendingNotification.create(strategy: "slack")
+  end
 end
