@@ -1,10 +1,10 @@
 module Rakes
   class SendPendingNotifications
-    def initialize(stdout:, stderr:, config: nil)
+    def initialize(stdout:, stderr:)
       @stdout = stdout
       @stderr = stderr
-      @config = config || Rails.application.config.x.matchmaking
 
+      @collect_groups = CollectGroups.new
       @retrieves_pending_notifications = Notify::RetrievesPendingNotifications.new
       @determines_retriability = Notify::DeterminesRetriability.new
       @uses_email_to_deliver_notification = Notify::UsesEmailToDeliverNotification.new
@@ -12,18 +12,18 @@ module Rakes
     end
 
     def call
-      @config.each_pair do |grouping, grouping_config|
-        notifications = @retrieves_pending_notifications.call(grouping: grouping)
+      @collect_groups.call.each do |group|
+        notifications = @retrieves_pending_notifications.call(grouping: group.name)
 
         if notifications.empty?
-          @stdout.puts "No pending notifications found for '#{grouping}'"
+          @stdout.puts "No pending notifications found for '#{group.name}'"
           next
         end
 
         notifications.each do |notification|
-          @stdout.puts "Sending notifications for '#{grouping}'"
+          @stdout.puts "Sending notifications for '#{group.name}'"
 
-          if sendable_today?(grouping_config, notification)
+          if sendable_today?(group, notification)
             notification_strategy = pick_strategy(notification)
             notification_strategy&.call(notification: notification)
           end
@@ -36,8 +36,8 @@ module Rakes
 
     private
 
-    def sendable_today?(grouping_config, notification)
-      @determines_retriability.can_retry?(grouping_config.schedule, original_date: notification.created_at.to_date)
+    def sendable_today?(group, notification)
+      @determines_retriability.can_retry?(group.schedule, original_date: notification.created_at.to_date)
     end
 
     def pick_strategy(notification)
