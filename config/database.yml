@@ -7,10 +7,12 @@ default: &default
 development:
   <<: *default
   database: doubleup_development
+  <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
 test:
   <<: *default
   database: doubleup_test
+  <% if RUBY_PLATFORM =~ /darwin/ %>gssencmode: disable<% end %>
 
 production:
   <<: *default
