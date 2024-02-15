@@ -62,19 +62,4 @@ class MatchmakingGroupTest < ActiveSupport::TestCase
       assert_not @subject.name_exists?("test")
     end
   end
-
-  private
-
-  def create_matchmaking_group(attrs = {})
-    default_attrs = {
-      name: "test",
-      slack_channel_name: "test-channel",
-      schedule: "daily",
-      target_size: 2,
-      is_active: true,
-      slack_user_id: "42"
-    }
-
-    @subject.create(default_attrs.merge(attrs))
-  end
 end
