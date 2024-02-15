@@ -1,6 +1,6 @@
 class CollectGroups
-  def initialize(config: nil)
-    @config = config || Rails.application.config.x.matchmaking
+  def initialize
+    @config = Rails.application.config.x.matchmaking
   end
 
   def call

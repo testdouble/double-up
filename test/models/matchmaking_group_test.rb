@@ -2,16 +2,17 @@ require "test_helper"
 
 class MatchmakingGroupTest < ActiveSupport::TestCase
   setup do
-    @subject = MatchmakingGroup
-    @config = build_matchmaking_config(
+    @config = {
       test1: {active: true, size: 2, channel: "group-test1", schedule: :daily},
       test2: {active: true, size: 3, channel: "group-test2", schedule: :daily},
       test3: {active: true, size: 4, channel: "group-test3", schedule: :daily}
-    )
+    }
+
+    @subject = MatchmakingGroup
   end
 
   test "requires unique name" do
-    Rails.application.config.x.stub :matchmaking, @config do
+    matchmaking_config_of(@config) do
       create_matchmaking_group(name: "test")
       group = @subject.new(name: "test")
       assert group.invalid?
@@ -20,7 +21,7 @@ class MatchmakingGroupTest < ActiveSupport::TestCase
   end
 
   test "prevents name clashes with matchmaking config" do
-    Rails.application.config.x.stub :matchmaking, @config do
+    matchmaking_config_of(@config) do
       group = @subject.new(name: "test1")
       assert group.invalid?
       assert_equal group.errors[:name].first, "cannot be the same as a key in the matchmaking config"
@@ -28,17 +29,19 @@ class MatchmakingGroupTest < ActiveSupport::TestCase
   end
 
   test "creates successfully" do
-    group = @subject.new(
-      name: "test",
-      slack_channel_name: "test-channel",
-      schedule: "daily",
-      target_size: 2,
-      is_active: true,
-      slack_user_id: "42"
-    )
+    matchmaking_config_of(@config) do
+      group = @subject.new(
+        name: "test",
+        slack_channel_name: "test-channel",
+        schedule: "daily",
+        target_size: 2,
+        is_active: true,
+        slack_user_id: "42"
+      )
 
-    assert group.valid?
-    assert group.errors.empty?
+      assert group.valid?
+      assert group.errors.empty?
+    end
   end
 
   private
