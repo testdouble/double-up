@@ -1,8 +1,6 @@
 class MatchmakingGroupsController < ApplicationController
   def index
-    @groups = CollectGroups.new.call.to_h
-      .reduce([]) { |acc, (k, v)| acc << v.to_h.merge(name: k) }
-      .sort_by { |g| [g[:readonly] ? 0 : 1, g[:name]] }
+    @groups = CollectGroups.new.call.sort_by { |group| [group.readonly? ? 0 : 1, group.name] }
   end
 
   def new
@@ -10,7 +8,7 @@ class MatchmakingGroupsController < ApplicationController
   end
 
   def create
-    if MatchmakingGroup.exists?(name: group_params[:name])
+    if MatchmakingGroup.name_exists?(group_params[:name])
       flash[:error] = "Group already exists"
     else
       MatchmakingGroup.create(group_params.merge(slack_user_id: @current_user.slack_user_id))
@@ -28,7 +26,7 @@ class MatchmakingGroupsController < ApplicationController
   def update
     @group = MatchmakingGroup.find_by(id: params[:id])
 
-    if @group.name != group_params[:name] && MatchmakingGroup.exists?(name: group_params[:name])
+    if @group.name != group_params[:name] && MatchmakingGroup.name_exists?(group_params[:name])
       flash[:error] = "Other group already exists with that name"
     else
       @group = MatchmakingGroup.find_by(id: params[:id])

@@ -44,6 +44,25 @@ class MatchmakingGroupTest < ActiveSupport::TestCase
     end
   end
 
+  test ".name_exists? returns true if name exists in matchmaking config" do
+    matchmaking_config_of(@config) do
+      assert @subject.name_exists?("test1")
+    end
+  end
+
+  test ".name_exists? returns true if name exists in database" do
+    matchmaking_config_of(@config) do
+      create_matchmaking_group(name: "test")
+      assert @subject.name_exists?("test")
+    end
+  end
+
+  test ".name_exists? returns false if name does not exist in matchmaking config or database" do
+    matchmaking_config_of(@config) do
+      assert_not @subject.name_exists?("test")
+    end
+  end
+
   private
 
   def create_matchmaking_group(attrs = {})

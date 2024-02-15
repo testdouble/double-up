@@ -2,6 +2,10 @@ class MatchmakingGroup < ApplicationRecord
   validate :name_not_in_config
   validates :name, uniqueness: true
 
+  def self.name_exists?(name)
+    Rails.application.config.x.matchmaking.to_h.transform_keys(&:to_s).key?(name) || exists?(name: name)
+  end
+
   def active?
     is_active
   end

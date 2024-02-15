@@ -28,16 +28,16 @@
       <tbody>
         <% @groups.each do |group| %>
           <tr>
-            <td><%= group[:name] %></td>
-            <td><%= group[:active] %></td>
-            <td><%= group[:schedule] %></td>
-            <td><%= group[:size] %></td>
-            <td><%= group[:channel] %></td>
-            <td><%= group[:readonly] %></td>
+            <td><%= group.name %></td>
+            <td><%= group.active? %></td>
+            <td><%= group.schedule %></td>
+            <td><%= group.target_size %></td>
+            <td><%= group.slack_channel_name %></td>
+            <td><%= group.readonly? %></td>
             <td class="actions">
-              <% if group[:id].present? %>
-                <%= link_to "Edit", edit_matchmaking_group_path(group[:id]) %>
-                <%= link_to "X", matchmaking_group_path(group[:id]), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+              <% if group.id.present? %>
+                <%= link_to "Edit", edit_matchmaking_group_path(group.id) %>
+                <%= link_to "X", matchmaking_group_path(group.id), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
               <% end %>
             </td>
           </tr>
