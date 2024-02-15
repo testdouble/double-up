@@ -10,4 +10,14 @@ module ConfigTestHelper
 
     MatchmakingGroup.new(normalized.reverse_merge(group_defaults).merge(name: name))
   end
+
+  def build_matchmaking_config(hash = {})
+    group_defaults = {size: 2, active: true, schedule: :weekly, channel: "test-channel"}
+
+    normalized = hash.map do |group, group_config|
+      [group, OpenStruct.new(group_config.reverse_merge(group_defaults).slice(:size, :active, :schedule, :channel))]
+    end.to_h
+
+    OpenStruct.new(normalized)
+  end
 end
