@@ -48,5 +48,8 @@ class MatchmakingGroupsController < ApplicationController
   def group_params
     params.require(:matchmaking_group)
       .permit(:name, :slack_channel_name, :schedule, :target_size, :is_active)
+      .tap do |hash|
+        hash[:name] = hash[:name].strip
+      end
   end
 end
