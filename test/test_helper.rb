@@ -27,5 +27,10 @@ class ActiveSupport::TestCase
 
   teardown do
     Mocktail.reset
+    Timecop.return
+  end
+
+  def sign_in_as(user)
+    get "/auth/verify", params: {token: user.auth_token}
   end
 end

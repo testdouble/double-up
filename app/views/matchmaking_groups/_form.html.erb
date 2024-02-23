@@ -1,0 +1,46 @@
+<%= form_with(model: group, class: "contents") do |form| %>
+  <% if group.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium mt-3">
+      <h2><%= pluralize(group.errors.count, "error") %> prohibited this matchmaking_group from being saved:</h2>
+
+      <ul>
+        <% group.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "block border border-black outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :slack_channel_name %>
+    <%= form.text_field :slack_channel_name, class: "block border border-black outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :schedule %>
+    <div class="block mt-2">
+      <%= form.select :schedule, ['daily', 'weekly', 'fortnightly', 'monthly'], selected: 'weekly' %>
+    </div>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :target_size %>
+    <%= form.text_field :target_size, class: "block border border-black outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :is_active, "Active?" %>
+    <div class="block mt-2">
+      <%= form.check_box :is_active, checked: true, class: "border border-black outline-none px-2 py-2" %>
+    </div>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "py-3 px-5 border border-blue-600 hover:border-blue-800 bg-blue-600 text-white hover:bg-blue-800 inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

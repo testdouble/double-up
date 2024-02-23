@@ -1,5 +1,5 @@
 module Mailer
-  class BuildsGroupingMailerMessage
+  class BuildGroupMailerMessage
     def render(recipient:, channel:, grouping:, other_members:)
       GroupingMailer.encourage_match(
         recipient: recipient,

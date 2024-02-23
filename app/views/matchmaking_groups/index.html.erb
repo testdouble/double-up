@@ -1,0 +1,48 @@
+<div class="w-full">
+  <% if flash[:notice].present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium inline-block" id="notice"><%= flash[:notice] %></p>
+  <% end %>
+
+  <% if flash[:error].present? %>
+    <p class="py-2 px-3 bg-red-50 mb-5 text-red-500 font-medium inline-block" id="error"><%= flash[:error] %></p>
+  <% end %>
+
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Matchmaking groups</h1>
+    <%= link_to "New Group", new_matchmaking_group_path, class: "py-3 px-5 border border-blue-600 bg-blue-600 hover:bg-blue-800 text-white block font-medium" %>
+  </div>
+
+  <div id="matchmaking_groups" class="min-w-full">
+    <table class="table-auto">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Active</th>
+          <th>Schedule</th>
+          <th>Size</th>
+          <th>Channel</th>
+          <th>Readonly</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @groups.each do |group| %>
+          <tr>
+            <td><%= group.name %></td>
+            <td><%= group.active? %></td>
+            <td><%= group.schedule %></td>
+            <td><%= group.target_size %></td>
+            <td><%= group.slack_channel_name %></td>
+            <td><%= group.readonly? %></td>
+            <td class="actions">
+              <% if group.id.present? %>
+                <%= link_to "Edit", edit_matchmaking_group_path(group.id) %>
+                <%= link_to "X", matchmaking_group_path(group.id), data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

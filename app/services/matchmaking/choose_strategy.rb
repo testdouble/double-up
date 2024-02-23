@@ -1,16 +1,11 @@
 module Matchmaking
   class ChooseStrategy
-    def initialize(config: nil)
-      @config = config || Rails.application.config.x.matchmaking
-    end
+    def call(group)
+      return nil unless group&.active?
 
-    def call(grouping)
-      group_config = @config.send(grouping.intern)
-      return nil unless group_config&.active
+      return Strategies::PairByFewestEncounters.new if group.target_size == 2
 
-      return Strategies::PairByFewestEncounters.new if group_config.size == 2
-
-      Strategies::ArrangeGroupsGenetically.new(target_group_size: group_config.size)
+      Strategies::ArrangeGroupsGenetically.new(target_group_size: group.target_size)
     end
   end
 end

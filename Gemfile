@@ -37,4 +37,5 @@ group :test do
   gem "mocktail"
   gem "rspec"
   gem "rspec-rails"
+  gem "timecop"
 end

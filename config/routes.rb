@@ -19,4 +19,6 @@ Rails.application.routes.draw do
   get "/matches", to: "recent_matches#index", as: "recent_matches"
   get "/profile/:slack_user_id", to: "profile#show", as: "profile"
   resources :calendar_links, except: [:show]
+
+  resources :matchmaking_groups, only: [:index, :new, :create, :edit, :update, :destroy]
 end

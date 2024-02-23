@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_20_213602) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_213602) do
     t.datetime "updated_at", null: false
     t.string "status", default: "scoreable"
     t.index ["members"], name: "index_historical_matches_on_members", using: :gin
+  end
+
+  create_table "matchmaking_groups", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "slack_channel_name", null: false
+    t.string "schedule", null: false
+    t.integer "target_size", null: false
+    t.boolean "is_active", default: false, null: false
+    t.string "slack_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_matchmaking_groups_on_name", unique: true
   end
 
   create_table "pending_notifications", force: :cascade do |t|
