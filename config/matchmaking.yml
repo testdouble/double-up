@@ -1,9 +1,4 @@
 default: &default
-  client_q_branch:
-    active: true
-    channel: rotating-client-q-branch
-    schedule: monthly
-    size: 2
   coffee_time:
     active: true
     channel: rotating-coffee-time
