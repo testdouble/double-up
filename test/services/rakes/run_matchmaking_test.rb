@@ -15,9 +15,9 @@ module Rakes
 
     test "shows successful message" do
       groups = [
-        group_with(name: "test1", channel: "group-test1", size: 2, schedule: :daily),
-        group_with(name: "test2", channel: "group-test2", size: 3, schedule: :daily),
-        group_with(name: "test3", channel: "group-test3", size: 4, schedule: :daily)
+        group_with(name: "test1", slack_channel_name: "group-test1", target_size: 2, schedule: :daily),
+        group_with(name: "test2", slack_channel_name: "group-test2", target_size: 3, schedule: :daily),
+        group_with(name: "test3", slack_channel_name: "group-test3", target_size: 4, schedule: :daily)
       ]
 
       stubs { @collect_groups.call }.with { groups }
@@ -36,7 +36,7 @@ module Rakes
 
     test "shows an error message" do
       groups = [
-        group_with(name: "test", channel: "group-test", size: 2, schedule: :daily)
+        group_with(name: "test", slack_channel_name: "group-test", target_size: 2, schedule: :daily)
       ]
 
       stubs { @collect_groups.call }.with { groups }
@@ -55,7 +55,7 @@ module Rakes
 
     test "shows inactive message" do
       groups = [
-        group_with(name: "test", channel: "group-test", size: 2, schedule: :daily, active: false)
+        group_with(name: "test", slack_channel_name: "group-test", target_size: 2, schedule: :daily, is_active: false)
       ]
 
       stubs { @collect_groups.call }.with { groups }
@@ -69,7 +69,7 @@ module Rakes
 
     test "shows completed message on an unscheduled day" do
       groups = [
-        group_with(name: "test", channel: "group-test", size: 2, schedule: :weekly)
+        group_with(name: "test", slack_channel_name: "group-test", target_size: 2, schedule: :weekly)
       ]
 
       stubs { @collect_groups.call }.with { groups }

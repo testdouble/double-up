@@ -13,7 +13,7 @@ module Matchmaking
     end
 
     test "raises error when grouping has configured channel" do
-      group_without_channel = group_with(name: "test", channel: nil)
+      group_without_channel = group_with(name: "test", slack_channel_name: nil)
 
       assert_raises(Errors::NoConfiguredChannel, "No configured channel for grouping 'test'") {
         @subject.call(group_without_channel)
@@ -21,7 +21,7 @@ module Matchmaking
     end
 
     test "raises error when no channel found with name" do
-      group = group_with(name: "test", channel: "test")
+      group = group_with(name: "test", slack_channel_name: "test")
 
       stubs { @loads_slack_channels.call(types: "public_channel") }.with {
         [
@@ -36,7 +36,7 @@ module Matchmaking
     end
 
     test "matches members of a specific channel and records the match" do
-      group = group_with(name: "test", channel: "group-test")
+      group = group_with(name: "test", slack_channel_name: "group-test")
 
       stubs { @loads_slack_channels.call(types: "public_channel") }.with {
         [

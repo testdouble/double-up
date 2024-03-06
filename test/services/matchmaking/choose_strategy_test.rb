@@ -7,7 +7,7 @@ module Matchmaking
     end
 
     test "returns nil if the group is not active" do
-      group = group_with(name: "test", active: false)
+      group = group_with(name: "test", is_active: false)
 
       assert_nil @subject.call(group)
     end
@@ -19,13 +19,13 @@ module Matchmaking
     end
 
     test "returns PairByFewestEncounters if the group size is 2" do
-      group = group_with(name: "test", size: 2)
+      group = group_with(name: "test", target_size: 2)
 
       assert_instance_of Strategies::PairByFewestEncounters, @subject.call(group)
     end
 
     test "returns ArrangeGroupsGenetically if the group size is greater than 2" do
-      group = group_with(name: "test", size: 3)
+      group = group_with(name: "test", target_size: 3)
 
       assert_instance_of Strategies::ArrangeGroupsGenetically, @subject.call(group)
     end

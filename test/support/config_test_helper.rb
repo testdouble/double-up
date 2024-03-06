@@ -19,16 +19,4 @@ module ConfigTestHelper
       block.call(config)
     end
   end
-
-  def matchmaking_config_of(hash = {})
-    group_defaults = {size: 2, active: true, schedule: :weekly, channel: "test-channel"}
-
-    normalized = hash.map do |group, group_config|
-      [group, OpenStruct.new(group_config.reverse_merge(group_defaults).slice(:size, :active, :schedule, :channel))]
-    end.to_h
-
-    Rails.application.config.x.stub :matchmaking, OpenStruct.new(normalized) do
-      yield if block_given?
-    end
-  end
 end

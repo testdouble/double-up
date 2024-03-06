@@ -14,7 +14,7 @@ module Rakes
 
     test "does not send any when no pending notifications are found" do
       groups = [
-        group_with(name: "test", channel: "group-test", schedule: :daily)
+        group_with(name: "test", slack_channel_name: "group-test", schedule: :daily)
       ]
 
       stubs { @collect_groups.call }.with { groups }
@@ -36,7 +36,7 @@ module Rakes
       )
 
       groups = [
-        group_with(name: "test", channel: "group-test", schedule: :daily)
+        group_with(name: "test", slack_channel_name: "group-test", schedule: :daily)
       ]
 
       stubs { @collect_groups.call }.with { groups }
@@ -60,7 +60,7 @@ module Rakes
       )
 
       groups = [
-        group_with(name: "test", channel: "group-test", schedule: :daily)
+        group_with(name: "test", slack_channel_name: "group-test", schedule: :daily)
       ]
 
       stubs { @collect_groups.call }.with { groups }
@@ -83,7 +83,7 @@ module Rakes
       )
 
       groups = [
-        group_with(name: "test", channel: "group-test", schedule: :daily)
+        group_with(name: "test", slack_channel_name: "group-test", schedule: :daily)
       ]
 
       stubs { @collect_groups.call }.with { groups }

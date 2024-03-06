@@ -7,7 +7,7 @@ module Notify
       @sends_slack_message = Mocktail.of_next(Slack::SendsSlackMessage)
       @builds_grouping_slack_message = Mocktail.of_next(Slack::BuildsGroupingSlackMessage)
 
-      @group = group_with(name: "test", channel: "group-test", schedule: :daily)
+      @group = group_with(name: "test", slack_channel_name: "group-test", schedule: :daily)
 
       @subject = UseSlackToDeliverNotification.new
     end
