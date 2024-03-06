@@ -15,6 +15,10 @@ module Matchmaking
       validate!
     end
 
+    def [](name)
+      groups.find { |group| group.name == name.to_s }
+    end
+
     def has_group?(name)
       @config.key?(name.intern)
     end

@@ -77,6 +77,21 @@ module Matchmaking
       assert_equal "must be a hash with a size and a strategy of 'exact_size' or 'flexible_size'", error.message
     end
 
+    test "#[] returns a specific MatchmakingGroup" do
+      config = {test: {active_in: "all", schedule: "daily", target_size: 2}}
+
+      group = Config.new(config)[:test]
+
+      assert group.is_a?(MatchmakingGroup)
+      assert_equal "test", group.name
+    end
+
+    test "#[] returns nil if group does not exist" do
+      config = {test: {active_in: "all", schedule: "daily", target_size: 2}}
+
+      assert_nil Config.new(config)[:other]
+    end
+
     test "#has_group? returns true if group exists" do
       config = {test: {active_in: "all", schedule: "daily", target_size: 2}}
 
