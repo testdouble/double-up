@@ -1,43 +1,40 @@
 class MatchmakingGroup < ApplicationRecord
+  SIZE_STRATEGIES = {
+    exact_size: "exact_size",
+    flexible_size: "flexible_size"
+  }.freeze
+  DEFAULT_SIZE_STRATEGY = SIZE_STRATEGIES[:flexible_size]
+
   validate :name_not_in_config
   validates :name, uniqueness: true
 
+  alias_attribute :active?, :is_active
+  alias_attribute :slack_channel, :slack_channel_name
+
   def self.name_exists?(name)
-    Rails.application.config.x.matchmaking.to_h.transform_keys(&:to_s).key?(name) || exists?(name: name)
+    Rails.application.config.x.matchmaking.has_group?(name) || exists?(name: name)
   end
 
-  def active?
-    is_active
+  def size_strategy
+    @strategy || DEFAULT_SIZE_STRATEGY
   end
 
-  def active
-    is_active
+  def size_strategy=(strategy)
+    @strategy = strategy if SIZE_STRATEGIES.value?(strategy)
   end
 
-  def active=(value)
-    self.is_active = value
+  def flexible_size?
+    size_strategy == SIZE_STRATEGIES[:flexible_size]
   end
 
-  def channel
-    slack_channel_name
-  end
-
-  def channel=(value)
-    self.slack_channel_name = value
-  end
-
-  def size
-    target_size
-  end
-
-  def size=(value)
-    self.target_size = value
+  def exact_size?
+    size_strategy == SIZE_STRATEGIES[:exact_size]
   end
 
   private
 
   def name_not_in_config
-    if Rails.application.config.x.matchmaking.to_h.key?(name.intern)
+    if Rails.application.config.x.matchmaking.has_group?(name)
       errors.add(:name, "cannot be the same as a key in the matchmaking config")
     end
   end

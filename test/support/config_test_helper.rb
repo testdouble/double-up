@@ -16,7 +16,7 @@ module ConfigTestHelper
     config = Mocktail.of(Matchmaking::Config)
     Rails.application.config.x.stub :matchmaking, config do
       stubs { config.groups }.with { groups }
-      block.call
+      block.call(config)
     end
   end
 
