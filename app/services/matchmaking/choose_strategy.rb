@@ -9,7 +9,10 @@ module Matchmaking
         )
       end
 
-      Strategies::ArrangeGroupsGenetically.new(target_group_size: group.target_size)
+      Strategies::ArrangeGroupsGenetically.new(
+        target_group_size: group.target_size,
+        strict_group_size: group.exact_size?
+      )
     end
   end
 end

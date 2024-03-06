@@ -55,6 +55,22 @@ module Matchmaking
         assert matches.is_a?(Array)
         assert_equal matches, []
       end
+
+      test "matchmaking with strict group size" do
+        stubs { |m| @balance_groups.call(m.that { |a| a.size == 9 }, 3) }.with do |call|
+          (a, b, c, d, e, f, g, h, i) = call.args.first
+          [[a, d, g], [b, e, h], [c, f, i]]
+        end
+
+        strategy = @subject.new(target_group_size: 3, population_size: 50, strict_group_size: true)
+
+        matches = strategy.call(@scored_participants)
+
+        assert matches.is_a?(Array)
+        assert_equal matches.size, 3
+        assert_equal matches.map(&:size), [3, 3, 3]
+        assert_equal matches.flatten.uniq.size, 9
+      end
     end
   end
 end

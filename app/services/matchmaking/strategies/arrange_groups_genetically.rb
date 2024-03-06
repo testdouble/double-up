@@ -34,10 +34,12 @@ module Matchmaking
     # Output example:
     #   [["Dave", "Bob", "Eve"], ["Alice", "Charlie"]]
     class ArrangeGroupsGenetically
-      def initialize(target_group_size:, population_size: 100, generations: 100)
+      def initialize(target_group_size:, population_size: 100, generations: 100, **options)
         @target_group_size = target_group_size
         @population_size = population_size
         @generations = generations
+
+        @options = options
 
         @balance_groups = BalanceGroups.new
       end
@@ -46,6 +48,7 @@ module Matchmaking
         return [] if scored_participants.size < 2
 
         @participants = scored_participants.keys
+        @participants = @participants.drop(@participants.size % @target_group_size) if strict_group_size?
         @scored_participants = scored_participants
 
         population = Array.new(@population_size) { random_solution }
@@ -60,6 +63,10 @@ module Matchmaking
         end
 
         best_solution(population)
+      end
+
+      def strict_group_size?
+        @options.fetch(:strict_group_size, false)
       end
 
       private

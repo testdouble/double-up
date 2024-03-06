@@ -24,6 +24,17 @@ module Matchmaking
       assert_instance_of Strategies::PairByFewestEncounters, @subject.call(group)
     end
 
+    test "returns PairByFewestEncounters that allows third participant" do
+      groups = [
+        group_with(name: "test", target_size: 2, size_strategy: "flexible_size"),
+        group_with(name: "test", target_size: 2)
+      ]
+
+      strategies = groups.map { |group| @subject.call(group) }
+
+      assert strategies.all?(&:allow_third_participant?)
+    end
+
     test "returns PairByFewestEncounters that disallows third participant" do
       group = group_with(name: "test", target_size: 2, size_strategy: "exact_size")
 
@@ -34,6 +45,23 @@ module Matchmaking
       group = group_with(name: "test", target_size: 3)
 
       assert_instance_of Strategies::ArrangeGroupsGenetically, @subject.call(group)
+    end
+
+    test "returns ArrangeGroupsGenetically that allows flexible group sizes" do
+      groups = [
+        group_with(name: "test", target_size: 3, size_strategy: "flexible_size"),
+        group_with(name: "test", target_size: 3)
+      ]
+
+      strategies = groups.map { |group| @subject.call(group) }
+
+      refute strategies.all?(&:strict_group_size?)
+    end
+
+    test "returns ArrangeGroupsGenetically that enforces strict group sizing" do
+      group = group_with(name: "test", target_size: 3, size_strategy: "exact_size")
+
+      assert @subject.call(group).strict_group_size?
     end
   end
 end
