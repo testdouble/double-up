@@ -15,6 +15,10 @@ module Matchmaking
       validate!
     end
 
+    def has_group?(name)
+      @config.key?(name.intern)
+    end
+
     def groups
       @config.map { |name, group_config|
         MatchmakingGroup.new.tap do |group|

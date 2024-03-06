@@ -77,6 +77,18 @@ module Matchmaking
       assert_equal "must be a hash with a size and a strategy of 'exact_size' or 'flexible_size'", error.message
     end
 
+    test "#has_group? returns true if group exists" do
+      config = {test: {active_in: "all", schedule: "daily", target_size: 2}}
+
+      assert Config.new(config).has_group?(:test)
+    end
+
+    test "#has_group? returns false if group does not exist" do
+      config = {test: {active_in: "all", schedule: "daily", target_size: 2}}
+
+      refute Config.new(config).has_group?(:other)
+    end
+
     test "#groups returns a list of MatchmakingGroup objects" do
       config = {
         active_in_all: {active_in: "all", schedule: "daily", target_size: 2, slack_channel: "test-1"},
