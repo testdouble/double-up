@@ -24,6 +24,12 @@ module Matchmaking
       assert_instance_of Strategies::PairByFewestEncounters, @subject.call(group)
     end
 
+    test "returns PairByFewestEncounters that disallows third participant" do
+      group = group_with(name: "test", target_size: 2, size_strategy: "exact_size")
+
+      refute @subject.call(group).allow_third_participant?
+    end
+
     test "returns ArrangeGroupsGenetically if the group size is greater than 2" do
       group = group_with(name: "test", target_size: 3)
 

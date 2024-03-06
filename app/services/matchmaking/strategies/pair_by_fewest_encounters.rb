@@ -43,11 +43,11 @@ module Matchmaking
         matches
       end
 
-      private
-
       def allow_third_participant?
         @options.fetch(:allow_third_participant, true)
       end
+
+      private
 
       def remove_participants(participants, unmatched)
         unmatched.except(*participants).map { |k, v| [k, v.except(*participants)] }.to_h
