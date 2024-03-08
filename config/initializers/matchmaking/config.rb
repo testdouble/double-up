@@ -39,6 +39,8 @@ module Matchmaking
             group.target_size = group_config[:target_size]
           end
 
+          group.accepted_decisions = group_config[:accepted_decisions]
+
           group.define_singleton_method(:readonly?) { true }
         end
       }
@@ -54,6 +56,7 @@ module Matchmaking
       validate_active_in(group_config[:active_in])
       validate_schedule(group_config[:schedule])
       validate_target_size(group_config[:target_size])
+      validate_accepted_decisions(group_config[:accepted_decisions])
     end
 
     def validate_active_in(active_in)
@@ -86,6 +89,12 @@ module Matchmaking
       return if target_size[:size].is_a?(Integer) && %w[exact_size flexible_size].include?(target_size[:strategy])
 
       raise InvalidMatchmakingConfig.new(:target_size, "must be a hash with a size and a strategy of 'exact_size' or 'flexible_size'")
+    end
+
+    def validate_accepted_decisions(accepted_decisions)
+      return if accepted_decisions.nil? || (accepted_decisions.is_a?(Array) && accepted_decisions.all? { |d| d.is_a?(String) })
+
+      raise InvalidMatchmakingConfig.new(:accepted_decisions, "must be an array of strings")
     end
   end
 end

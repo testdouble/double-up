@@ -18,6 +18,9 @@ default: &default
     target_size:
       strategy: exact_size
       size: 2
+    accepted_decisions:
+      - protraction
+      - completion
   rotating_brunch:
     active_in: all
     slack_channel: rotating-brunch

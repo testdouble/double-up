@@ -92,4 +92,21 @@ class MatchmakingGroupTest < ActiveSupport::TestCase
     group.size_strategy = "exact_size"
     assert group.exact_size?
   end
+
+  test "#accepted_decisions returns default accepted decisions" do
+    group = @subject.new
+    assert_equal group.accepted_decisions, []
+  end
+
+  test "#accepted_decisions= sets accepted decisions" do
+    group = @subject.new
+    group.accepted_decisions = ["complete"]
+    assert_equal group.accepted_decisions, ["complete"]
+  end
+
+  test "#accepted_decisions= removes invalid decisions" do
+    group = @subject.new
+    group.accepted_decisions = ["complete", "invalid"]
+    assert_equal group.accepted_decisions, ["complete"]
+  end
 end

@@ -31,6 +31,14 @@ class MatchmakingGroup < ApplicationRecord
     size_strategy == SIZE_STRATEGIES[:exact_size]
   end
 
+  def accepted_decisions
+    Array.wrap(@accepted_decisions)
+  end
+
+  def accepted_decisions=(decisions)
+    @accepted_decisions = Array.wrap(decisions).uniq.reject { |d| MatchDecision::AVAILABLE_DECISIONS.exclude?(d) }
+  end
+
   private
 
   def name_not_in_config

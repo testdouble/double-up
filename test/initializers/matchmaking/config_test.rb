@@ -77,6 +77,16 @@ module Matchmaking
       assert_equal "must be a hash with a size and a strategy of 'exact_size' or 'flexible_size'", error.message
     end
 
+    test "raises for invalid accepted_decisions" do
+      config = {test: {active_in: "all", schedule: "daily", target_size: 2, accepted_decisions: "invalid"}}
+
+      error = assert_raises(InvalidMatchmakingConfig) {
+        Config.new(config)
+      }
+      assert_equal :accepted_decisions, error.field
+      assert_equal "must be an array of strings", error.message
+    end
+
     test "#[] returns a specific MatchmakingGroup" do
       config = {test: {active_in: "all", schedule: "daily", target_size: 2}}
 
@@ -113,12 +123,13 @@ module Matchmaking
         target_size_flexible: {active_in: "all", schedule: "daily", target_size: {size: 3, strategy: "flexible_size"}, slack_channel: "test-5"},
         weekly: {active_in: "all", schedule: "weekly", target_size: 2, slack_channel: "test-6"},
         fortnightly: {active_in: "all", schedule: "fortnightly", target_size: 2, slack_channel: "test-7"},
-        monthly: {active_in: "all", schedule: "monthly", target_size: 2, slack_channel: "test-8"}
+        monthly: {active_in: "all", schedule: "monthly", target_size: 2, slack_channel: "test-8"},
+        decisions: {active_in: "all", schedule: "daily", target_size: 2, accepted_decisions: ["complete", "protract"], slack_channel: "test-9"}
       }
 
       groups = Config.new(config).groups
 
-      assert_equal 8, groups.size
+      assert_equal 9, groups.size
       assert groups.all? { |group| group.is_a?(MatchmakingGroup) }
 
       assert group_match?(groups[0], name: "active_in_all", slack_channel_name: "test-1", schedule: "daily", target_size: 2, is_active: true, size_strategy: "flexible_size")
@@ -129,6 +140,7 @@ module Matchmaking
       assert group_match?(groups[5], name: "weekly", slack_channel_name: "test-6", schedule: "weekly", target_size: 2, is_active: true, size_strategy: "flexible_size")
       assert group_match?(groups[6], name: "fortnightly", slack_channel_name: "test-7", schedule: "fortnightly", target_size: 2, is_active: true, size_strategy: "flexible_size")
       assert group_match?(groups[7], name: "monthly", slack_channel_name: "test-8", schedule: "monthly", target_size: 2, is_active: true, size_strategy: "flexible_size")
+      assert group_match?(groups[8], name: "decisions", slack_channel_name: "test-9", schedule: "daily", target_size: 2, is_active: true, size_strategy: "flexible_size", accepted_decisions: ["complete", "protract"])
     end
 
     def group_match?(group, expected)
@@ -138,6 +150,7 @@ module Matchmaking
         group.target_size == expected[:target_size] &&
         group.is_active == expected[:is_active] &&
         group.size_strategy == expected[:size_strategy] &&
+        group.accepted_decisions == (expected[:accepted_decisions] || []) &&
         group.readonly?
     end
   end
