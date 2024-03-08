@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_08_215230) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
     t.datetime "updated_at", null: false
     t.string "status", default: "scoreable"
     t.index ["members"], name: "index_historical_matches_on_members", using: :gin
+  end
+
+  create_table "match_decisions", force: :cascade do |t|
+    t.string "decision", null: false
+    t.string "decided_by", null: false
+    t.jsonb "details", default: {}, null: false
+    t.bigint "historical_match_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["historical_match_id"], name: "index_match_decisions_on_historical_match_id"
   end
 
   create_table "matchmaking_groups", force: :cascade do |t|

@@ -1,6 +1,7 @@
 class HistoricalMatch < ApplicationRecord
   enum status: {scoreable: "scoreable", archived: "archived"}
 
+  has_many :match_decisions, dependent: :destroy
   has_many :pending_notifications, dependent: :nullify
 
   validates :matched_on, :grouping, presence: true
