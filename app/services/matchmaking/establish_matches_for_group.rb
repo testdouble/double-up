@@ -12,7 +12,7 @@ module Matchmaking
       channel = fetch_slack_channel(group.slack_channel_name)
       ensure_channel_found(channel, group)
 
-      participants = @loads_slack_channel_members.call(channel: channel.id)
+      participants = collect_participants(group, channel.id)
 
       matches = @match_participants.call(participants, group)
       matches.each do |match|
@@ -38,6 +38,12 @@ module Matchmaking
 
     def ensure_channel_found(channel, group)
       raise Errors::ChannelNotFound.new(group.slack_channel_name, group.name) unless channel
+    end
+
+    def collect_participants(group, channel_id)
+      participants = @loads_slack_channel_members.call(channel: channel_id)
+      unavailable_participants = HistoricalMatch.protracted_in(group.name).flat_map(&:members)
+      participants.difference(unavailable_participants)
     end
 
     def fetch_slack_channel(channel_name)
