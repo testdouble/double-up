@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_08_215230) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_09_001629) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -33,16 +33,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_08_215230) do
     t.index ["members"], name: "index_historical_matches_on_members", using: :gin
   end
 
-  create_table "match_decisions", force: :cascade do |t|
-    t.string "decision", null: false
-    t.string "decided_by", null: false
-    t.jsonb "details", default: {}, null: false
-    t.bigint "historical_match_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["historical_match_id"], name: "index_match_decisions_on_historical_match_id"
-  end
-
   create_table "matchmaking_groups", force: :cascade do |t|
     t.string "name", null: false
     t.string "slack_channel_name", null: false
@@ -62,6 +52,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_08_215230) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["historical_match_id"], name: "index_pending_notifications_on_historical_match_id"
+  end
+
+  create_table "protracted_matches", force: :cascade do |t|
+    t.string "protracted_by", null: false
+    t.string "completed_by"
+    t.datetime "completed_at"
+    t.bigint "historical_match_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["historical_match_id"], name: "index_protracted_matches_on_historical_match_id"
   end
 
   create_table "slack_user_profiles", force: :cascade do |t|

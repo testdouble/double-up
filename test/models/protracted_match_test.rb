@@ -1,0 +1,46 @@
+require "test_helper"
+
+class ProtractedMatchTest < ActiveSupport::TestCase
+  setup do
+    @subject = ProtractedMatch
+  end
+
+  test "requires historical_match association" do
+    match = @subject.new
+    assert match.invalid?
+    assert_equal match.errors[:historical_match].first, "must exist"
+  end
+
+  test "requires protracted_by attribute" do
+    match = @subject.new
+    assert match.invalid?
+    assert_equal match.errors[:protracted_by].first, "can't be blank"
+  end
+
+  test "requires completed_at if completed_by is set" do
+    match = @subject.new(completed_by: "Sam")
+    assert match.invalid?
+    assert_equal match.errors[:completed_at].first, "can't be blank"
+  end
+
+  test "requires completed_by if completed_at is set" do
+    match = @subject.new(completed_at: Time.now)
+    assert match.invalid?
+    assert_equal match.errors[:completed_by].first, "can't be blank"
+  end
+
+  test "creates successfully" do
+    match = create_historical_match(
+      grouping: "test",
+      members: ["Frodo", "Sam"]
+    )
+
+    protracted_match = @subject.new(
+      historical_match: match,
+      protracted_by: "Sam"
+    )
+
+    assert protracted_match.valid?
+    assert protracted_match.errors.empty?
+  end
+end
