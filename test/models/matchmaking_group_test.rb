@@ -93,20 +93,14 @@ class MatchmakingGroupTest < ActiveSupport::TestCase
     assert group.exact_size?
   end
 
-  test "#accepted_decisions returns default accepted decisions" do
+  test "#protractable? returns true if protractable" do
     group = @subject.new
-    assert_equal group.accepted_decisions, []
+    group.protractable = true
+    assert group.protractable?
   end
 
-  test "#accepted_decisions= sets accepted decisions" do
+  test "#protractable? returns false by default" do
     group = @subject.new
-    group.accepted_decisions = ["complete"]
-    assert_equal group.accepted_decisions, ["complete"]
-  end
-
-  test "#accepted_decisions= removes invalid decisions" do
-    group = @subject.new
-    group.accepted_decisions = ["complete", "invalid"]
-    assert_equal group.accepted_decisions, ["complete"]
+    assert_not group.protractable?
   end
 end
