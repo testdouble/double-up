@@ -129,8 +129,8 @@ class HistoricalMatchTest < ActiveSupport::TestCase
     assert_equal matches, [match1, match3]
   end
 
-  test ".most_recent_by_member returns the most recent match for every member" do
-    this_week_match1, this_week_match2 = [
+  test ".protracted_in returns the most recent protracted matches" do
+    _match1, match2, _match3 = [
       @subject.create(
         grouping: "test",
         matched_on: Date.today,
@@ -139,63 +139,19 @@ class HistoricalMatchTest < ActiveSupport::TestCase
       @subject.create(
         grouping: "test",
         matched_on: Date.today,
-        members: ["Merry", "Pippin"]
-      )
-    ]
-    _last_week_matches = [
-      @subject.create(
-        grouping: "test",
-        matched_on: Date.today - 1.week,
-        members: ["Frodo", "Pippin"]
+        members: ["Sam", "Pippin"],
+        protracted_match: ProtractedMatch.new(protracted_by: "Sam")
       ),
-      @subject.create(
-        grouping: "test",
-        matched_on: Date.today - 1.week,
-        members: ["Sam", "Merry"]
-      )
-    ]
-
-    matches = @subject.most_recent_by_member("test")
-
-    assert_equal matches, {
-      "Frodo" => this_week_match1,
-      "Sam" => this_week_match1,
-      "Merry" => this_week_match2,
-      "Pippin" => this_week_match2
-    }
-  end
-
-  test ".most_recent_by_member returns the most recent match specific members" do
-    this_week_match1, this_week_match2 = [
       @subject.create(
         grouping: "test",
         matched_on: Date.today,
-        members: ["Frodo", "Sam"]
-      ),
-      @subject.create(
-        grouping: "test",
-        matched_on: Date.today - 1.month,
-        members: ["Merry", "Pippin"]
-      )
-    ]
-    _last_week_matches = [
-      @subject.create(
-        grouping: "test",
-        matched_on: Date.today - 1.year,
-        members: ["Frodo", "Pippin"]
-      ),
-      @subject.create(
-        grouping: "test",
-        matched_on: Date.today - 1.week,
-        members: ["Sam", "Merry"]
+        members: ["Sam", "Pippin"],
+        protracted_match: ProtractedMatch.new(protracted_by: "Sam", completed_at: Time.zone.now, completed_by: "Pippin")
       )
     ]
 
-    matches = @subject.most_recent_by_member("test", ["Frodo", "Pippin"])
+    matches = @subject.protracted_in("test")
 
-    assert_equal matches, {
-      "Frodo" => this_week_match1,
-      "Pippin" => this_week_match2
-    }
+    assert_equal matches, [match2]
   end
 end
