@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_09_001629) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_09_083242) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_09_001629) do
     t.bigint "historical_match_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reason"
     t.index ["historical_match_id"], name: "index_pending_notifications_on_historical_match_id"
   end
 
