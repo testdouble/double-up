@@ -21,7 +21,7 @@ module Rakes
         end
 
         notifications.each do |notification|
-          @stdout.puts "Sending notifications for '#{group.name}'"
+          @stdout.puts "Sending #{notification.reason} notification for '#{group.name}'"
 
           if sendable_today?(group, notification)
             notification_strategy = pick_strategy(notification)

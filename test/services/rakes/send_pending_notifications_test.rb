@@ -47,7 +47,7 @@ module Rakes
 
       @subject.new(stdout: stdout, stderr: stderr).call
 
-      assert_match(/Sending notifications for 'test'/, read_output!)
+      assert_match(/Sending new_match notification for 'test'/, read_output!)
       assert_empty read_errors!
     end
 
