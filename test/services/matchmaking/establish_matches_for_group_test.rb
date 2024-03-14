@@ -80,7 +80,34 @@ module Matchmaking
       }
 
       assert_difference("HistoricalMatch.count", 1) {
-        assert_difference("PendingNotification.count", 2) {
+        assert_difference("PendingNotification.new_match_reason.count", 2) {
+          @subject.call(group)
+        }
+      }
+    end
+
+    test "creates completion_check notifications for protracted matches" do
+      group = group_with(name: "test", slack_channel_name: "group-test")
+
+      match1 = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_4"])
+      match2 = create_historical_match(grouping: "test", members: ["USER_ID_2", "USER_ID_3"])
+      ProtractedMatch.create!(protracted_by: "USER_ID_1", historical_match: match1)
+      ProtractedMatch.create!(protracted_by: "USER_ID_1", historical_match: match2)
+
+      stubs { @loads_slack_channels.call(types: "public_channel") }.with {
+        [
+          Slack::Messages::Message.new(id: "CHANNEL_ID_1", name_normalized: "general"),
+          Slack::Messages::Message.new(id: "CHANNEL_ID_2", name_normalized: "group-test"),
+          Slack::Messages::Message.new(id: "CHANNEL_ID_3", name_normalized: "random")
+        ]
+      }
+      stubs { @loads_slack_channel_members.call(channel: "CHANNEL_ID_2") }.with {
+        ["USER_ID_1", "USER_ID_2", "USER_ID_3", "USER_ID_4"]
+      }
+      stubs { @match_participants.call([], group) }.with { [[]] }
+
+      assert_difference("PendingNotification.completion_check_reason.count", 2) {
+        assert_difference("PendingNotification.new_match_reason.count", 0) {
           @subject.call(group)
         }
       }

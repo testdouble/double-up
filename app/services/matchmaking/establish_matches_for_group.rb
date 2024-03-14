@@ -21,9 +21,17 @@ module Matchmaking
           grouping: group.name,
           matched_on: Date.today,
           pending_notifications: [
-            PendingNotification.create(strategy: "email"),
-            PendingNotification.create(strategy: "slack")
+            PendingNotification.create(strategy: "email", reason: "new_match"),
+            PendingNotification.create(strategy: "slack", reason: "new_match")
           ]
+        )
+      end
+
+      protracted_matches(group).each do |match|
+        PendingNotification.create(
+          historical_match: match,
+          strategy: "slack",
+          reason: "completion_check"
         )
       end
     rescue => e
@@ -40,9 +48,13 @@ module Matchmaking
       raise Errors::ChannelNotFound.new(group.slack_channel_name, group.name) unless channel
     end
 
+    def protracted_matches(group)
+      @protracted_matches ||= HistoricalMatch.protracted_in(group.name)
+    end
+
     def collect_participants(group, channel_id)
       participants = @loads_slack_channel_members.call(channel: channel_id)
-      unavailable_participants = HistoricalMatch.protracted_in(group.name).flat_map(&:members)
+      unavailable_participants = protracted_matches(group).flat_map(&:members)
       participants.difference(unavailable_participants)
     end
 
