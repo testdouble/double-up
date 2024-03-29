@@ -35,7 +35,7 @@ class ProtractedMatchTest < ActiveSupport::TestCase
     assert protracted_match.errors.empty?
   end
 
-  test "#complete_as! sets completed_by and completed_at" do
+  test "#complete! sets completed_by and completed_at" do
     match = create_historical_match(
       grouping: "test",
       members: ["Frodo", "Sam"]
@@ -44,10 +44,23 @@ class ProtractedMatchTest < ActiveSupport::TestCase
     protracted_match = @subject.create!(historical_match: match)
 
     Timecop.freeze(Time.zone.now) do
-      protracted_match.complete_as!("Frodo")
+      protracted_match.complete!("Frodo")
 
       assert_equal protracted_match.completed_by, "Frodo"
       assert_not_nil protracted_match.completed_at
     end
+  end
+
+  test "#protract! sets last_protracted_by" do
+    match = create_historical_match(
+      grouping: "test",
+      members: ["Frodo", "Sam"]
+    )
+
+    protracted_match = @subject.create!(historical_match: match)
+
+    protracted_match.protract!("Frodo")
+
+    assert_equal protracted_match.last_protracted_by, "Frodo"
   end
 end

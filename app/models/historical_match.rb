@@ -12,6 +12,9 @@ class HistoricalMatch < ApplicationRecord
   scope :older_than, ->(date) { where("created_at::date < '#{date.to_date}'") }
   scope :for_user, ->(user) { with_member(user.slack_user_id) }
 
+  delegate :protract!, to: :protracted_match, allow_nil: true
+  delegate :complete!, to: :protracted_match, allow_nil: true
+
   def self.protracted_in(grouping)
     find_by_sql([<<~SQL.squish, grouping])
       with protracted_matches as (
