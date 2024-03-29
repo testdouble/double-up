@@ -7,7 +7,7 @@ class PendingNotification < ApplicationRecord
   scope :for_grouping, ->(grouping) { includes(:historical_match).where(historical_match: {grouping: grouping}) }
 
   scope :new_match_reason, -> { where(reason: "new_match").or(where(reason: nil)) }
-  scope :completion_check_reason, -> { where(reason: "completion_check") }
+  scope :quest_protraction_reason, -> { where(reason: "quest_protraction") }
 
   def use_slack?
     strategy == "slack"

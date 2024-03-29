@@ -86,7 +86,7 @@ module Matchmaking
       }
     end
 
-    test "creates completion_check notifications for protracted matches" do
+    test "creates quest_protraction notifications for protracted matches" do
       group = group_with(name: "test", slack_channel_name: "group-test")
 
       match1 = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_4"])
@@ -106,7 +106,7 @@ module Matchmaking
       }
       stubs { @match_participants.call([], group) }.with { [[]] }
 
-      assert_difference("PendingNotification.completion_check_reason.count", 2) {
+      assert_difference("PendingNotification.quest_protraction_reason.count", 2) {
         assert_difference("PendingNotification.new_match_reason.count", 0) {
           @subject.call(group)
         }

@@ -31,7 +31,7 @@ module Matchmaking
         PendingNotification.create(
           historical_match: match,
           strategy: "slack",
-          reason: "completion_check"
+          reason: "quest_protraction"
         )
       end
     rescue => e
