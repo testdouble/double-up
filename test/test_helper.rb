@@ -15,6 +15,7 @@ class ActiveSupport::TestCase
   include ConfigTestHelper
   include DatabaseTestHelper
   include IoTestHelper
+  include SlackTestHelper
   include Mocktail::DSL
 
   parallelize(workers: :number_of_processors)

@@ -3,7 +3,7 @@ module Auth
     def initialize
       @finds_or_creates_user = FindsOrCreatesUser.new
       @generates_token = GeneratesToken.new
-      @builds_login_slack_message = Slack::BuildsLoginSlackMessage.new
+      @build_login_message = Slack::BuildLoginMessage.new
       @opens_slack_conversation = Slack::OpensSlackConversation.new
       @sends_slack_message = Slack::SendsSlackMessage.new
     end
@@ -18,7 +18,7 @@ module Auth
 
       @sends_slack_message.call(
         channel: conversation,
-        blocks: @builds_login_slack_message.render(user: user)
+        blocks: @build_login_message.call(user)
       )
     end
   end
