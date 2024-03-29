@@ -1,5 +1,5 @@
 module Auth
-  class SendsLoginLink
+  class SendLoginLink
     def initialize
       @finds_or_creates_user = FindsOrCreatesUser.new
       @generates_token = GeneratesToken.new
@@ -18,7 +18,7 @@ module Auth
 
       @sends_slack_message.call(
         channel: conversation,
-        blocks: @build_login_message.call(user)
+        blocks: @build_login_message.call(user: user)
       )
     end
   end
