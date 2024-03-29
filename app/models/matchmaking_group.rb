@@ -8,9 +8,8 @@ class MatchmakingGroup < ApplicationRecord
   validate :name_not_in_config
   validates :name, uniqueness: true
 
-  attr_writer :protractable
-
   alias_attribute :active?, :is_active
+  alias_attribute :protractable?, :is_protractable
   alias_attribute :slack_channel, :slack_channel_name
 
   def self.name_exists?(name)
@@ -31,10 +30,6 @@ class MatchmakingGroup < ApplicationRecord
 
   def exact_size?
     size_strategy == SIZE_STRATEGIES[:exact_size]
-  end
-
-  def protractable?
-    !!@protractable
   end
 
   private

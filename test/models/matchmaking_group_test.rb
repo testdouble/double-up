@@ -95,7 +95,7 @@ class MatchmakingGroupTest < ActiveSupport::TestCase
 
   test "#protractable? returns true if protractable" do
     group = @subject.new
-    group.protractable = true
+    group.is_protractable = true
     assert group.protractable?
   end
 
