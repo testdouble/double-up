@@ -2,7 +2,7 @@ module Notify
   class UseSlackToDeliverNotification
     def initialize
       @opens_slack_conversation = Slack::OpensSlackConversation.new
-      @sends_slack_message = Slack::SendsSlackMessage.new
+      @send_slack_message = Slack::SendSlackMessage.new
       @build_new_match_message = Slack::BuildNewMatchMessage.new
       @build_quest_protraction_message = Slack::BuildQuestProtractionMessage.new
     end
@@ -14,7 +14,7 @@ module Notify
 
       match_conversation = @opens_slack_conversation.call(users: match.members)
 
-      @sends_slack_message.call(
+      @send_slack_message.call(
         channel: match_conversation,
         blocks: build_appropriate_message(notification, group)
       )

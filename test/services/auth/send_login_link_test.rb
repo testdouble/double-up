@@ -7,7 +7,7 @@ module Auth
       @generates_token = Mocktail.of_next(GeneratesToken)
       @build_login_message = Mocktail.of_next(Slack::BuildLoginMessage)
       @opens_slack_conversation = Mocktail.of_next(Slack::OpensSlackConversation)
-      @sends_slack_message = Mocktail.of_next(Slack::SendsSlackMessage)
+      @send_slack_message = Mocktail.of_next(Slack::SendSlackMessage)
 
       @subject = SendLoginLink.new
     end
@@ -27,7 +27,7 @@ module Auth
       stubs { @generates_token.call(user) }.with { token }
       stubs { @build_login_message.call(user: user) }.with { [] }
       stubs { @opens_slack_conversation.call(users: ["USER"]) }.with { "DM_ID" }
-      stubs { @sends_slack_message.call(channel: "DM_ID", blocks: []) }
+      stubs { @send_slack_message.call(channel: "DM_ID", blocks: []) }
 
       @subject.call(slack_user_id: "USER")
     end

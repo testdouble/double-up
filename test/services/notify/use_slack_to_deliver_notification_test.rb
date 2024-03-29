@@ -4,7 +4,7 @@ module Notify
   class UseSlackToDeliverNotificationTest < ActiveSupport::TestCase
     setup do
       @opens_slack_conversation = Mocktail.of_next(Slack::OpensSlackConversation)
-      @sends_slack_message = Mocktail.of_next(Slack::SendsSlackMessage)
+      @send_slack_message = Mocktail.of_next(Slack::SendSlackMessage)
       @build_new_match_message = Mocktail.of_next(Slack::BuildNewMatchMessage)
       @build_quest_protraction_message = Mocktail.of_next(Slack::BuildQuestProtractionMessage)
 
@@ -23,7 +23,7 @@ module Notify
 
       stubs { @opens_slack_conversation.call(users: ["USER_ID_1", "USER_ID_2"]) }.with { "MPIM_ID" }
       stubs { @build_new_match_message.call(match: match, channel_name: "test") }.with { [] }
-      stubs { @sends_slack_message.call(channel: "MPIM_ID", blocks: []) }
+      stubs { @send_slack_message.call(channel: "MPIM_ID", blocks: []) }
 
       @subject.call(notification, @group)
     end
@@ -38,7 +38,7 @@ module Notify
 
       stubs { @opens_slack_conversation.call(users: ["USER_ID_1", "USER_ID_2"]) }.with { "MPIM_ID" }
       stubs { @build_quest_protraction_message.call(match: match) }.with { [] }
-      stubs { @sends_slack_message.call(channel: "MPIM_ID", blocks: []) }
+      stubs { @send_slack_message.call(channel: "MPIM_ID", blocks: []) }
 
       @subject.call(notification, @group)
     end
@@ -54,7 +54,7 @@ module Notify
       stubs { |m| @opens_slack_conversation.call(users: m.any) }.with { raise "Should not be called" }
       stubs { |m| @build_new_match_message.call(match: m.any, channel_name: m.any) }.with { raise "Should not be called" }
       stubs { |m| @build_quest_protraction_message.call(match: m.any) }.with { raise "Should not be called" }
-      stubs { |m| @sends_slack_message.call(channel: m.any, blocks: m.any) }.with { raise "Should not be called" }
+      stubs { |m| @send_slack_message.call(channel: m.any, blocks: m.any) }.with { raise "Should not be called" }
 
       @subject.call(notification, @group)
     end
