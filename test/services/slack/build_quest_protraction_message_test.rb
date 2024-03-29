@@ -35,8 +35,8 @@ module Slack
                 type: "plain_text",
                 text: "Yes!"
               },
-              action_id: "match:#{match.id}",
-              value: "quest_complete"
+              action_id: "quest_complete",
+              value: match.id.to_s
             },
             {
               type: "button",
@@ -44,8 +44,8 @@ module Slack
                 type: "plain_text",
                 text: "No, we need more time"
               },
-              action_id: "match:#{match.id}",
-              value: "quest_continue"
+              action_id: "quest_continue",
+              value: match.id.to_s
             }
           ]
         }
