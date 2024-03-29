@@ -5,7 +5,8 @@ module Notify
     setup do
       @opens_slack_conversation = Mocktail.of_next(Slack::OpensSlackConversation)
       @sends_slack_message = Mocktail.of_next(Slack::SendsSlackMessage)
-      @builds_grouping_slack_message = Mocktail.of_next(Slack::BuildsGroupingSlackMessage)
+      @build_new_match_message = Mocktail.of_next(Slack::BuildNewMatchMessage)
+      @build_quest_protraction_message = Mocktail.of_next(Slack::BuildQuestProtractionMessage)
 
       @group = group_with(name: "test", slack_channel_name: "group-test", schedule: :daily)
 
@@ -14,14 +15,14 @@ module Notify
 
     test "sends a single group slack message to all members" do
       notification = create_pending_slack_notification
-      create_historical_match(
+      match = create_historical_match(
         grouping: "test",
         members: ["USER_ID_1", "USER_ID_2"],
         pending_notifications: [notification]
       )
 
       stubs { @opens_slack_conversation.call(users: ["USER_ID_1", "USER_ID_2"]) }.with { "MPIM_ID" }
-      stubs { @builds_grouping_slack_message.render(grouping: "test", members: ["USER_ID_1", "USER_ID_2"], channel_name: "test") }.with { [] }
+      stubs { @build_new_match_message.call(match: match, channel_name: "test") }.with { [] }
       stubs { @sends_slack_message.call(channel: "MPIM_ID", blocks: []) }
 
       @subject.call(notification, @group)
@@ -36,13 +37,7 @@ module Notify
       )
 
       stubs { |m| @opens_slack_conversation.call(users: m.any) }.with { raise "Should not be called" }
-      stubs { |m|
-        @builds_grouping_slack_message.render(
-          grouping: m.any,
-          members: m.any,
-          channel_name: m.any
-        )
-      }.with { raise "Should not be called" }
+      stubs { |m| @build_new_match_message.call(match: m.any, channel_name: m.any) }.with { raise "Should not be called" }
       stubs { |m| @sends_slack_message.call(channel: m.any, blocks: m.any) }.with { raise "Should not be called" }
 
       @subject.call(notification, @group)
