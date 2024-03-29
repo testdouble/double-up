@@ -44,3 +44,11 @@ en:
       new_match:
         body: >
           :wave: Hi %{mentions}! You've been matched up for %{group_name} from #%{channel_name}! Find a time to meet, and have fun!
+      quest_protraction:
+        salutation: >
+          Hi %{mentions}!
+        body: >
+          Are you done with your quest?
+        buttons:
+          complete: "Yes!"
+          continue: "No, we need more time"
