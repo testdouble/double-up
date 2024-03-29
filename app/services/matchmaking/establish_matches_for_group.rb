@@ -16,15 +16,8 @@ module Matchmaking
 
       matches = @match_participants.call(participants, group)
       matches.each do |match|
-        HistoricalMatch.create(
-          members: match,
-          grouping: group.name,
-          matched_on: Date.today,
-          pending_notifications: [
-            PendingNotification.create(strategy: "email", reason: "new_match"),
-            PendingNotification.create(strategy: "slack", reason: "new_match")
-          ]
-        )
+        historical_match = save_as_historical_match(match, group)
+        prepare_protraction(historical_match) if group.protractable?
       end
 
       protracted_matches(group).each do |match|
@@ -39,6 +32,22 @@ module Matchmaking
     end
 
     private
+
+    def save_as_historical_match(match, group)
+      HistoricalMatch.create(
+        grouping: group.name,
+        members: match,
+        matched_on: Date.today,
+        pending_notifications: [
+          PendingNotification.create(strategy: "email", reason: "new_match"),
+          PendingNotification.create(strategy: "slack", reason: "new_match")
+        ]
+      )
+    end
+
+    def prepare_protraction(historical_match)
+      ProtractedMatch.create(historical_match: historical_match)
+    end
 
     def ensure_channel_configured(group)
       raise Errors::NoConfiguredChannel.new(group.name) unless group.slack_channel_name

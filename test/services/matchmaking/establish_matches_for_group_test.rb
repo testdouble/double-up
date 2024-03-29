@@ -112,5 +112,31 @@ module Matchmaking
         }
       }
     end
+
+    test "creates protracted match for protractable group and does not create quest_protraction notifications" do
+      group = group_with(name: "test", slack_channel_name: "group-test", protractable: true)
+
+      stubs { @loads_slack_channels.call(types: "public_channel") }.with {
+        [
+          Slack::Messages::Message.new(id: "CHANNEL_ID_1", name_normalized: "general"),
+          Slack::Messages::Message.new(id: "CHANNEL_ID_2", name_normalized: "group-test"),
+          Slack::Messages::Message.new(id: "CHANNEL_ID_3", name_normalized: "random")
+        ]
+      }
+      stubs { @loads_slack_channel_members.call(channel: "CHANNEL_ID_2") }.with {
+        ["USER_ID_1", "USER_ID_2", "USER_ID_3", "USER_ID_4"]
+      }
+      stubs { @match_participants.call(["USER_ID_1", "USER_ID_2", "USER_ID_3", "USER_ID_4"], group) }.with {
+        [["USER_ID_1", "USER_ID_2"], ["USER_ID_3", "USER_ID_4"]]
+      }
+
+      assert_difference("HistoricalMatch.count", 2) {
+        assert_difference("ProtractedMatch.count", 2) {
+          assert_difference("PendingNotification.quest_protraction_reason.count", 0) {
+            @subject.call(group)
+          }
+        }
+      }
+    end
   end
 end
