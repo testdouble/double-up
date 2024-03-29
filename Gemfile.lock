@@ -243,6 +243,8 @@ GEM
       sendgrid-ruby (~> 6.4)
     sendgrid-ruby (6.6.2)
       ruby_http_client (~> 3.4)
+    slack-ruby-block-kit (0.23.0)
+      zeitwerk (~> 2.6)
     slack-ruby-client (2.3.0)
       faraday (>= 2.0)
       faraday-mashify
@@ -325,6 +327,7 @@ DEPENDENCIES
   rspec
   rspec-rails
   sendgrid-actionmailer
+  slack-ruby-block-kit
   slack-ruby-client
   sprockets-rails
   standard

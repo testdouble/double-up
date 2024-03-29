@@ -12,6 +12,7 @@ gem "tailwindcss-rails"
 gem "importmap-rails"
 gem "hotwire-rails"
 gem "heroicon"
+gem "slack-ruby-block-kit"
 
 gem "bugsnag"
 gem "sendgrid-actionmailer"
