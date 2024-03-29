@@ -38,6 +38,9 @@ en:
   slack:
     message:
       mention: <@%{slack_user_id}>
-      login: "Use <%{link}|this link> to login"
-      new_match: >
-        :wave: Hi %{mentions}! You've been matched up for %{group_name} from #%{channel_name}! Find a time to meet, and have fun!
+      login:
+        body: >
+          Use <%{link}|this link> to login
+      new_match:
+        body: >
+          :wave: Hi %{mentions}! You've been matched up for %{group_name} from #%{channel_name}! Find a time to meet, and have fun!

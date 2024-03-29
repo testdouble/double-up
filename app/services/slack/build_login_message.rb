@@ -13,7 +13,7 @@ module Slack
     private
 
     def message_text(user)
-      I18n.t("slack.message.login", link: verify_login_url(token: user.auth_token))
+      I18n.t("slack.message.login.body", link: verify_login_url(token: user.auth_token))
     end
   end
 end

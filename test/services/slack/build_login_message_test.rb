@@ -16,7 +16,7 @@ module Slack
           type: "section",
           text: {
             type: "mrkdwn",
-            text: "Use <http://example.com/auth/verify?token=12345|this link> to login"
+            text: "Use <http://example.com/auth/verify?token=12345|this link> to login\n"
           }
         }
       ], content

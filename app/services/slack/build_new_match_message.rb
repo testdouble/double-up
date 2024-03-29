@@ -18,7 +18,7 @@ module Slack
       group_name = match.grouping.to_s.titleize
       member_mentions = match.members.map { |m| I18n.t("slack.message.mention", slack_user_id: m) }
       humanized_mentions = @humanize_names.call(member_mentions)
-      I18n.t("slack.message.new_match", mentions: humanized_mentions, channel_name: channel_name, group_name: group_name)
+      I18n.t("slack.message.new_match.body", mentions: humanized_mentions, channel_name: channel_name, group_name: group_name)
     end
   end
 end
