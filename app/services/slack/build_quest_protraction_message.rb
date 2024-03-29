@@ -13,8 +13,10 @@ module Slack
           s.mrkdwn(text: I18n.t("slack.message.quest_protraction.body"))
         end
         b.actions do |a|
-          a.button(text: I18n.t("slack.message.quest_protraction.buttons.complete"), action_id: "action-complete", value: "quest_complete")
-          a.button(text: I18n.t("slack.message.quest_protraction.buttons.continue"), action_id: "action-continue", value: "quest_continue")
+          action_id = "match:#{match.id}"
+
+          a.button(text: I18n.t("slack.message.quest_protraction.buttons.complete"), action_id: action_id, value: "quest_complete")
+          a.button(text: I18n.t("slack.message.quest_protraction.buttons.continue"), action_id: action_id, value: "quest_continue")
         end
       end
     end

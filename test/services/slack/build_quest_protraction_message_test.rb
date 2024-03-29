@@ -35,7 +35,7 @@ module Slack
                 type: "plain_text",
                 text: "Yes!"
               },
-              action_id: "action-complete",
+              action_id: "match:#{match.id}",
               value: "quest_complete"
             },
             {
@@ -44,7 +44,7 @@ module Slack
                 type: "plain_text",
                 text: "No, we need more time"
               },
-              action_id: "action-continue",
+              action_id: "match:#{match.id}",
               value: "quest_continue"
             }
           ]
