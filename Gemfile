@@ -13,6 +13,7 @@ gem "importmap-rails"
 gem "hotwire-rails"
 gem "heroicon"
 gem "slack-ruby-block-kit"
+gem "faraday"
 
 gem "bugsnag"
 gem "sendgrid-actionmailer"

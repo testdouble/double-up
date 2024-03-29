@@ -313,6 +313,7 @@ DEPENDENCIES
   bugsnag
   debug
   dotenv-rails
+  faraday
   foreman
   heroicon
   hotwire-rails
