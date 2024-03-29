@@ -30,6 +30,14 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
+  name_list:
+    two_names: "%{first_name} and %{second_name}"
+    many_names:
+      start: "%{names_before_last}"
+      end: "and %{last_name}"
   slack:
     message:
+      mention: <@%{slack_user_id}>
       login: "Use <%{link}|this link> to login"
+      new_match: >
+        :wave: Hi %{mentions}! You've been matched up for %{group_name} from #%{channel_name}! Find a time to meet, and have fun!

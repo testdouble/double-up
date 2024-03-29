@@ -3,7 +3,7 @@ module Notify
     def initialize
       @opens_slack_conversation = Slack::OpensSlackConversation.new
       @sends_slack_message = Slack::SendsSlackMessage.new
-      @builds_grouping_slack_message = Slack::BuildsGroupingSlackMessage.new
+      @build_new_match_message = Slack::BuildNewMatchMessage.new
     end
 
     def call(notification, group)
@@ -15,23 +15,8 @@ module Notify
 
       @sends_slack_message.call(
         channel: match_conversation,
-        # TODO refactor to pass match instead of match attributes
-        blocks: @builds_grouping_slack_message.render(
-          grouping: match.grouping,
-          members: match.members,
-          channel_name: group.slack_channel_name
-        )
+        blocks: @build_new_match_message.call(match: match, channel_name: group.slack_channel_name)
       )
-    end
-
-    private
-
-    def channel_name_for_grouping(grouping)
-      grouping_sym = grouping.intern
-
-      raise "No config found for grouping '#{grouping}'" unless @config.respond_to?(grouping_sym)
-
-      @config.send(grouping_sym)&.channel
     end
   end
 end
