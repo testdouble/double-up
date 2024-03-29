@@ -140,13 +140,13 @@ class HistoricalMatchTest < ActiveSupport::TestCase
         grouping: "test",
         matched_on: Date.today,
         members: ["Sam", "Pippin"],
-        protracted_match: ProtractedMatch.new(protracted_by: "Sam")
+        protracted_match: ProtractedMatch.new
       ),
       @subject.create(
         grouping: "test",
         matched_on: Date.today,
         members: ["Sam", "Pippin"],
-        protracted_match: ProtractedMatch.new(protracted_by: "Sam", completed_at: Time.zone.now, completed_by: "Pippin")
+        protracted_match: ProtractedMatch.new(completed_at: Time.zone.now, completed_by: "Pippin")
       )
     ]
 

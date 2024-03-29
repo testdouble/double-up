@@ -63,7 +63,7 @@ module Matchmaking
       group = group_with(name: "test", slack_channel_name: "group-test")
 
       match = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_4"])
-      ProtractedMatch.create!(protracted_by: "USER_ID_1", historical_match: match)
+      ProtractedMatch.create!(historical_match: match)
 
       stubs { @loads_slack_channels.call(types: "public_channel") }.with {
         [
@@ -91,8 +91,8 @@ module Matchmaking
 
       match1 = create_historical_match(grouping: "test", members: ["USER_ID_1", "USER_ID_4"])
       match2 = create_historical_match(grouping: "test", members: ["USER_ID_2", "USER_ID_3"])
-      ProtractedMatch.create!(protracted_by: "USER_ID_1", historical_match: match1)
-      ProtractedMatch.create!(protracted_by: "USER_ID_1", historical_match: match2)
+      ProtractedMatch.create!(historical_match: match1)
+      ProtractedMatch.create!(historical_match: match2)
 
       stubs { @loads_slack_channels.call(types: "public_channel") }.with {
         [

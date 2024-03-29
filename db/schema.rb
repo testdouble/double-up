@@ -56,7 +56,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_09_083242) do
   end
 
   create_table "protracted_matches", force: :cascade do |t|
-    t.string "protracted_by", null: false
+    t.string "last_protracted_by"
     t.string "completed_by"
     t.datetime "completed_at"
     t.bigint "historical_match_id", null: false
@@ -82,5 +82,4 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_09_083242) do
     t.datetime "updated_at", null: false
     t.index ["slack_user_id"], name: "index_users_on_slack_user_id", unique: true
   end
-
 end

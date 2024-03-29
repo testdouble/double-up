@@ -11,12 +11,6 @@ class ProtractedMatchTest < ActiveSupport::TestCase
     assert_equal match.errors[:historical_match].first, "must exist"
   end
 
-  test "requires protracted_by attribute" do
-    match = @subject.new
-    assert match.invalid?
-    assert_equal match.errors[:protracted_by].first, "can't be blank"
-  end
-
   test "requires completed_at if completed_by is set" do
     match = @subject.new(completed_by: "Sam")
     assert match.invalid?
@@ -35,10 +29,7 @@ class ProtractedMatchTest < ActiveSupport::TestCase
       members: ["Frodo", "Sam"]
     )
 
-    protracted_match = @subject.new(
-      historical_match: match,
-      protracted_by: "Sam"
-    )
+    protracted_match = @subject.new(historical_match: match)
 
     assert protracted_match.valid?
     assert protracted_match.errors.empty?
@@ -50,10 +41,7 @@ class ProtractedMatchTest < ActiveSupport::TestCase
       members: ["Frodo", "Sam"]
     )
 
-    protracted_match = @subject.create!(
-      historical_match: match,
-      protracted_by: "Sam"
-    )
+    protracted_match = @subject.create!(historical_match: match)
 
     Timecop.freeze(Time.zone.now) do
       protracted_match.complete_as!("Frodo")
