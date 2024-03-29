@@ -36,6 +36,20 @@ en:
       start: "%{names_before_last}"
       end: "and %{last_name}"
   slack:
+    response:
+      action:
+        quest_complete:
+          acknowledgement: "Thanks for the update!"
+          message:
+            body: >
+              Congratulations on completing your quest! :tada:
+        quest_continue:
+          acknowledgement: "Thanks for the update!"
+          message:
+            body: >
+              No problem! Take your time. :relaxed:
+        unknown:
+          acknowledgement: "Unknown action"
     message:
       mention: <@%{slack_user_id}>
       login:
