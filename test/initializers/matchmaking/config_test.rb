@@ -130,7 +130,7 @@ module Matchmaking
       assert group_match?(groups[5], name: "weekly", slack_channel_name: "test-6", schedule: "weekly", target_size: 2, is_active: true, size_strategy: "flexible_size")
       assert group_match?(groups[6], name: "fortnightly", slack_channel_name: "test-7", schedule: "fortnightly", target_size: 2, is_active: true, size_strategy: "flexible_size")
       assert group_match?(groups[7], name: "monthly", slack_channel_name: "test-8", schedule: "monthly", target_size: 2, is_active: true, size_strategy: "flexible_size")
-      assert group_match?(groups[8], name: "protractable", slack_channel_name: "test-9", schedule: "daily", target_size: 2, is_active: true, size_strategy: "flexible_size", is_protractable: true)
+      assert group_match?(groups[8], name: "protractable", slack_channel_name: "test-9", schedule: "daily", target_size: 2, is_active: true, size_strategy: "flexible_size", protractable: true)
     end
 
     def group_match?(group, expected)
@@ -140,7 +140,7 @@ module Matchmaking
         group.target_size == expected[:target_size] &&
         group.is_active == expected[:is_active] &&
         group.size_strategy == expected[:size_strategy] &&
-        group.protractable? == !!expected[:is_protractable] &&
+        group.protractable? == !!expected[:protractable] &&
         group.readonly?
     end
   end

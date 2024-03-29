@@ -39,7 +39,7 @@ module Matchmaking
             group.target_size = group_config[:target_size]
           end
 
-          group.is_protractable = !!group_config[:protractable]
+          group.protractable = !!group_config[:protractable]
 
           group.define_singleton_method(:readonly?) { true }
         end
