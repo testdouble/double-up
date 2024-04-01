@@ -1,8 +1,10 @@
 module Rakes
   class RunMatchmaking
-    def initialize(stdout:, stderr:)
+    def initialize(stdout:, stderr:, only: nil)
       @stdout = stdout
       @stderr = stderr
+
+      @only = only || []
 
       @identifies_nearest_date = IdentifiesNearestDate.new
       @collect_groups = CollectGroups.new
@@ -10,7 +12,7 @@ module Rakes
     end
 
     def call
-      @collect_groups.call.each do |group|
+      groups.each do |group|
         next unless should_run_today?(group.schedule)
 
         unless group.active?
@@ -28,6 +30,10 @@ module Rakes
     end
 
     private
+
+    def groups
+      @collect_groups.call.select { |group| @only.any? ? @only.include?(group.name) : true }
+    end
 
     def should_run_today?(schedule)
       @identifies_nearest_date.call(schedule).today?

@@ -81,5 +81,26 @@ module Rakes
       assert_no_match(/Starting matchmaking for 'test'/, output)
       assert_match(/Matchmaking successfully completed/, output)
     end
+
+    test "only runs specified groups" do
+      groups = [
+        group_with(name: "test1", slack_channel_name: "group-test1", target_size: 2, schedule: :daily),
+        group_with(name: "test2", slack_channel_name: "group-test2", target_size: 3, schedule: :daily),
+        group_with(name: "test3", slack_channel_name: "group-test3", target_size: 4, schedule: :daily)
+      ]
+
+      stubs { @collect_groups.call }.with { groups }
+      stubs(times: 2) { @identifies_nearest_date.call("daily") }.with { @jan_5 }
+      stubs(times: 2) { |m| @establish_matches_for_group.call(m.is_a?(MatchmakingGroup)) }
+
+      @subject.new(stdout: stdout, stderr: stderr, only: ["test1", "test3"]).call
+
+      output = read_output!
+      assert_match(/Starting matchmaking for 'test1'/, output)
+      assert_no_match(/Starting matchmaking for 'test2'/, output)
+      assert_match(/Starting matchmaking for 'test3'/, output)
+      assert_match(/Matchmaking successfully completed/, output)
+      assert_empty read_errors!
+    end
   end
 end
