@@ -47,7 +47,7 @@ en:
           acknowledgement: "Thanks for the update!"
           message:
             body: >
-              No problem! Take your time. :relaxed:
+              No problem! Take your time. :thumbsup:
         unknown:
           acknowledgement: "Unknown action"
     message:
