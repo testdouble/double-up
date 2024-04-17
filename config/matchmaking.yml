@@ -10,11 +10,9 @@ default: &default
     schedule: monthly
     target_size: 2
   quest:
-    active_in:
-      - development
-      - test
+    active_in: all
     slack_channel: rotating-quest
-    schedule: daily
+    schedule: monthly
     target_size:
       strategy: exact_size
       size: 2
