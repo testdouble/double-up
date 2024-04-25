@@ -66,6 +66,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     ast (2.4.2)
     bootsnap (1.13.0)
       msgpack (~> 1.2)
@@ -73,6 +75,8 @@ GEM
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     concurrent-ruby (1.1.10)
+    crack (0.4.5)
+      rexml
     crass (1.0.6)
     debug (1.7.2)
       irb (>= 1.5.0)
@@ -83,20 +87,21 @@ GEM
       dotenv (= 2.8.1)
       railties (>= 3.2)
     erubi (1.11.0)
-    faraday (2.6.0)
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
     faraday-mashify (0.1.1)
       faraday (~> 2.0)
       hashie
     faraday-multipart (1.0.4)
       multipart-post (~> 2)
-    faraday-net_http (3.0.2)
+    faraday-net_http (3.1.0)
+      net-http
     ffi (1.15.5)
     foreman (0.87.2)
-    gli (2.21.0)
+    gli (2.21.1)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    hashdiff (1.0.1)
     hashie (5.0.0)
     heroicon (1.0.0)
       rails (>= 5.2)
@@ -131,7 +136,9 @@ GEM
       sorbet-eraser (~> 0.3.1)
       sorbet-runtime (~> 0.5.9204)
     msgpack (1.6.0)
-    multipart-post (2.2.3)
+    multipart-post (2.4.0)
+    net-http (0.4.1)
+      uri
     net-imap (0.3.1)
       net-protocol
     net-pop (0.1.2)
@@ -154,6 +161,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.4.4)
+    public_suffix (5.0.1)
     puma (6.0.0)
       nio4r (~> 2.0)
     racc (1.6.0)
@@ -235,20 +243,20 @@ GEM
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
     ruby-progressbar (1.13.0)
-    ruby2_keywords (0.0.5)
     ruby_http_client (3.5.5)
     sendgrid-actionmailer (3.2.0)
       mail (~> 2.7)
       sendgrid-ruby (~> 6.4)
     sendgrid-ruby (6.6.2)
       ruby_http_client (~> 3.4)
-    slack-ruby-client (2.0.0)
+    slack-ruby-block-kit (0.23.0)
+      zeitwerk (~> 2.6)
+    slack-ruby-client (2.3.0)
       faraday (>= 2.0)
       faraday-mashify
       faraday-multipart
       gli
       hashie
-      websocket-driver
     sorbet-eraser (0.3.1)
     sorbet-runtime (0.5.11178)
     sprockets (4.2.0)
@@ -291,7 +299,12 @@ GEM
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.5.0)
-    websocket-driver (0.7.5)
+    uri (0.13.0)
+    webmock (3.18.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
+    websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     zeitwerk (2.6.6)
@@ -310,6 +323,7 @@ DEPENDENCIES
   bugsnag
   debug
   dotenv-rails
+  faraday
   foreman
   heroicon
   hotwire-rails
@@ -324,12 +338,14 @@ DEPENDENCIES
   rspec
   rspec-rails
   sendgrid-actionmailer
+  slack-ruby-block-kit
   slack-ruby-client
   sprockets-rails
   standard
   tailwindcss-rails
   timecop
   todo_or_die
+  webmock
 
 RUBY VERSION
    ruby 3.1.2p20

@@ -1,7 +1,7 @@
 module Slack
   class ClientWrapper
     def self.client
-      return if @disabled
+      return if disabled?
 
       @self ||= new
       @self.client

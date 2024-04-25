@@ -35,7 +35,7 @@ module DatabaseTestHelper
     PendingNotification.create(strategy: "email")
   end
 
-  def create_pending_slack_notification
-    PendingNotification.create(strategy: "slack")
+  def create_pending_slack_notification(reason: "new_match")
+    PendingNotification.create(strategy: "slack", reason: reason)
   end
 end

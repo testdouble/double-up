@@ -30,4 +30,39 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  name_list:
+    two_names: "%{first_name} and %{second_name}"
+    many_names:
+      start: "%{names_before_last}"
+      end: "and %{last_name}"
+  slack:
+    response:
+      action:
+        quest_complete:
+          acknowledgement: "Thanks for the update!"
+          message:
+            body: >
+              Congratulations on completing your quest! :tada:
+        quest_continue:
+          acknowledgement: "Thanks for the update!"
+          message:
+            body: >
+              No problem! Take your time. :thumbsup:
+        unknown:
+          acknowledgement: "Unknown action"
+    message:
+      mention: <@%{slack_user_id}>
+      login:
+        body: >
+          Use <%{link}|this link> to login
+      new_match:
+        body: >
+          :wave: Hi %{mentions}! You've been matched up for %{group_name} from #%{channel_name}! Find a time to meet, and have fun!
+      quest_protraction:
+        salutation: >
+          Hi %{mentions}!
+        body: >
+          Are you done with your quest?
+        buttons:
+          complete: "Yes!"
+          continue: "No, we need more time"

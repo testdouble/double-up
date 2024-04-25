@@ -2,13 +2,13 @@ require "test_helper"
 
 class CollectGroupsTest < ActiveSupport::TestCase
   setup do
-    @config = {
-      test1: {active: true, size: 2, channel: "group-test1", schedule: :daily},
-      test2: {active: true, size: 3, channel: "group-test2", schedule: :daily},
-      test3: {active: true, size: 4, channel: "group-test3", schedule: :daily}
-    }
+    @groups = [
+      group_with(name: "test1", target_size: 2, slack_channel_name: "group-test1", schedule: :daily),
+      group_with(name: "test2", target_size: 3, slack_channel_name: "group-test2", schedule: :daily),
+      group_with(name: "test3", target_size: 4, slack_channel_name: "group-test3", schedule: :daily)
+    ]
 
-    matchmaking_config_of(@config) do
+    stub_matchmaking_config(@groups) do
       @subject = CollectGroups.new
     end
   end
@@ -17,7 +17,7 @@ class CollectGroupsTest < ActiveSupport::TestCase
     groups = @subject.call
 
     assert_equal 3, groups.size
-    assert groups.all? { |group| group.is_a?(MatchmakingGroup) && group.readonly? }
+    assert groups.all? { |group| group.is_a?(MatchmakingGroup) }
   end
 
   test "merges config and MatchmakingGroup records" do

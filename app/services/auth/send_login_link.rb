@@ -1,11 +1,11 @@
 module Auth
-  class SendsLoginLink
+  class SendLoginLink
     def initialize
       @finds_or_creates_user = FindsOrCreatesUser.new
       @generates_token = GeneratesToken.new
-      @builds_login_slack_message = Slack::BuildsLoginSlackMessage.new
+      @build_login_message = Slack::BuildLoginMessage.new
       @opens_slack_conversation = Slack::OpensSlackConversation.new
-      @sends_slack_message = Slack::SendsSlackMessage.new
+      @send_slack_message = Slack::SendSlackMessage.new
     end
 
     def call(slack_user_id:)
@@ -16,9 +16,9 @@ module Auth
 
       conversation = @opens_slack_conversation.call(users: [slack_user_id])
 
-      @sends_slack_message.call(
+      @send_slack_message.call(
         channel: conversation,
-        blocks: @builds_login_slack_message.render(user: user)
+        blocks: @build_login_message.call(user: user)
       )
     end
   end

@@ -1,7 +1,7 @@
 module Slack
   class LoginWithSlackCommandController < SlashCommandController
     def handle
-      Auth::SendsLoginLink.new.call(slack_user_id: params["user_id"])
+      Auth::SendLoginLink.new.call(slack_user_id: params["user_id"])
 
       render json: {
         response_type: "ephemeral",

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_09_083242) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,7 +51,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
     t.bigint "historical_match_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reason"
     t.index ["historical_match_id"], name: "index_pending_notifications_on_historical_match_id"
+  end
+
+  create_table "protracted_matches", force: :cascade do |t|
+    t.string "last_protracted_by"
+    t.string "completed_by"
+    t.datetime "completed_at"
+    t.bigint "historical_match_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["historical_match_id"], name: "index_protracted_matches_on_historical_match_id"
   end
 
   create_table "slack_user_profiles", force: :cascade do |t|
@@ -71,5 +82,4 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_27_185507) do
     t.datetime "updated_at", null: false
     t.index ["slack_user_id"], name: "index_users_on_slack_user_id", unique: true
   end
-
 end

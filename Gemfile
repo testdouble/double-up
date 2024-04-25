@@ -12,6 +12,8 @@ gem "tailwindcss-rails"
 gem "importmap-rails"
 gem "hotwire-rails"
 gem "heroicon"
+gem "slack-ruby-block-kit"
+gem "faraday"
 
 gem "bugsnag"
 gem "sendgrid-actionmailer"
@@ -38,4 +40,5 @@ group :test do
   gem "rspec"
   gem "rspec-rails"
   gem "timecop"
+  gem "webmock"
 end

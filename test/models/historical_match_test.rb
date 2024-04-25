@@ -128,4 +128,30 @@ class HistoricalMatchTest < ActiveSupport::TestCase
 
     assert_equal matches, [match1, match3]
   end
+
+  test ".protracted_in returns the most recent protracted matches" do
+    _match1, match2, _match3 = [
+      @subject.create(
+        grouping: "test",
+        matched_on: Date.today,
+        members: ["Frodo", "Sam"]
+      ),
+      @subject.create(
+        grouping: "test",
+        matched_on: Date.today,
+        members: ["Sam", "Pippin"],
+        protracted_match: ProtractedMatch.new
+      ),
+      @subject.create(
+        grouping: "test",
+        matched_on: Date.today,
+        members: ["Sam", "Pippin"],
+        protracted_match: ProtractedMatch.new(completed_at: Time.zone.now, completed_by: "Pippin")
+      )
+    ]
+
+    matches = @subject.protracted_in("test")
+
+    assert_equal matches, [match2]
+  end
 end

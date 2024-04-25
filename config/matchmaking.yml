@@ -1,24 +1,27 @@
 default: &default
   coffee_time:
-    active: true
-    channel: rotating-coffee-time
+    active_in: all
+    slack_channel: rotating-coffee-time
     schedule: weekly
-    size: 2
+    target_size: 2
   q_branch:
-    active: true
-    channel: rotating-q-branch
+    active_in: all
+    slack_channel: rotating-q-branch
     schedule: monthly
-    size: 2
+    target_size: 2
+  quest:
+    active_in: all
+    slack_channel: rotating-quest
+    schedule: monthly
+    target_size:
+      strategy: exact_size
+      size: 2
+    protractable: true
   rotating_brunch:
-    active: true
-    channel: rotating-brunch
+    active_in: all
+    slack_channel: rotating-brunch
     schedule: fortnightly
-    size: 4
-  test_channel:
-    active: false
-    channel: rotating-test-channel
-    schedule: daily
-    size: 2
+    target_size: 4
 
 development:
   <<: *default

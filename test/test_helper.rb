@@ -9,12 +9,14 @@ Slack::ClientWrapper.disable!
 
 require "minitest/autorun"
 require "mocktail"
+require "webmock/minitest"
 Dir[Rails.root.join("test/support/**/*.rb")].each { |f| require f }
 
 class ActiveSupport::TestCase
   include ConfigTestHelper
   include DatabaseTestHelper
   include IoTestHelper
+  include SlackTestHelper
   include Mocktail::DSL
 
   parallelize(workers: :number_of_processors)
