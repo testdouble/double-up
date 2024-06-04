@@ -1,0 +1,24 @@
+<div id="historical_match_<%= historical_match.id %>" class="my-4 px-4">
+  <div class="flex flex-col space-y-4 border border-black">
+    <div class="flex flex-wrap">
+      <% historical_match.profiled_members.each do |member| %>
+        <%= link_to profile_path(member.slack_user_id) do %>
+          <div class="flex flex-row p-2">
+              <img class="w-8 h-8" src="<%= member.avatar_url %>" />
+              <span class="leading-8 px-2"><%= member.name %></span>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <div class="flex flex-row justify-between">
+      <div class="text-sm text-slate-500 m-1">
+        <%= historical_match.grouping.titleize %>
+      </div>
+      <div class="text-sm text-slate-500 m-1">
+        <div>
+          <span><%= historical_match.matched_on.strftime("%b %d, %Y") %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

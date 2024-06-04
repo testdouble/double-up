@@ -3,7 +3,7 @@ require "test_helper"
 module Mailer
   class BuildGroupMailerMessageTest < ActiveSupport::TestCase
     setup do
-      @retrieves_slack_user_info = Mocktail.of_next(Slack::RetrievesSlackUserInfo)
+      @retrieve_slack_user_info = Mocktail.of_next(Slack::RetrieveSlackUserInfo)
       @subject = BuildGroupMailerMessage.new
     end
 

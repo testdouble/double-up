@@ -33,6 +33,20 @@ class HistoricalMatch < ApplicationRecord
     SQL
   end
 
+  def profiled_members
+    members.map do |member|
+      user_profile = SlackUserProfile.find_by(slack_user_id: member)
+
+      if user_profile.nil?
+        Slack::RetrieveSlackUserInfo.new.call(user: member)
+
+        user_profile = SlackUserProfile.find_by(slack_user_id: member)
+      end
+
+      user_profile
+    end
+  end
+
   private
 
   def at_least_two_members

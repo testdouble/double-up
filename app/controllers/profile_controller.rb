@@ -11,7 +11,7 @@ class ProfileController < ApplicationController
     @user_profile = SlackUserProfile.find_by(slack_user_id: slack_user_id)
     return if @user_profile.present?
 
-    Slack::RetrievesSlackUserInfo.new.call(user: slack_user_id)
+    Slack::RetrieveSlackUserInfo.new.call(user: slack_user_id)
 
     @user_profile = SlackUserProfile.find_by(slack_user_id: slack_user_id)
   end

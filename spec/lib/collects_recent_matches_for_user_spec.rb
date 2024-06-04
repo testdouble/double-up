@@ -4,9 +4,9 @@ RSpec.describe CollectsRecentMatchesForUser do
   let(:subject) { CollectsRecentMatchesForUser.new }
 
   before(:example) do
-    @retrieves_slack_user_info = double(Slack::RetrievesSlackUserInfo)
+    @retrieve_slack_user_info = double(Slack::RetrieveSlackUserInfo)
 
-    allow(Slack::RetrievesSlackUserInfo).to receive(:new) { @retrieves_slack_user_info }
+    allow(Slack::RetrieveSlackUserInfo).to receive(:new) { @retrieve_slack_user_info }
   end
 
   it "merges matches and slack profile data from the database for match members" do
@@ -15,7 +15,7 @@ RSpec.describe CollectsRecentMatchesForUser do
     SlackUserProfile.create(name: "Leia", slack_user_id: "USER_ID_2", avatar_url: "https://example.com/x/512/512")
     match = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date)
 
-    expect(@retrieves_slack_user_info).to_not receive(:call)
+    expect(@retrieve_slack_user_info).to_not receive(:call)
 
     user_matches = subject.call(user: user)
 
@@ -38,7 +38,7 @@ RSpec.describe CollectsRecentMatchesForUser do
     match1 = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date - 1.day)
     match2 = HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date)
 
-    expect(@retrieves_slack_user_info).to_not receive(:call)
+    expect(@retrieve_slack_user_info).to_not receive(:call)
 
     user_matches = subject.call(user: user)
 
@@ -67,7 +67,7 @@ RSpec.describe CollectsRecentMatchesForUser do
     match_date = Date.today
     HistoricalMatch.create(members: ["USER_ID_1", "USER_ID_2"], grouping: "test", matched_on: match_date)
 
-    expect(@retrieves_slack_user_info).to receive(:call).with(user: "USER_ID_2")
+    expect(@retrieve_slack_user_info).to receive(:call).with(user: "USER_ID_2")
 
     subject.call(user: user)
   end
