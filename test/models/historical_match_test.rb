@@ -154,4 +154,20 @@ class HistoricalMatchTest < ActiveSupport::TestCase
 
     assert_equal matches, [match2]
   end
+
+  test "#profiled_members returns the user profiles for each member" do
+    match = @subject.new(members: ["Frodo", "Sam"])
+    frodo_profile = SlackUserProfile.create(slack_user_id: "Frodo")
+    sam_profile = SlackUserProfile.create(slack_user_id: "Sam")
+
+    assert_equal match.profiled_members, [frodo_profile, sam_profile]
+  end
+
+  test "#profiled_members creates a user profile if one does not exist" do
+    retrieves_user_info = Mocktail.of_next(Slack::RetrieveSlackUserInfo)
+
+    @subject.new(members: ["Frodo"]).profiled_members
+
+    verify { retrieves_user_info.call(user: "Frodo") }
+  end
 end
