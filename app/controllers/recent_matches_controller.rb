@@ -5,6 +5,12 @@ class RecentMatchesController < ApplicationController
     @recent_matches = CollectsRecentMatchesForUser.new.call(user: @current_user)
   end
 
+  def filter
+    load_current_user_profile
+
+    @historical_matches = HistoricalMatch.where(filter_params).order(matched_on: :desc)
+  end
+
   private
 
   def load_current_user_profile
@@ -14,5 +20,9 @@ class RecentMatchesController < ApplicationController
     Slack::RetrieveSlackUserInfo.new.call(user: @current_user.slack_user_id)
 
     @user_profile = SlackUserProfile.find_by(slack_user_id: @current_user.slack_user_id)
+  end
+
+  def filter_params
+    params.permit(:grouping)
   end
 end

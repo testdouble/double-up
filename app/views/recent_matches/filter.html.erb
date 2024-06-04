@@ -1,0 +1,13 @@
+<div class="w-full">
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Historical matches</h1>
+  </div>
+
+  <div id="historical_matches" class="min-w-full">
+    <% if @historical_matches.empty? %>
+      <p class="px-4">No matches made yet</p>
+    <% else %>
+      <%= render partial: "historical_match", collection: @historical_matches %>
+    <% end %>
+  </div>
+</div>
