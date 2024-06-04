@@ -6,7 +6,7 @@ module Notify
       # Mocktail wasn't working for a class like GroupingMailer. It was returning nil
       # and it wasn't clear why. I decided to use Minitest::Mock instead.
       @mailer = Minitest::Mock.new
-      @retrieves_slack_user_info = Mocktail.of_next(Slack::RetrievesSlackUserInfo)
+      @retrieve_slack_user_info = Mocktail.of_next(Slack::RetrieveSlackUserInfo)
       @build_group_mailer_message = Mocktail.of_next(Mailer::BuildGroupMailerMessage)
 
       @group = group_with(name: "test", slack_channel_name: "test-channel")
@@ -22,10 +22,10 @@ module Notify
         pending_notifications: [notification]
       )
 
-      stubs { @retrieves_slack_user_info.call(user: "USER_ID_1") }.with {
+      stubs { @retrieve_slack_user_info.call(user: "USER_ID_1") }.with {
         slack_user_message("USER_ID_1", "Luke", "luke@rebels.com")
       }
-      stubs { @retrieves_slack_user_info.call(user: "USER_ID_2") }.with {
+      stubs { @retrieve_slack_user_info.call(user: "USER_ID_2") }.with {
         slack_user_message("USER_ID_2", "Leia", "leia@rebels.com")
       }
       stubs { |m|
@@ -63,7 +63,7 @@ module Notify
         pending_notifications: [notification]
       )
 
-      stubs { |m| @retrieves_slack_user_info.call(user: m.any) }
+      stubs { |m| @retrieve_slack_user_info.call(user: m.any) }
         .with { raise "Should not be called" }
       stubs { |m|
         @build_group_mailer_message.render(

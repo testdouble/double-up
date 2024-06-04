@@ -1,6 +1,6 @@
 class CollectsRecentMatchesForUser
   def initialize
-    @retrieves_slack_user_info = Slack::RetrievesSlackUserInfo.new
+    @retrieve_slack_user_info = Slack::RetrieveSlackUserInfo.new
   end
 
   def call(user:)
@@ -26,7 +26,7 @@ class CollectsRecentMatchesForUser
     user_profile = SlackUserProfile.find_by(slack_user_id: slack_user_id)
 
     if user_profile.nil?
-      @retrieves_slack_user_info.call(user: slack_user_id)
+      @retrieve_slack_user_info.call(user: slack_user_id)
 
       user_profile = SlackUserProfile.find_by(slack_user_id: slack_user_id)
     end

@@ -1,7 +1,7 @@
 module Notify
   class UseEmailToDeliverNotification
     def initialize
-      @retrieves_slack_user_info = Slack::RetrievesSlackUserInfo.new
+      @retrieve_slack_user_info = Slack::RetrieveSlackUserInfo.new
       @build_group_mailer_message = Mailer::BuildGroupMailerMessage.new
     end
 
@@ -26,7 +26,7 @@ module Notify
     private
 
     def convert_to_match_member(member_id)
-      slack_user = @retrieves_slack_user_info.call(user: member_id)
+      slack_user = @retrieve_slack_user_info.call(user: member_id)
       Mailer::MatchMember.from_slack_user(slack_user)
     end
   end

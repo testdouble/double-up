@@ -1,5 +1,5 @@
 module Slack
-  class RetrievesSlackUserInfo
+  class RetrieveSlackUserInfo
     include RateLimitRetryable
 
     def call(user:)
